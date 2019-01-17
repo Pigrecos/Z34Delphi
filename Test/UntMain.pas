@@ -38,6 +38,13 @@ type
     procedure assert_inj_axiom(ctx: Z3_context; s: Z3_solver; f: Z3_func_decl;
       i: Cardinal);
     procedure array_example1;
+    procedure array_example2;
+    procedure array_example3;
+    procedure tuple_example1;
+    procedure bitvector_example1;
+    procedure bitvector_example2;
+    procedure eval_example1;
+    procedure two_contexts_example1;
     { Private declarations }
   public
     { Public declarations }
@@ -204,6 +211,16 @@ begin
 end;
 
 (**
+   \brief Create a real variable using the given name.
+*)
+function mk_real_var(ctx: Z3_context; name: AnsiString): Z3_ast;
+begin
+    var ty : Z3_sort := Z3_mk_real_sort(ctx);
+    Result           := mk_var(ctx, name, ty);
+end;
+
+
+(**
    \brief Create the unary function application: <tt>(f x)</tt>.
 *)
 function mk_unary_app(ctx: Z3_context; f: Z3_func_decl; x: Z3_ast): Z3_ast;
@@ -363,7 +380,7 @@ begin
             Result := Result + ']';
         end;
      end;
-     Z3_QUANTIFIER_AST: Result := Result +'quantifier' ;
+     Z3_QUANTIFIER_AST: Result := Result +'quantifier#unknown' ;
 
     else
      Result := Result + '#unknown';
@@ -648,6 +665,54 @@ begin
     SetLength(types, 0);
     SetLength(names, 0);
     SetLength(xs,    0);
+end;
+
+(**
+   \brief Z3 does not support explicitly tuple updates. They can be easily implemented
+   as macros. The argument \c t must have tuple type.
+   A tuple update is a new tuple where field \c i has value \c new_val, and all
+   other fields have the value of the respective field of \c t.
+
+   <tt>update(t, i, new_val)</tt> is equivalent to
+   <tt>mk_tuple(proj_0(t), ..., new_val, ..., proj_n(t))</tt>
+*)
+function mk_tuple_update(c: Z3_context; t: Z3_ast; i: Cardinal; new_val: Z3_ast): Z3_ast;
+var
+  ty            : Z3_sort;
+  mk_tuple_decl : Z3_func_decl;
+  num_fields, j : Cardinal;
+  new_fields    : array of Z3_ast;
+  res           : Z3_ast;
+begin
+    ty := Z3_get_sort(c, t);
+
+    if (Z3_get_sort_kind(c, ty) <> Z3_DATATYPE_SORT) then
+        exitf('argument must be a tuple');
+
+    num_fields := Z3_get_tuple_sort_num_fields(c, ty);
+
+    if (i >= num_fields) then
+        exitf('invalid tuple update, index is too big');
+
+    SetLength(new_fields, num_fields);
+    for j := 0 to num_fields - 1 do
+    begin
+        if i = j then
+        begin
+            (* use new_val at position i *)
+            new_fields[j] := new_val;
+        end else
+        begin
+            (* use field j of t *)
+            var proj_decl : Z3_func_decl := Z3_get_tuple_sort_field_decl(c, ty, j);
+            new_fields[j]                := mk_unary_app(c, proj_decl, t);
+        end;
+    end;
+    mk_tuple_decl := Z3_get_tuple_sort_mk_decl(c, ty);
+    res           := Z3_mk_app(c, mk_tuple_decl, num_fields, @new_fields[0]);
+
+    SetLength(new_fields,0);
+    result := res;
 end;
 
 (**********************Procedure start********)
@@ -1183,6 +1248,364 @@ begin
     Z3_del_context(ctx);
 end;
 
+(**
+   \brief Show that <tt>distinct(a_0, ... , a_n)</tt> is
+   unsatisfiable when \c a_i's are arrays from boolean to
+   boolean and n > 4.
+
+   This example also shows how to use the \c distinct construct.
+*)
+procedure TMain.array_example2;
+var
+  ctx        : Z3_context ;
+  s          : Z3_solver;
+  bool_sort,
+  array_sort : Z3_sort;
+  a          : array[0..4] of Z3_ast;
+  d          : Z3_ast;
+  i, n       : Integer;
+begin
+    reLog.Lines.Append('');
+    reLog.Lines.Append('array_example2');
+    LOG_MSG('array_example2');
+
+    for n := 2 to 5 do
+    begin
+        reLog.Lines.Append(Format('n = %d', [n]));
+        ctx := mk_context();
+        s   := mk_solver(ctx);
+
+        bool_sort   := Z3_mk_bool_sort(ctx);
+        array_sort  := Z3_mk_array_sort(ctx, bool_sort, bool_sort);
+
+        (* create arrays *)
+        for i := 0 to n - 1 do
+        begin
+            var ss : Z3_symbol := Z3_mk_int_symbol(ctx, i);
+            a[i]               := Z3_mk_const(ctx, ss, array_sort);
+        end;
+
+        (* assert distinct(a[0], ..., a[n]) *)
+        d := Z3_mk_distinct(ctx, n, @a[0]);
+        reLog.Lines.Append(Format('%s', [Z3_ast_to_string(ctx, d)]));
+        Z3_solver_assert(ctx, s, d);
+
+        (* context is satisfiable if n < 5 *)
+        if    (n) < 5 then check2(ctx, s, Z3_L_TRUE )
+        else                 check2(ctx, s, Z3_L_FALSE );
+
+	      del_solver(ctx, s);
+        Z3_del_context(ctx);
+    end;
+end;
+
+(**
+   \brief Simple array type construction/deconstruction example.
+*)
+procedure TMain.array_example3;
+var
+   bool_sort, int_sort, array_sort : Z3_sort;
+   domain, range                   : Z3_sort;
+begin
+    reLog.Lines.Append('');
+    reLog.Lines.Append('array_example3');
+    LOG_MSG('array_example3');
+
+    var ctx : Z3_context := mk_context;
+    var s   : Z3_solver  := mk_solver(ctx);
+
+    bool_sort  := Z3_mk_bool_sort(ctx);
+    int_sort   := Z3_mk_int_sort(ctx);
+    array_sort := Z3_mk_array_sort(ctx, int_sort, bool_sort);
+
+    if Z3_get_sort_kind(ctx, array_sort) <> Z3_ARRAY_SORT then
+        exitf('type must be an array type');
+
+    domain := Z3_get_array_sort_domain(ctx, array_sort);
+    range  := Z3_get_array_sort_range(ctx, array_sort);
+
+    reLog.Lines.Append('domain: '+ display_sort(ctx, domain));
+
+    reLog.Lines.Append('range:  '+ display_sort(ctx, range));
+    reLog.Lines.Append('');
+
+	if (int_sort <> domain) or (bool_sort <> range) then
+       exitf('invalid array type');
+
+
+    del_solver(ctx, s);
+    Z3_del_context(ctx);
+end;
+
+(**
+   \brief Simple tuple type example. It creates a tuple that is a pair of real numbers.
+*)
+procedure TMain.tuple_example1;
+var
+    real_sort, pair_sort  : Z3_sort;
+    mk_tuple_name         : Z3_symbol;
+    mk_tuple_decl         : Z3_func_decl  ;
+    proj_names            : array[0..1] of Z3_symbol;
+    proj_sorts            : array[0..1] of Z3_sort;
+    proj_decls            : array[0..1] of Z3_func_decl;
+    antecedents           : array[0..1] of Z3_ast;
+    get_x_decl, get_y_decl: Z3_func_decl;
+Begin
+    reLog.Lines.Append('');
+    reLog.Lines.Append('tuple_example1');
+    LOG_MSG('tuple_example1');
+
+    var ctx : Z3_context := mk_context();
+    var s   : Z3_solver  := mk_solver(ctx);
+
+
+    real_sort := Z3_mk_real_sort(ctx);
+
+    (* Create pair (tuple) type *)
+    mk_tuple_name := Z3_mk_string_symbol(ctx, 'mk_pair');
+    proj_names[0] := Z3_mk_string_symbol(ctx, 'get_x');
+    proj_names[1] := Z3_mk_string_symbol(ctx, 'get_y');
+    proj_sorts[0] := real_sort;
+    proj_sorts[1] := real_sort;
+    (* Z3_mk_tuple_sort will set mk_tuple_decl and proj_decls *)
+    pair_sort     := Z3_mk_tuple_sort(ctx, mk_tuple_name, 2, @proj_names[0], @proj_sorts[0], @mk_tuple_decl, @proj_decls[0]);
+    get_x_decl    := proj_decls[0]; (* function that extracts the first element of a tuple. *)
+    get_y_decl    := proj_decls[1]; (* function that extracts the second element of a tuple. *)
+
+    reLog.Lines.Append('tuple_sort: '+ display_sort(ctx, pair_sort));
+    reLog.Lines.Append('');
+
+     begin
+        (* prove that get_x(mk_pair(x,y)) == 1 implies x = 1*)
+        var app1, app2, x, y, one : Z3_ast;
+        var eq1, eq2, eq3, thm    : Z3_ast;
+
+        x    := mk_real_var(ctx, 'x');
+        y    := mk_real_var(ctx, 'y');
+        app1 := mk_binary_app(ctx, mk_tuple_decl, x, y);
+        app2 := mk_unary_app(ctx, get_x_decl, app1);
+        one  := Z3_mk_numeral(ctx, '1', real_sort);
+        eq1  := Z3_mk_eq(ctx, app2, one);
+        eq2  := Z3_mk_eq(ctx, x, one);
+        thm  := Z3_mk_implies(ctx, eq1, eq2);
+        reLog.Lines.Append('prove: get_x(mk_pair(x, y)) = 1 implies x = 1');
+        prove(ctx, s, thm, true);
+
+        (* disprove that get_x(mk_pair(x,y)) == 1 implies y = 1*)
+        eq3  := Z3_mk_eq(ctx, y, one);
+        thm  := Z3_mk_implies(ctx, eq1, eq3);
+        reLog.Lines.Append('disprove: get_x(mk_pair(x, y)) = 1 implies y = 1');
+        prove(ctx, s, thm, false);
+     end;
+
+     begin
+        (* prove that get_x(p1) = get_x(p2) and get_y(p1) = get_y(p2) implies p1 = p2 *)
+        var p1, p2, x1, x2, y1, y2      : Z3_ast;
+        var antecedent, consequent, thm : Z3_ast;
+
+        p1             := mk_var(ctx, 'p1', pair_sort);
+        p2             := mk_var(ctx, 'p2', pair_sort);
+        x1             := mk_unary_app(ctx, get_x_decl, p1);
+        y1             := mk_unary_app(ctx, get_y_decl, p1);
+        x2             := mk_unary_app(ctx, get_x_decl, p2);
+        y2             := mk_unary_app(ctx, get_y_decl, p2);
+        antecedents[0] := Z3_mk_eq(ctx, x1, x2);
+        antecedents[1] := Z3_mk_eq(ctx, y1, y2);
+        antecedent     := Z3_mk_and(ctx, 2, @antecedents[0]);
+        consequent     := Z3_mk_eq(ctx, p1, p2);
+        thm            := Z3_mk_implies(ctx, antecedent, consequent);
+        reLog.Lines.Append('prove: get_x(p1) = get_x(p2) and get_y(p1) = get_y(p2) implies p1 = p2');
+        prove(ctx, s, thm, true);
+
+        (* disprove that get_x(p1) = get_x(p2) implies p1 = p2 *)
+        thm            := Z3_mk_implies(ctx, antecedents[0], consequent);
+        reLog.Lines.Append('disprove: get_x(p1) = get_x(p2) implies p1 = p2');
+        prove(ctx, s, thm, false);
+     end;
+
+     begin
+        (* demonstrate how to use the mk_tuple_update function *)
+        (* prove that p2 = update(p1, 0, 10) implies get_x(p2) = 10 *)
+        var p1, p2, one, ten, updt, x, y : Z3_ast;
+        var antecedent, consequent, thm  : Z3_ast;
+
+        p1             := mk_var(ctx, 'p1', pair_sort);
+        p2             := mk_var(ctx, 'p2', pair_sort);
+        one            := Z3_mk_numeral(ctx, '1', real_sort);
+        ten            := Z3_mk_numeral(ctx, '10', real_sort);
+        updt           := mk_tuple_update(ctx, p1, 0, ten);
+        antecedent     := Z3_mk_eq(ctx, p2, updt);
+        x              := mk_unary_app(ctx, get_x_decl, p2);
+        consequent     := Z3_mk_eq(ctx, x, ten);
+        thm            := Z3_mk_implies(ctx, antecedent, consequent);
+        reLog.Lines.Append('prove: p2 = update(p1, 0, 10) implies get_x(p2) = 10');
+        prove(ctx, s, thm, true);
+
+        (* disprove that p2 = update(p1, 0, 10) implies get_y(p2) = 10 *)
+        y              := mk_unary_app(ctx, get_y_decl, p2);
+        consequent     := Z3_mk_eq(ctx, y, ten);
+        thm            := Z3_mk_implies(ctx, antecedent, consequent);
+        reLog.Lines.Append('disprove: p2 = update(p1, 0, 10) implies get_y(p2) = 10');
+        prove(ctx, s, thm, false);
+     end;
+
+
+    del_solver(ctx, s);
+    Z3_del_context(ctx);
+end;
+
+(**
+   \brief Simple bit-vector example. This example disproves that x - 10 <= 0 IFF x <= 10 for (32-bit) machine integers
+*)
+procedure TMain.bitvector_example1;
+var
+  bv_sort : Z3_sort;
+  x, zero, ten, x_minus_ten, c1, c2, thm : Z3_ast;
+begin
+    var ctx : Z3_context := mk_context;
+    var s   : Z3_solver  := mk_solver(ctx);
+
+    reLog.Lines.Append('');
+    reLog.Lines.Append('bitvector_example1');
+    LOG_MSG('bitvector_example1');
+
+    bv_sort   := Z3_mk_bv_sort(ctx, 32);
+
+    x           := mk_var(ctx, 'x', bv_sort);
+    zero        := Z3_mk_numeral(ctx, '0', bv_sort);
+    ten         := Z3_mk_numeral(ctx, '10', bv_sort);
+    x_minus_ten := Z3_mk_bvsub(ctx, x, ten);
+    (* bvsle is signed less than or equal to *)
+    c1          := Z3_mk_bvsle(ctx, x, ten);
+    c2          := Z3_mk_bvsle(ctx, x_minus_ten, zero);
+    thm         := Z3_mk_iff(ctx, c1, c2);
+    reLog.Lines.Append('disprove: x - 10 <= 0 IFF x <= 10 for (32-bit) machine integers');
+    prove(ctx, s, thm, false);
+
+    del_solver(ctx, s);
+    Z3_del_context(ctx);
+end;
+
+(**
+   \brief Find x and y such that: x ^ y - 103 == x * y
+*)
+procedure TMain.bitvector_example2;
+begin
+    var ctx : Z3_context := mk_context;
+    var s   : Z3_solver  := mk_solver(ctx);
+
+    reLog.Lines.Append('');
+    reLog.Lines.Append('bitvector_example2');
+    LOG_MSG('bitvector_example2');
+    reLog.Lines.Append('find values of x and y, such that x ^ y - 103 == x * y');
+
+    (* construct x ^ y - 103 == x * y *)
+    var bv_sort : Z3_sort := Z3_mk_bv_sort(ctx, 32);
+    var x       : Z3_ast  := mk_var(ctx, 'x', bv_sort);
+    var y       : Z3_ast  := mk_var(ctx, 'y', bv_sort);
+    var x_xor_y : Z3_ast  := Z3_mk_bvxor(ctx, x, y);
+    var c103    : Z3_ast  := Z3_mk_numeral(ctx, '103', bv_sort);
+    var lhs     : Z3_ast  := Z3_mk_bvsub(ctx, x_xor_y, c103);
+    var rhs     : Z3_ast  := Z3_mk_bvmul(ctx, x, y);
+    var ctr     : Z3_ast  := Z3_mk_eq(ctx, lhs, rhs);
+
+    (* add the constraint <tt>x ^ y - 103 == x * y<\tt> to the logical context *)
+    Z3_solver_assert(ctx, s, ctr);
+
+    (* find a model (i.e., values for x an y that satisfy the constraint *)
+    check(ctx, s, Z3_L_TRUE);
+
+    del_solver(ctx, s);
+    Z3_del_context(ctx);
+end;
+
+(**
+   \brief Demonstrate how to use #Z3_eval.
+*)
+procedure TMain.eval_example1;
+var
+  x, y, two : Z3_ast;
+  c1, c2    : Z3_ast;
+  args      : array[0..1] of Z3_ast;
+begin
+    var ctx : Z3_context := mk_context;
+    var s   : Z3_solver  := mk_solver(ctx);
+    var m   : Z3_model   := 0;
+
+    reLog.Lines.Append('');
+    reLog.Lines.Append('eval_example1');
+    LOG_MSG('eval_example1');
+
+    x          := mk_int_var(ctx, 'x');
+    y          := mk_int_var(ctx, 'y');
+    two        := mk_int(ctx, 2);
+
+    (* assert x < y *)
+    c1         := Z3_mk_lt(ctx, x, y);
+    Z3_solver_assert(ctx, s, c1);
+
+    (* assert x > 2 *)
+    c2         := Z3_mk_gt(ctx, x, two);
+    Z3_solver_assert(ctx, s, c2);
+
+    (* find model for the constraints above *)
+    if Z3_solver_check(ctx, s) = Z3_L_TRUE then
+    begin
+        var x_plus_y : Z3_ast;
+        var v        : Z3_ast ;
+        args[0] := x;
+        args[1] := y;
+        m := Z3_solver_get_model(ctx, s);
+        // inc ref
+	      if m <> nil then
+          Z3_model_inc_ref(ctx, m);
+        reLog.Lines.Append(Format('MODEL:' + sLineBreak+ '%s', [Z3_model_to_string(ctx, m)]));
+        x_plus_y := Z3_mk_add(ctx, 2, @args[0]);
+        reLog.Lines.Append(sLineBreak + 'evaluating x+y');
+        if Z3_model_eval(ctx, m, x_plus_y, True, @v) then
+        begin
+            reLog.Lines.Append('result = ' +  display_ast(ctx, v));
+        end else
+        begin
+            exitf('failed to evaluate: x+y');
+        end;
+    end else
+    begin
+        exitf('the constraints are satisfiable');
+    end;
+    // dec ref
+    if m <> nil then
+      Z3_model_dec_ref(ctx, m);
+    del_solver(ctx, s);
+    Z3_del_context(ctx);
+end;
+
+(**
+   \brief Several logical context can be used simultaneously.
+*)
+procedure TMain.two_contexts_example1;
+var
+  ctx1, ctx2 : Z3_context;
+  x1, x2     : Z3_ast ;
+begin
+    reLog.Lines.Append(sLineBreak+ 'two_contexts_example1');
+    LOG_MSG('two_contexts_example1');
+
+    (* using the same (default) configuration to initialized both logical contexts. *)
+    ctx1 := mk_context();
+    ctx2 := mk_context();
+
+    x1 := Z3_mk_const(ctx1, Z3_mk_int_symbol(ctx1,0), Z3_mk_bool_sort(ctx1));
+    x2 := Z3_mk_const(ctx2, Z3_mk_int_symbol(ctx2,0), Z3_mk_bool_sort(ctx2));
+
+    Z3_del_context(ctx1);
+
+    (* ctx2 can still be used. *)
+    reLog.Lines.Append(Format('%s', [Z3_ast_to_string(ctx2, x2)]));
+
+    Z3_del_context(ctx2);
+end;
+
 procedure TMain.StartMain;
 begin
     Z3_open_log('z3.log');
@@ -1198,14 +1621,14 @@ begin
     push_pop_example1();
     quantifier_example1();
     array_example1();
-   { array_example2();
+    array_example2();
     array_example3();
     tuple_example1();
     bitvector_example1();
     bitvector_example2();
     eval_example1();
     two_contexts_example1();
-    error_code_example1();
+    { error_code_example1();
     error_code_example2();
     parser_example2();
     parser_example3();

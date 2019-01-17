@@ -21,10 +21,6 @@ object Main: TMain
     Align = alClient
     Caption = 'pnl1'
     TabOrder = 0
-    ExplicitLeft = -8
-    ExplicitTop = 48
-    ExplicitWidth = 493
-    ExplicitHeight = 311
     object reLog: TRichEdit
       Left = 1
       Top = 1
@@ -43,10 +39,6 @@ object Main: TMain
       TabOrder = 0
       Zoom = 100
       OnChange = reLogChange
-      ExplicitLeft = 0
-      ExplicitTop = 41
-      ExplicitWidth = 491
-      ExplicitHeight = 309
     end
   end
   object pnlBtn: TPanel
@@ -56,9 +48,6 @@ object Main: TMain
     Height = 41
     Align = alBottom
     TabOrder = 1
-    ExplicitLeft = 24
-    ExplicitTop = 408
-    ExplicitWidth = 185
     object btnStart: TBitBtn
       Left = 1
       Top = 6
