@@ -24,7 +24,7 @@ type
        def_API('Z3_mk_fixedpoint', FIXEDPOINT, (_in(CONTEXT), ))
  *)
 function Z3_mk_fixedpoint(c: Z3_context): Z3_fixedpoint; cdecl;
-  external z3_dll name _PU + 'Z3_mk_fixedpoint';
+  external z3_dll name  'Z3_mk_fixedpoint';
 
 (**
        \brief Increment the reference counter of the given fixedpoint context
@@ -32,7 +32,7 @@ function Z3_mk_fixedpoint(c: Z3_context): Z3_fixedpoint; cdecl;
        def_API('Z3_fixedpoint_inc_ref', VOID, (_in(CONTEXT), _in(FIXEDPOINT)))
  *)
 procedure Z3_fixedpoint_inc_ref(c: Z3_context; d: Z3_fixedpoint); cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_inc_ref';
+  external z3_dll name  'Z3_fixedpoint_inc_ref';
 
 (**
        \brief Decrement the reference counter of the given fixedpoint context.
@@ -40,7 +40,7 @@ procedure Z3_fixedpoint_inc_ref(c: Z3_context; d: Z3_fixedpoint); cdecl;
        def_API('Z3_fixedpoint_dec_ref', VOID, (_in(CONTEXT), _in(FIXEDPOINT)))
  *)
 procedure Z3_fixedpoint_dec_ref(c: Z3_context; d: Z3_fixedpoint); cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_dec_ref';
+  external z3_dll name  'Z3_fixedpoint_dec_ref';
 
 (**
        \brief Add a universal Horn clause as a named rule.
@@ -55,7 +55,7 @@ procedure Z3_fixedpoint_dec_ref(c: Z3_context; d: Z3_fixedpoint); cdecl;
        def_API('Z3_fixedpoint_add_rule', VOID, (_in(CONTEXT), _in(FIXEDPOINT), _in(AST), _in(SYMBOL)))
  *)
 procedure Z3_fixedpoint_add_rule(c: Z3_context; d: Z3_fixedpoint; rule: Z3_ast; name: Z3_symbol); cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_add_rule';
+  external z3_dll name  'Z3_fixedpoint_add_rule';
 
 (**
        \brief Add a Database fact.
@@ -75,7 +75,7 @@ procedure Z3_fixedpoint_add_rule(c: Z3_context; d: Z3_fixedpoint; rule: Z3_ast; 
        def_API('Z3_fixedpoint_add_fact', VOID, (_in(CONTEXT), _in(FIXEDPOINT), _in(FUNC_DECL), _in(UINT), _in_array(3, UINT)))
  *)
 procedure Z3_fixedpoint_add_fact(c: Z3_context; d: Z3_fixedpoint; r: Z3_func_decl; num_args: Cardinal; args: PCardinal); cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_add_fact';
+  external z3_dll name  'Z3_fixedpoint_add_fact';
 
 (**
        \brief Assert a constraint to the fixedpoint context.
@@ -86,7 +86,7 @@ procedure Z3_fixedpoint_add_fact(c: Z3_context; d: Z3_fixedpoint; r: Z3_func_dec
        def_API('Z3_fixedpoint_assert', VOID, (_in(CONTEXT), _in(FIXEDPOINT), _in(AST)))
  *)
 procedure Z3_fixedpoint_assert(c: Z3_context; d: Z3_fixedpoint; axiom: Z3_ast); cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_assert';
+  external z3_dll name  'Z3_fixedpoint_assert';
 
 (**
         \brief Pose a query against the asserted rules.
@@ -104,7 +104,7 @@ procedure Z3_fixedpoint_assert(c: Z3_context; d: Z3_fixedpoint; axiom: Z3_ast); 
         def_API('Z3_fixedpoint_query', INT, (_in(CONTEXT), _in(FIXEDPOINT), _in(AST)))
  *)
 function Z3_fixedpoint_query(c: Z3_context; d: Z3_fixedpoint; query: Z3_ast): Z3_lbool; cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_query';
+  external z3_dll name  'Z3_fixedpoint_query';
 
 (**
         \brief Pose multiple queries against the asserted rules.
@@ -119,7 +119,7 @@ function Z3_fixedpoint_query(c: Z3_context; d: Z3_fixedpoint; query: Z3_ast): Z3
         def_API('Z3_fixedpoint_query_relations', INT, (_in(CONTEXT), _in(FIXEDPOINT), _in(UINT), _in_array(2, FUNC_DECL)))
  *)
 function Z3_fixedpoint_query_relations(c: Z3_context; d: Z3_fixedpoint; num_relations: Cardinal; relations: PZ3_func_decl): Z3_lbool; cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_query_relations';
+  external z3_dll name  'Z3_fixedpoint_query_relations';
 
 (**
        \brief Retrieve a formula that encodes satisfying answers to the query.
@@ -135,7 +135,7 @@ function Z3_fixedpoint_query_relations(c: Z3_context; d: Z3_fixedpoint; num_rela
        def_API('Z3_fixedpoint_get_answer', AST, (_in(CONTEXT), _in(FIXEDPOINT)))
  *)
 function Z3_fixedpoint_get_answer(c: Z3_context; d: Z3_fixedpoint): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_get_answer';
+  external z3_dll name  'Z3_fixedpoint_get_answer';
 
 (**
        \brief Retrieve a string that describes the last status returned by #Z3_fixedpoint_query.
@@ -145,7 +145,7 @@ function Z3_fixedpoint_get_answer(c: Z3_context; d: Z3_fixedpoint): Z3_ast; cdec
        def_API('Z3_fixedpoint_get_reason_unknown', STRING, (_in(CONTEXT), _in(FIXEDPOINT) ))
  *)
 function Z3_fixedpoint_get_reason_unknown(c: Z3_context; d: Z3_fixedpoint): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_get_reason_unknown';
+  external z3_dll name  'Z3_fixedpoint_get_reason_unknown';
 
 (**
        \brief Update a named rule.
@@ -154,7 +154,7 @@ function Z3_fixedpoint_get_reason_unknown(c: Z3_context; d: Z3_fixedpoint): Z3_s
        def_API('Z3_fixedpoint_update_rule', VOID, (_in(CONTEXT), _in(FIXEDPOINT), _in(AST), _in(SYMBOL)))
  *)
 procedure Z3_fixedpoint_update_rule(c: Z3_context; d: Z3_fixedpoint; a: Z3_ast; name: Z3_symbol); cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_update_rule';
+  external z3_dll name  'Z3_fixedpoint_update_rule';
 
 (**
        \brief Query the PDR engine for the maximal levels properties are known about predicate.
@@ -166,7 +166,7 @@ procedure Z3_fixedpoint_update_rule(c: Z3_context; d: Z3_fixedpoint; a: Z3_ast; 
        def_API('Z3_fixedpoint_get_num_levels', UINT, (_in(CONTEXT), _in(FIXEDPOINT), _in(FUNC_DECL)))
  *)
 function Z3_fixedpoint_get_num_levels(c: Z3_context; d: Z3_fixedpoint; pred: Z3_func_decl): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_get_num_levels';
+  external z3_dll name  'Z3_fixedpoint_get_num_levels';
 
 (**
        Retrieve the current cover of \c pred up to \c level unfoldings.
@@ -179,7 +179,7 @@ function Z3_fixedpoint_get_num_levels(c: Z3_context; d: Z3_fixedpoint; pred: Z3_
        def_API('Z3_fixedpoint_get_cover_delta', AST, (_in(CONTEXT), _in(FIXEDPOINT), _in(INT), _in(FUNC_DECL)))
  *)
 function Z3_fixedpoint_get_cover_delta(c: Z3_context; d: Z3_fixedpoint; level: Integer; pred: Z3_func_decl): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_get_cover_delta';
+  external z3_dll name  'Z3_fixedpoint_get_cover_delta';
 
 (**
        \brief Add property about the predicate \c pred.
@@ -194,7 +194,7 @@ function Z3_fixedpoint_get_cover_delta(c: Z3_context; d: Z3_fixedpoint; level: I
        def_API('Z3_fixedpoint_add_cover', VOID, (_in(CONTEXT), _in(FIXEDPOINT), _in(INT), _in(FUNC_DECL), _in(AST)))
  *)
 procedure Z3_fixedpoint_add_cover(c: Z3_context; d: Z3_fixedpoint; level: Integer; pred: Z3_func_decl; &property: Z3_ast); cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_add_cover';
+  external z3_dll name  'Z3_fixedpoint_add_cover';
 
 (**
        \brief Retrieve statistics information from the last call to #Z3_fixedpoint_query.
@@ -202,7 +202,7 @@ procedure Z3_fixedpoint_add_cover(c: Z3_context; d: Z3_fixedpoint; level: Intege
        def_API('Z3_fixedpoint_get_statistics', STATS, (_in(CONTEXT), _in(FIXEDPOINT)))
  *)
 function Z3_fixedpoint_get_statistics(c: Z3_context; d: Z3_fixedpoint): Z3_stats; cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_get_statistics';
+  external z3_dll name  'Z3_fixedpoint_get_statistics';
 
 (**
        \brief Register relation as Fixedpoint defined.
@@ -213,7 +213,7 @@ function Z3_fixedpoint_get_statistics(c: Z3_context; d: Z3_fixedpoint): Z3_stats
        def_API('Z3_fixedpoint_register_relation', VOID, (_in(CONTEXT), _in(FIXEDPOINT), _in(FUNC_DECL)))
  *)
 procedure Z3_fixedpoint_register_relation(c: Z3_context; d: Z3_fixedpoint; f: Z3_func_decl); cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_register_relation';
+  external z3_dll name  'Z3_fixedpoint_register_relation';
 
 (**
        \brief Configure the predicate representation.
@@ -225,7 +225,7 @@ procedure Z3_fixedpoint_register_relation(c: Z3_context; d: Z3_fixedpoint; f: Z3
        def_API('Z3_fixedpoint_set_predicate_representation', VOID, (_in(CONTEXT), _in(FIXEDPOINT), _in(FUNC_DECL), _in(UINT), _in_array(3, SYMBOL)))
  *)
 procedure Z3_fixedpoint_set_predicate_representation(c: Z3_context; d: Z3_fixedpoint; f: Z3_func_decl; num_relations: Cardinal; relation_kinds: PZ3_symbol); cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_set_predicate_representation';
+  external z3_dll name  'Z3_fixedpoint_set_predicate_representation';
 
 (**
        \brief Retrieve set of rules from fixedpoint context.
@@ -233,7 +233,7 @@ procedure Z3_fixedpoint_set_predicate_representation(c: Z3_context; d: Z3_fixedp
        def_API('Z3_fixedpoint_get_rules', AST_VECTOR, (_in(CONTEXT),_in(FIXEDPOINT)))
  *)
 function Z3_fixedpoint_get_rules(c: Z3_context; f: Z3_fixedpoint): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_get_rules';
+  external z3_dll name  'Z3_fixedpoint_get_rules';
 
 (**
        \brief Retrieve set of background assertions from fixedpoint context.
@@ -241,7 +241,7 @@ function Z3_fixedpoint_get_rules(c: Z3_context; f: Z3_fixedpoint): Z3_ast_vector
        def_API('Z3_fixedpoint_get_assertions', AST_VECTOR, (_in(CONTEXT),_in(FIXEDPOINT)))
  *)
 function Z3_fixedpoint_get_assertions(c: Z3_context; f: Z3_fixedpoint): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_get_assertions';
+  external z3_dll name  'Z3_fixedpoint_get_assertions';
 
 (**
        \brief Set parameters on fixedpoint context.
@@ -252,7 +252,7 @@ function Z3_fixedpoint_get_assertions(c: Z3_context; f: Z3_fixedpoint): Z3_ast_v
        def_API('Z3_fixedpoint_set_params', VOID, (_in(CONTEXT), _in(FIXEDPOINT), _in(PARAMS)))
  *)
 procedure Z3_fixedpoint_set_params(c: Z3_context; f: Z3_fixedpoint; p: Z3_params); cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_set_params';
+  external z3_dll name  'Z3_fixedpoint_set_params';
 
 (**
        \brief Return a string describing all fixedpoint available parameters.
@@ -263,7 +263,7 @@ procedure Z3_fixedpoint_set_params(c: Z3_context; f: Z3_fixedpoint; p: Z3_params
        def_API('Z3_fixedpoint_get_help', STRING, (_in(CONTEXT), _in(FIXEDPOINT)))
  *)
 function Z3_fixedpoint_get_help(c: Z3_context; f: Z3_fixedpoint): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_get_help';
+  external z3_dll name  'Z3_fixedpoint_get_help';
 
 (**
        \brief Return the parameter description set for the given fixedpoint object.
@@ -274,7 +274,7 @@ function Z3_fixedpoint_get_help(c: Z3_context; f: Z3_fixedpoint): Z3_string; cde
        def_API('Z3_fixedpoint_get_param_descrs', PARAM_DESCRS, (_in(CONTEXT), _in(FIXEDPOINT)))
  *)
 function Z3_fixedpoint_get_param_descrs(c: Z3_context; f: Z3_fixedpoint): Z3_param_descrs; cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_get_param_descrs';
+  external z3_dll name  'Z3_fixedpoint_get_param_descrs';
 
 (**
        \brief Print the current rules and background axioms as a string.
@@ -289,7 +289,7 @@ function Z3_fixedpoint_get_param_descrs(c: Z3_context; f: Z3_fixedpoint): Z3_par
        def_API('Z3_fixedpoint_to_string', STRING, (_in(CONTEXT), _in(FIXEDPOINT), _in(UINT), _in_array(2, AST)))
  *)
 function Z3_fixedpoint_to_string(c: Z3_context; f: Z3_fixedpoint; num_queries: Cardinal; queries: PZ3_ast): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_to_string';
+  external z3_dll name  'Z3_fixedpoint_to_string';
 
 (**
        \brief Parse an SMT-LIB2 string with fixedpoint rules.
@@ -306,7 +306,7 @@ function Z3_fixedpoint_to_string(c: Z3_context; f: Z3_fixedpoint; num_queries: C
        def_API('Z3_fixedpoint_from_string', AST_VECTOR, (_in(CONTEXT), _in(FIXEDPOINT), _in(STRING)))
  *)
 function Z3_fixedpoint_from_string(c: Z3_context; f: Z3_fixedpoint; s: Z3_string): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_from_string';
+  external z3_dll name  'Z3_fixedpoint_from_string';
 
 (**
        \brief Parse an SMT-LIB2 file with fixedpoint rules.
@@ -323,7 +323,7 @@ function Z3_fixedpoint_from_string(c: Z3_context; f: Z3_fixedpoint; s: Z3_string
        def_API('Z3_fixedpoint_from_file', AST_VECTOR, (_in(CONTEXT), _in(FIXEDPOINT), _in(STRING)))
  *)
 function Z3_fixedpoint_from_file(c: Z3_context; f: Z3_fixedpoint; s: Z3_string): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_from_file';
+  external z3_dll name  'Z3_fixedpoint_from_file';
 
 (**
        \brief Create a backtracking point.
@@ -336,7 +336,7 @@ function Z3_fixedpoint_from_file(c: Z3_context; f: Z3_fixedpoint; s: Z3_string):
        def_API('Z3_fixedpoint_push', VOID, (_in(CONTEXT), _in(FIXEDPOINT)))
  *)
 procedure Z3_fixedpoint_push(c: Z3_context; d: Z3_fixedpoint); cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_push';
+  external z3_dll name  'Z3_fixedpoint_push';
 
 (**
        \brief Backtrack one backtracking point.
@@ -348,11 +348,11 @@ procedure Z3_fixedpoint_push(c: Z3_context; d: Z3_fixedpoint); cdecl;
        def_API('Z3_fixedpoint_pop', VOID, (_in(CONTEXT), _in(FIXEDPOINT)))
  *)
 procedure Z3_fixedpoint_pop(c: Z3_context; d: Z3_fixedpoint); cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_pop';
+  external z3_dll name  'Z3_fixedpoint_pop';
 
 (** \brief Initialize the context with a user-defined state. *)
 procedure Z3_fixedpoint_init(c: Z3_context; d: Z3_fixedpoint; state: Pointer); cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_init';
+  external z3_dll name  'Z3_fixedpoint_init';
 
 (**
        \brief Register a callback to destructive updates.
@@ -360,18 +360,18 @@ procedure Z3_fixedpoint_init(c: Z3_context; d: Z3_fixedpoint; state: Pointer); c
        Registers are identified with terms encoded as fresh constants,
  *)
 procedure Z3_fixedpoint_set_reduce_assign_callback(c: Z3_context; d: Z3_fixedpoint; cb: Z3_fixedpoint_reduce_assign_callback_fptr); cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_set_reduce_assign_callback';
+  external z3_dll name  'Z3_fixedpoint_set_reduce_assign_callback';
 
 (** \brief Register a callback for building terms based on the relational operators. *)
 procedure Z3_fixedpoint_set_reduce_app_callback(c: Z3_context; d: Z3_fixedpoint; cb: Z3_fixedpoint_reduce_app_callback_fptr); cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_set_reduce_app_callback';
+  external z3_dll name  'Z3_fixedpoint_set_reduce_app_callback';
 
 (** \brief set export callback for lemmas *)
 procedure Z3_fixedpoint_add_callback(ctx: Z3_context; f: Z3_fixedpoint; state: Pointer; new_lemma_eh: Z3_fixedpoint_new_lemma_eh; predecessor_eh: Z3_fixedpoint_predecessor_eh; unfold_eh: Z3_fixedpoint_unfold_eh); cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_add_callback';
+  external z3_dll name  'Z3_fixedpoint_add_callback';
 
 procedure Z3_fixedpoint_add_constraint(c: Z3_context; d: Z3_fixedpoint; e: Z3_ast; lvl: Cardinal); cdecl;
-  external z3_dll name _PU + 'Z3_fixedpoint_add_constraint';
+  external z3_dll name  'Z3_fixedpoint_add_constraint';
 
 implementation
 

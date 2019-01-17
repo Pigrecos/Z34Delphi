@@ -15,7 +15,7 @@ uses z3;
        def_API('Z3_mk_optimize', OPTIMIZE, (_in(CONTEXT), ))
  *)
 function Z3_mk_optimize(c: Z3_context): Z3_optimize; cdecl;
-  external z3_dll name _PU + 'Z3_mk_optimize';
+  external z3_dll name  'Z3_mk_optimize';
 
 (**
        \brief Increment the reference counter of the given optimize context
@@ -23,7 +23,7 @@ function Z3_mk_optimize(c: Z3_context): Z3_optimize; cdecl;
        def_API('Z3_optimize_inc_ref', VOID, (_in(CONTEXT), _in(OPTIMIZE)))
  *)
 procedure Z3_optimize_inc_ref(c: Z3_context; d: Z3_optimize); cdecl;
-  external z3_dll name _PU + 'Z3_optimize_inc_ref';
+  external z3_dll name  'Z3_optimize_inc_ref';
 
 (**
        \brief Decrement the reference counter of the given optimize context.
@@ -31,7 +31,7 @@ procedure Z3_optimize_inc_ref(c: Z3_context; d: Z3_optimize); cdecl;
        def_API('Z3_optimize_dec_ref', VOID, (_in(CONTEXT), _in(OPTIMIZE)))
  *)
 procedure Z3_optimize_dec_ref(c: Z3_context; d: Z3_optimize); cdecl;
-  external z3_dll name _PU + 'Z3_optimize_dec_ref';
+  external z3_dll name  'Z3_optimize_dec_ref';
 
 (**
        \brief Assert hard constraint to the optimization context.
@@ -41,7 +41,7 @@ procedure Z3_optimize_dec_ref(c: Z3_context; d: Z3_optimize); cdecl;
        def_API('Z3_optimize_assert', VOID, (_in(CONTEXT), _in(OPTIMIZE), _in(AST)))
  *)
 procedure Z3_optimize_assert(c: Z3_context; o: Z3_optimize; a: Z3_ast); cdecl;
-  external z3_dll name _PU + 'Z3_optimize_assert';
+  external z3_dll name  'Z3_optimize_assert';
 
 (**
        \brief Assert soft constraint to the optimization context.
@@ -56,7 +56,7 @@ procedure Z3_optimize_assert(c: Z3_context; o: Z3_optimize; a: Z3_ast); cdecl;
        def_API('Z3_optimize_assert_soft', UINT, (_in(CONTEXT), _in(OPTIMIZE), _in(AST), _in(STRING), _in(SYMBOL)))
  *)
 function Z3_optimize_assert_soft(c: Z3_context; o: Z3_optimize; a: Z3_ast; weight: Z3_string; id: Z3_symbol): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_optimize_assert_soft';
+  external z3_dll name  'Z3_optimize_assert_soft';
 
 (**
        \brief Add a maximization constraint.
@@ -69,7 +69,7 @@ function Z3_optimize_assert_soft(c: Z3_context; o: Z3_optimize; a: Z3_ast; weigh
        def_API('Z3_optimize_maximize', UINT, (_in(CONTEXT), _in(OPTIMIZE), _in(AST)))
  *)
 function Z3_optimize_maximize(c: Z3_context; o: Z3_optimize; t: Z3_ast): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_optimize_maximize';
+  external z3_dll name  'Z3_optimize_maximize';
 
 (**
        \brief Add a minimization constraint.
@@ -82,7 +82,7 @@ function Z3_optimize_maximize(c: Z3_context; o: Z3_optimize; t: Z3_ast): Cardina
        def_API('Z3_optimize_minimize', UINT, (_in(CONTEXT), _in(OPTIMIZE), _in(AST)))
  *)
 function Z3_optimize_minimize(c: Z3_context; o: Z3_optimize; t: Z3_ast): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_optimize_minimize';
+  external z3_dll name  'Z3_optimize_minimize';
 
 (**
        \brief Create a backtracking point.
@@ -95,7 +95,7 @@ function Z3_optimize_minimize(c: Z3_context; o: Z3_optimize; t: Z3_ast): Cardina
        def_API('Z3_optimize_push', VOID, (_in(CONTEXT), _in(OPTIMIZE)))
  *)
 procedure Z3_optimize_push(c: Z3_context; d: Z3_optimize); cdecl;
-  external z3_dll name _PU + 'Z3_optimize_push';
+  external z3_dll name  'Z3_optimize_push';
 
 (**
        \brief Backtrack one level.
@@ -107,7 +107,7 @@ procedure Z3_optimize_push(c: Z3_context; d: Z3_optimize); cdecl;
        def_API('Z3_optimize_pop', VOID, (_in(CONTEXT), _in(OPTIMIZE)))
  *)
 procedure Z3_optimize_pop(c: Z3_context; d: Z3_optimize); cdecl;
-  external z3_dll name _PU + 'Z3_optimize_pop';
+  external z3_dll name  'Z3_optimize_pop';
 
 (**
        \brief Check consistency and produce optimal values.
@@ -124,7 +124,7 @@ procedure Z3_optimize_pop(c: Z3_context; d: Z3_optimize); cdecl;
        def_API('Z3_optimize_check', INT, (_in(CONTEXT), _in(OPTIMIZE), _in(UINT), _in_array(2, AST)))
  *)
 function Z3_optimize_check(c: Z3_context; o: Z3_optimize; num_assumptions: Cardinal; assumptions: PZ3_ast): Z3_lbool; cdecl;
-  external z3_dll name _PU + 'Z3_optimize_check';
+  external z3_dll name  'Z3_optimize_check';
 
 (**
        \brief Retrieve a string that describes the last status returned by #Z3_optimize_check.
@@ -134,7 +134,7 @@ function Z3_optimize_check(c: Z3_context; o: Z3_optimize; num_assumptions: Cardi
        def_API('Z3_optimize_get_reason_unknown', STRING, (_in(CONTEXT), _in(OPTIMIZE) ))
  *)
 function Z3_optimize_get_reason_unknown(c: Z3_context; d: Z3_optimize): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_optimize_get_reason_unknown';
+  external z3_dll name  'Z3_optimize_get_reason_unknown';
 
 (**
        \brief Retrieve the model for the last #Z3_optimize_check
@@ -146,7 +146,7 @@ function Z3_optimize_get_reason_unknown(c: Z3_context; d: Z3_optimize): Z3_strin
        def_API('Z3_optimize_get_model', MODEL, (_in(CONTEXT), _in(OPTIMIZE)))
  *)
 function Z3_optimize_get_model(c: Z3_context; o: Z3_optimize): Z3_model; cdecl;
-  external z3_dll name _PU + 'Z3_optimize_get_model';
+  external z3_dll name  'Z3_optimize_get_model';
 
 (**
        \brief Retrieve the unsat core for the last #Z3_optimize_check
@@ -155,7 +155,7 @@ function Z3_optimize_get_model(c: Z3_context; o: Z3_optimize): Z3_model; cdecl;
        def_API('Z3_optimize_get_unsat_core', AST_VECTOR, (_in(CONTEXT), _in(OPTIMIZE)))       
  *)
 function Z3_optimize_get_unsat_core(c: Z3_context; o: Z3_optimize): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_optimize_get_unsat_core';
+  external z3_dll name  'Z3_optimize_get_unsat_core';
 
 (**
        \brief Set parameters on optimization context.
@@ -170,7 +170,7 @@ function Z3_optimize_get_unsat_core(c: Z3_context; o: Z3_optimize): Z3_ast_vecto
        def_API('Z3_optimize_set_params', VOID, (_in(CONTEXT), _in(OPTIMIZE), _in(PARAMS)))
  *)
 procedure Z3_optimize_set_params(c: Z3_context; o: Z3_optimize; p: Z3_params); cdecl;
-  external z3_dll name _PU + 'Z3_optimize_set_params';
+  external z3_dll name  'Z3_optimize_set_params';
 
 (**
        \brief Return the parameter description set for the given optimize object.
@@ -184,7 +184,7 @@ procedure Z3_optimize_set_params(c: Z3_context; o: Z3_optimize; p: Z3_params); c
        def_API('Z3_optimize_get_param_descrs', PARAM_DESCRS, (_in(CONTEXT), _in(OPTIMIZE)))
  *)
 function Z3_optimize_get_param_descrs(c: Z3_context; o: Z3_optimize): Z3_param_descrs; cdecl;
-  external z3_dll name _PU + 'Z3_optimize_get_param_descrs';
+  external z3_dll name  'Z3_optimize_get_param_descrs';
 
 (**
        \brief Retrieve lower bound value or approximation for the i'th optimization objective.
@@ -200,7 +200,7 @@ function Z3_optimize_get_param_descrs(c: Z3_context; o: Z3_optimize): Z3_param_d
        def_API('Z3_optimize_get_lower', AST, (_in(CONTEXT), _in(OPTIMIZE), _in(UINT)))
  *)
 function Z3_optimize_get_lower(c: Z3_context; o: Z3_optimize; idx: Cardinal): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_optimize_get_lower';
+  external z3_dll name  'Z3_optimize_get_lower';
 
 (**
        \brief Retrieve upper bound value or approximation for the i'th optimization objective.
@@ -216,7 +216,7 @@ function Z3_optimize_get_lower(c: Z3_context; o: Z3_optimize; idx: Cardinal): Z3
        def_API('Z3_optimize_get_upper', AST, (_in(CONTEXT), _in(OPTIMIZE), _in(UINT)))
  *)
 function Z3_optimize_get_upper(c: Z3_context; o: Z3_optimize; idx: Cardinal): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_optimize_get_upper';
+  external z3_dll name  'Z3_optimize_get_upper';
 
 (**
        \brief Retrieve lower bound value or approximation for the i'th optimization objective.
@@ -235,7 +235,7 @@ function Z3_optimize_get_upper(c: Z3_context; o: Z3_optimize; idx: Cardinal): Z3
        def_API('Z3_optimize_get_lower_as_vector', AST_VECTOR, (_in(CONTEXT), _in(OPTIMIZE), _in(UINT)))
  *)
 function Z3_optimize_get_lower_as_vector(c: Z3_context; o: Z3_optimize; idx: Cardinal): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_optimize_get_lower_as_vector';
+  external z3_dll name  'Z3_optimize_get_lower_as_vector';
 
 (**
        \brief Retrieve upper bound value or approximation for the i'th optimization objective.
@@ -251,7 +251,7 @@ function Z3_optimize_get_lower_as_vector(c: Z3_context; o: Z3_optimize; idx: Car
        def_API('Z3_optimize_get_upper_as_vector', AST_VECTOR, (_in(CONTEXT), _in(OPTIMIZE), _in(UINT)))
  *)
 function Z3_optimize_get_upper_as_vector(c: Z3_context; o: Z3_optimize; idx: Cardinal): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_optimize_get_upper_as_vector';
+  external z3_dll name  'Z3_optimize_get_upper_as_vector';
 
 (**
        \brief Print the current context as a string.
@@ -264,7 +264,7 @@ function Z3_optimize_get_upper_as_vector(c: Z3_context; o: Z3_optimize; idx: Car
        def_API('Z3_optimize_to_string', STRING, (_in(CONTEXT), _in(OPTIMIZE)))
  *)
 function Z3_optimize_to_string(c: Z3_context; o: Z3_optimize): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_optimize_to_string';
+  external z3_dll name  'Z3_optimize_to_string';
 
 (**
        \brief Parse an SMT-LIB2 string with assertions,
@@ -281,7 +281,7 @@ function Z3_optimize_to_string(c: Z3_context; o: Z3_optimize): Z3_string; cdecl;
        def_API('Z3_optimize_from_string', VOID, (_in(CONTEXT), _in(OPTIMIZE), _in(STRING)))
  *)
 procedure Z3_optimize_from_string(c: Z3_context; o: Z3_optimize; s: Z3_string); cdecl;
-  external z3_dll name _PU + 'Z3_optimize_from_string';
+  external z3_dll name  'Z3_optimize_from_string';
 
 (**
        \brief Parse an SMT-LIB2 file with assertions,
@@ -298,7 +298,7 @@ procedure Z3_optimize_from_string(c: Z3_context; o: Z3_optimize; s: Z3_string); 
        def_API('Z3_optimize_from_file', VOID, (_in(CONTEXT), _in(OPTIMIZE), _in(STRING)))
  *)
 procedure Z3_optimize_from_file(c: Z3_context; o: Z3_optimize; s: Z3_string); cdecl;
-  external z3_dll name _PU + 'Z3_optimize_from_file';
+  external z3_dll name  'Z3_optimize_from_file';
 
 (**
        \brief Return a string containing a description of parameters accepted by optimize.
@@ -309,7 +309,7 @@ procedure Z3_optimize_from_file(c: Z3_context; o: Z3_optimize; s: Z3_string); cd
        def_API('Z3_optimize_get_help', STRING, (_in(CONTEXT), _in(OPTIMIZE)))
  *)
 function Z3_optimize_get_help(c: Z3_context; t: Z3_optimize): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_optimize_get_help';
+  external z3_dll name  'Z3_optimize_get_help';
 
 (**
        \brief Retrieve statistics information from the last call to #Z3_optimize_check
@@ -317,7 +317,7 @@ function Z3_optimize_get_help(c: Z3_context; t: Z3_optimize): Z3_string; cdecl;
        def_API('Z3_optimize_get_statistics', STATS, (_in(CONTEXT), _in(OPTIMIZE)))
  *)
 function Z3_optimize_get_statistics(c: Z3_context; d: Z3_optimize): Z3_stats; cdecl;
-  external z3_dll name _PU + 'Z3_optimize_get_statistics';
+  external z3_dll name  'Z3_optimize_get_statistics';
 
 (**
        \brief Return the set of asserted formulas on the optimization context.
@@ -325,7 +325,7 @@ function Z3_optimize_get_statistics(c: Z3_context; d: Z3_optimize): Z3_stats; cd
        def_API('Z3_optimize_get_assertions', AST_VECTOR, (_in(CONTEXT), _in(OPTIMIZE)))
  *)
 function Z3_optimize_get_assertions(c: Z3_context; o: Z3_optimize): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_optimize_get_assertions';
+  external z3_dll name  'Z3_optimize_get_assertions';
 
 (**
        \brief Return objectives on the optimization context.
@@ -338,7 +338,7 @@ function Z3_optimize_get_assertions(c: Z3_context; o: Z3_optimize): Z3_ast_vecto
        def_API('Z3_optimize_get_objectives', AST_VECTOR, (_in(CONTEXT), _in(OPTIMIZE)))
  *)
 function Z3_optimize_get_objectives(c: Z3_context; o: Z3_optimize): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_optimize_get_objectives';
+  external z3_dll name  'Z3_optimize_get_objectives';
 
 implementation
 

@@ -15,7 +15,7 @@ uses z3;
        def_API('Z3_mk_ast_vector', AST_VECTOR, (_in(CONTEXT),))
  *)
 function Z3_mk_ast_vector(c: Z3_context): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_mk_ast_vector';
+  external z3_dll name  'Z3_mk_ast_vector';
 
 (**
        \brief Increment the reference counter of the given AST vector.
@@ -23,7 +23,7 @@ function Z3_mk_ast_vector(c: Z3_context): Z3_ast_vector; cdecl;
        def_API('Z3_ast_vector_inc_ref', VOID, (_in(CONTEXT), _in(AST_VECTOR)))
  *)
 procedure Z3_ast_vector_inc_ref(c: Z3_context; v: Z3_ast_vector); cdecl;
-  external z3_dll name _PU + 'Z3_ast_vector_inc_ref';
+  external z3_dll name  'Z3_ast_vector_inc_ref';
 
 (**
        \brief Decrement the reference counter of the given AST vector.
@@ -31,7 +31,7 @@ procedure Z3_ast_vector_inc_ref(c: Z3_context; v: Z3_ast_vector); cdecl;
        def_API('Z3_ast_vector_dec_ref', VOID, (_in(CONTEXT), _in(AST_VECTOR)))
  *)
 procedure Z3_ast_vector_dec_ref(c: Z3_context; v: Z3_ast_vector); cdecl;
-  external z3_dll name _PU + 'Z3_ast_vector_dec_ref';
+  external z3_dll name  'Z3_ast_vector_dec_ref';
 
 (**
        \brief Return the size of the given AST vector.
@@ -39,7 +39,7 @@ procedure Z3_ast_vector_dec_ref(c: Z3_context; v: Z3_ast_vector); cdecl;
        def_API('Z3_ast_vector_size', UINT, (_in(CONTEXT), _in(AST_VECTOR)))
  *)
 function Z3_ast_vector_size(c: Z3_context; v: Z3_ast_vector): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_ast_vector_size';
+  external z3_dll name  'Z3_ast_vector_size';
 
 (**
        \brief Return the AST at position \c i in the AST vector \c v.
@@ -49,7 +49,7 @@ function Z3_ast_vector_size(c: Z3_context; v: Z3_ast_vector): Cardinal; cdecl;
        def_API('Z3_ast_vector_get', AST, (_in(CONTEXT), _in(AST_VECTOR), _in(UINT)))
  *)
 function Z3_ast_vector_get(c: Z3_context; v: Z3_ast_vector; i: Cardinal): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_ast_vector_get';
+  external z3_dll name  'Z3_ast_vector_get';
 
 (**
        \brief Update position \c i of the AST vector \c v with the AST \c a.
@@ -59,7 +59,7 @@ function Z3_ast_vector_get(c: Z3_context; v: Z3_ast_vector; i: Cardinal): Z3_ast
        def_API('Z3_ast_vector_set', VOID, (_in(CONTEXT), _in(AST_VECTOR), _in(UINT), _in(AST)))
  *)
 procedure Z3_ast_vector_set(c: Z3_context; v: Z3_ast_vector; i: Cardinal; a: Z3_ast); cdecl;
-  external z3_dll name _PU + 'Z3_ast_vector_set';
+  external z3_dll name  'Z3_ast_vector_set';
 
 (**
        \brief Resize the AST vector \c v.
@@ -67,7 +67,7 @@ procedure Z3_ast_vector_set(c: Z3_context; v: Z3_ast_vector; i: Cardinal; a: Z3_
        def_API('Z3_ast_vector_resize', VOID, (_in(CONTEXT), _in(AST_VECTOR), _in(UINT)))
  *)
 procedure Z3_ast_vector_resize(c: Z3_context; v: Z3_ast_vector; n: Cardinal); cdecl;
-  external z3_dll name _PU + 'Z3_ast_vector_resize';
+  external z3_dll name  'Z3_ast_vector_resize';
 
 (**
        \brief Add the AST \c a in the end of the AST vector \c v. The size of \c v is increased by one.
@@ -75,7 +75,7 @@ procedure Z3_ast_vector_resize(c: Z3_context; v: Z3_ast_vector; n: Cardinal); cd
        def_API('Z3_ast_vector_push', VOID, (_in(CONTEXT), _in(AST_VECTOR), _in(AST)))
  *)
 procedure Z3_ast_vector_push(c: Z3_context; v: Z3_ast_vector; a: Z3_ast); cdecl;
-  external z3_dll name _PU + 'Z3_ast_vector_push';
+  external z3_dll name  'Z3_ast_vector_push';
 
 (**
        \brief Translate the AST vector \c v from context \c s into an AST vector in context \c t.
@@ -83,7 +83,7 @@ procedure Z3_ast_vector_push(c: Z3_context; v: Z3_ast_vector; a: Z3_ast); cdecl;
        def_API('Z3_ast_vector_translate', AST_VECTOR, (_in(CONTEXT), _in(AST_VECTOR), _in(CONTEXT)))
  *)
 function Z3_ast_vector_translate(s: Z3_context; v: Z3_ast_vector; t: Z3_context): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_ast_vector_translate';
+  external z3_dll name  'Z3_ast_vector_translate';
 
 (**
        \brief Convert AST vector into a string.
@@ -91,7 +91,7 @@ function Z3_ast_vector_translate(s: Z3_context; v: Z3_ast_vector; t: Z3_context)
        def_API('Z3_ast_vector_to_string', STRING, (_in(CONTEXT), _in(AST_VECTOR)))
  *)
 function Z3_ast_vector_to_string(c: Z3_context; v: Z3_ast_vector): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_ast_vector_to_string';
+  external z3_dll name  'Z3_ast_vector_to_string';
 
 (**
     \brief Return an empty mapping from AST to AST
@@ -102,7 +102,7 @@ function Z3_ast_vector_to_string(c: Z3_context; v: Z3_ast_vector): Z3_string; cd
     def_API('Z3_mk_ast_map', AST_MAP, (_in(CONTEXT),) )
  *)
 function Z3_mk_ast_map(c: Z3_context): Z3_ast_map; cdecl;
-  external z3_dll name _PU + 'Z3_mk_ast_map';
+  external z3_dll name  'Z3_mk_ast_map';
 
 (**
     \brief Increment the reference counter of the given AST map.
@@ -110,7 +110,7 @@ function Z3_mk_ast_map(c: Z3_context): Z3_ast_map; cdecl;
     def_API('Z3_ast_map_inc_ref', VOID, (_in(CONTEXT), _in(AST_MAP)))
  *)
 procedure Z3_ast_map_inc_ref(c: Z3_context; m: Z3_ast_map); cdecl;
-  external z3_dll name _PU + 'Z3_ast_map_inc_ref';
+  external z3_dll name  'Z3_ast_map_inc_ref';
 
 (**
     \brief Decrement the reference counter of the given AST map.
@@ -118,7 +118,7 @@ procedure Z3_ast_map_inc_ref(c: Z3_context; m: Z3_ast_map); cdecl;
     def_API('Z3_ast_map_dec_ref', VOID, (_in(CONTEXT), _in(AST_MAP)))
  *)
 procedure Z3_ast_map_dec_ref(c: Z3_context; m: Z3_ast_map); cdecl;
-  external z3_dll name _PU + 'Z3_ast_map_dec_ref';
+  external z3_dll name  'Z3_ast_map_dec_ref';
 
 (**
     \brief Return true if the map \c m contains the AST key \c k.
@@ -126,7 +126,7 @@ procedure Z3_ast_map_dec_ref(c: Z3_context; m: Z3_ast_map); cdecl;
     def_API('Z3_ast_map_contains', BOOL, (_in(CONTEXT), _in(AST_MAP), _in(AST)))
  *)
 function Z3_ast_map_contains(c: Z3_context; m: Z3_ast_map; k: Z3_ast): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_ast_map_contains';
+  external z3_dll name  'Z3_ast_map_contains';
 
 (**
     \brief Return the value associated with the key \c k.
@@ -136,7 +136,7 @@ function Z3_ast_map_contains(c: Z3_context; m: Z3_ast_map; k: Z3_ast): Boolean; 
     def_API('Z3_ast_map_find', AST, (_in(CONTEXT), _in(AST_MAP), _in(AST)))
  *)
 function Z3_ast_map_find(c: Z3_context; m: Z3_ast_map; k: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_ast_map_find';
+  external z3_dll name  'Z3_ast_map_find';
 
 (**
     \brief Store/Replace a new key, value pair in the given map.
@@ -144,7 +144,7 @@ function Z3_ast_map_find(c: Z3_context; m: Z3_ast_map; k: Z3_ast): Z3_ast; cdecl
     def_API('Z3_ast_map_insert', VOID, (_in(CONTEXT), _in(AST_MAP), _in(AST), _in(AST)))
  *)
 procedure Z3_ast_map_insert(c: Z3_context; m: Z3_ast_map; k: Z3_ast; v: Z3_ast); cdecl;
-  external z3_dll name _PU + 'Z3_ast_map_insert';
+  external z3_dll name  'Z3_ast_map_insert';
 
 (**
     \brief Erase a key from the map.
@@ -152,7 +152,7 @@ procedure Z3_ast_map_insert(c: Z3_context; m: Z3_ast_map; k: Z3_ast; v: Z3_ast);
     def_API('Z3_ast_map_erase', VOID, (_in(CONTEXT), _in(AST_MAP), _in(AST)))
  *)
 procedure Z3_ast_map_erase(c: Z3_context; m: Z3_ast_map; k: Z3_ast); cdecl;
-  external z3_dll name _PU + 'Z3_ast_map_erase';
+  external z3_dll name  'Z3_ast_map_erase';
 
 (**
     \brief Remove all keys from the given map.
@@ -160,7 +160,7 @@ procedure Z3_ast_map_erase(c: Z3_context; m: Z3_ast_map; k: Z3_ast); cdecl;
     def_API('Z3_ast_map_reset', VOID, (_in(CONTEXT), _in(AST_MAP)))
  *)
 procedure Z3_ast_map_reset(c: Z3_context; m: Z3_ast_map); cdecl;
-  external z3_dll name _PU + 'Z3_ast_map_reset';
+  external z3_dll name  'Z3_ast_map_reset';
 
 (**
     \brief Return the size of the given map.
@@ -168,7 +168,7 @@ procedure Z3_ast_map_reset(c: Z3_context; m: Z3_ast_map); cdecl;
     def_API('Z3_ast_map_size', UINT, (_in(CONTEXT), _in(AST_MAP)))
  *)
 function Z3_ast_map_size(c: Z3_context; m: Z3_ast_map): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_ast_map_size';
+  external z3_dll name  'Z3_ast_map_size';
 
 (**
     \brief Return the keys stored in the given map.
@@ -176,7 +176,7 @@ function Z3_ast_map_size(c: Z3_context; m: Z3_ast_map): Cardinal; cdecl;
     def_API('Z3_ast_map_keys', AST_VECTOR, (_in(CONTEXT), _in(AST_MAP)))
  *)
 function Z3_ast_map_keys(c: Z3_context; m: Z3_ast_map): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_ast_map_keys';
+  external z3_dll name  'Z3_ast_map_keys';
 
 (**
     \brief Convert the given map into a string.
@@ -184,7 +184,7 @@ function Z3_ast_map_keys(c: Z3_context; m: Z3_ast_map): Z3_ast_vector; cdecl;
     def_API('Z3_ast_map_to_string', STRING, (_in(CONTEXT), _in(AST_MAP)))
  *)
 function Z3_ast_map_to_string(c: Z3_context; m: Z3_ast_map): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_ast_map_to_string';
+  external z3_dll name  'Z3_ast_map_to_string';
 
 implementation
 

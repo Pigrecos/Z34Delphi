@@ -17,7 +17,7 @@ uses z3;
        def_API('Z3_polynomial_subresultants', AST_VECTOR, (_in(CONTEXT), _in(AST), _in(AST), _in(AST)))
  *)
 function Z3_polynomial_subresultants(c: Z3_context; p: Z3_ast; q: Z3_ast; x: Z3_ast): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_polynomial_subresultants';
+  external z3_dll name 'Z3_polynomial_subresultants';
 
 implementation
 

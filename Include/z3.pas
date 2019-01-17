@@ -9,10 +9,8 @@ interface
 const
   {$IF Defined(WIN32)}
   z3_dll = 'z3_x32.dll';
-  _PU = '';
   {$ELSEIF Defined(WIN64)}
   z3_dll = 'z3_x64.dll';
-  _PU = '';
   {$ELSE}
     {$MESSAGE Error 'Unsupported platform'}
   {$ENDIF}
@@ -1308,7 +1306,7 @@ type
 
        def_API('Z3_global_param_set', VOID, (_in(STRING), _in(STRING)))
  *)
-procedure Z3_global_param_set(param_id: Z3_string; param_value: Z3_string); cdecl;   external z3_dll name _PU + 'Z3_global_param_set';
+procedure Z3_global_param_set(param_id: Z3_string; param_value: Z3_string); cdecl;   external z3_dll name  'Z3_global_param_set';
 
 (**
        \brief Restore the value of all global (and module) parameters.
@@ -1318,7 +1316,7 @@ procedure Z3_global_param_set(param_id: Z3_string; param_value: Z3_string); cdec
 
        def_API('Z3_global_param_reset_all', VOID, ())
  *)
-procedure Z3_global_param_reset_all(); cdecl;  external z3_dll name _PU + 'Z3_global_param_reset_all';
+procedure Z3_global_param_reset_all(); cdecl;  external z3_dll name  'Z3_global_param_reset_all';
 
 (**
        \brief Get a global (or module) parameter.
@@ -1332,7 +1330,7 @@ procedure Z3_global_param_reset_all(); cdecl;  external z3_dll name _PU + 'Z3_gl
 
        def_API('Z3_global_param_get', BOOL, (_in(STRING), _out(STRING)))
  *)
-function Z3_global_param_get(param_id: Z3_string; param_value: Z3_string_ptr): Z3_bool; cdecl;  external z3_dll name _PU + 'Z3_global_param_get';
+function Z3_global_param_get(param_id: Z3_string; param_value: Z3_string_ptr): Z3_bool; cdecl;  external z3_dll name  'Z3_global_param_get';
 
 (**
         \brief Create a configuration object for the Z3 context object.
@@ -1364,7 +1362,7 @@ function Z3_global_param_get(param_id: Z3_string; param_value: Z3_string_ptr): Z
 
         def_API('Z3_mk_config', CONFIG, ())
  *)
-function Z3_mk_config(): Z3_config; cdecl;  external z3_dll name _PU + 'Z3_mk_config';
+function Z3_mk_config(): Z3_config; cdecl;  external z3_dll name  'Z3_mk_config';
 
 (**
         \brief Delete the given configuration object.
@@ -1373,7 +1371,7 @@ function Z3_mk_config(): Z3_config; cdecl;  external z3_dll name _PU + 'Z3_mk_co
 
         def_API('Z3_del_config', VOID, (_in(CONFIG),))
  *)
-procedure Z3_del_config(c: Z3_config); cdecl;  external z3_dll name _PU + 'Z3_del_config';
+procedure Z3_del_config(c: Z3_config); cdecl;  external z3_dll name  'Z3_del_config';
 
 (**
         \brief Set a configuration parameter.
@@ -1384,7 +1382,7 @@ procedure Z3_del_config(c: Z3_config); cdecl;  external z3_dll name _PU + 'Z3_de
 
         def_API('Z3_set_param_value', VOID, (_in(CONFIG), _in(STRING), _in(STRING)))
  *)
-procedure Z3_set_param_value(c: Z3_config; param_id: Z3_string; param_value: Z3_string); cdecl;  external z3_dll name _PU + 'Z3_set_param_value';
+procedure Z3_set_param_value(c: Z3_config; param_id: Z3_string; param_value: Z3_string); cdecl;  external z3_dll name  'Z3_set_param_value';
 
 (**
        \brief Create a context using the given configuration.
@@ -1412,7 +1410,7 @@ procedure Z3_set_param_value(c: Z3_config; param_id: Z3_string; param_value: Z3_
 
        def_API('Z3_mk_context', CONTEXT, (_in(CONFIG),))
  *)
-function Z3_mk_context(c: Z3_config): Z3_context; cdecl;  external z3_dll name _PU + 'Z3_mk_context';
+function Z3_mk_context(c: Z3_config): Z3_context; cdecl;  external z3_dll name  'Z3_mk_context';
 
 (**
        \brief Create a context using the given configuration.
@@ -1436,7 +1434,7 @@ function Z3_mk_context(c: Z3_config): Z3_context; cdecl;  external z3_dll name _
 
        def_API('Z3_mk_context_rc', CONTEXT, (_in(CONFIG),))
  *)
-function Z3_mk_context_rc(c: Z3_config): Z3_context; cdecl;  external z3_dll name _PU + 'Z3_mk_context_rc';
+function Z3_mk_context_rc(c: Z3_config): Z3_context; cdecl;  external z3_dll name  'Z3_mk_context_rc';
 
 (**
        \brief Delete the given logical context.
@@ -1445,7 +1443,7 @@ function Z3_mk_context_rc(c: Z3_config): Z3_context; cdecl;  external z3_dll nam
 
        def_API('Z3_del_context', VOID, (_in(CONTEXT),))
  *)
-procedure Z3_del_context(c: Z3_context); cdecl;  external z3_dll name _PU + 'Z3_del_context';
+procedure Z3_del_context(c: Z3_context); cdecl;  external z3_dll name  'Z3_del_context';
 
 (**
        \brief Increment the reference counter of the given AST.
@@ -1454,7 +1452,7 @@ procedure Z3_del_context(c: Z3_context); cdecl;  external z3_dll name _PU + 'Z3_
 
        def_API('Z3_inc_ref', VOID, (_in(CONTEXT), _in(AST)))
  *)
-procedure Z3_inc_ref(c: Z3_context; a: Z3_ast); cdecl;  external z3_dll name _PU + 'Z3_inc_ref';
+procedure Z3_inc_ref(c: Z3_context; a: Z3_ast); cdecl;  external z3_dll name  'Z3_inc_ref';
 
 (**
        \brief Decrement the reference counter of the given AST.
@@ -1463,7 +1461,7 @@ procedure Z3_inc_ref(c: Z3_context; a: Z3_ast); cdecl;  external z3_dll name _PU
 
        def_API('Z3_dec_ref', VOID, (_in(CONTEXT), _in(AST)))
  *)
-procedure Z3_dec_ref(c: Z3_context; a: Z3_ast); cdecl;  external z3_dll name _PU + 'Z3_dec_ref';
+procedure Z3_dec_ref(c: Z3_context; a: Z3_ast); cdecl;  external z3_dll name  'Z3_dec_ref';
 
 (**
        \brief Set a value of a context parameter.
@@ -1472,7 +1470,7 @@ procedure Z3_dec_ref(c: Z3_context; a: Z3_ast); cdecl;  external z3_dll name _PU
 
        def_API('Z3_update_param_value', VOID, (_in(CONTEXT), _in(STRING), _in(STRING)))
  *)
-procedure Z3_update_param_value(c: Z3_context; param_id: Z3_string; param_value: Z3_string); cdecl;  external z3_dll name _PU + 'Z3_update_param_value';
+procedure Z3_update_param_value(c: Z3_context; param_id: Z3_string; param_value: Z3_string); cdecl;  external z3_dll name  'Z3_update_param_value';
 
 (**
        \brief Interrupt the execution of a Z3 procedure.
@@ -1480,7 +1478,7 @@ procedure Z3_update_param_value(c: Z3_context; param_id: Z3_string; param_value:
 
        def_API('Z3_interrupt', VOID, (_in(CONTEXT),))
  *)
-procedure Z3_interrupt(c: Z3_context); cdecl;  external z3_dll name _PU + 'Z3_interrupt';
+procedure Z3_interrupt(c: Z3_context); cdecl;  external z3_dll name  'Z3_interrupt';
 
 (**
        \brief Create a Z3 (empty) parameter set.
@@ -1492,49 +1490,49 @@ procedure Z3_interrupt(c: Z3_context); cdecl;  external z3_dll name _PU + 'Z3_in
 
        def_API('Z3_mk_params', PARAMS, (_in(CONTEXT),))
  *)
-function Z3_mk_params(c: Z3_context): Z3_params; cdecl;  external z3_dll name _PU + 'Z3_mk_params';
+function Z3_mk_params(c: Z3_context): Z3_params; cdecl;  external z3_dll name  'Z3_mk_params';
 
 (**
        \brief Increment the reference counter of the given parameter set.
 
        def_API('Z3_params_inc_ref', VOID, (_in(CONTEXT), _in(PARAMS)))
  *)
-procedure Z3_params_inc_ref(c: Z3_context; p: Z3_params); cdecl;  external z3_dll name _PU + 'Z3_params_inc_ref';
+procedure Z3_params_inc_ref(c: Z3_context; p: Z3_params); cdecl;  external z3_dll name  'Z3_params_inc_ref';
 
 (**
        \brief Decrement the reference counter of the given parameter set.
 
        def_API('Z3_params_dec_ref', VOID, (_in(CONTEXT), _in(PARAMS)))
  *)
-procedure Z3_params_dec_ref(c: Z3_context; p: Z3_params); cdecl;  external z3_dll name _PU + 'Z3_params_dec_ref';
+procedure Z3_params_dec_ref(c: Z3_context; p: Z3_params); cdecl;  external z3_dll name  'Z3_params_dec_ref';
 
 (**
        \brief Add a Boolean parameter \c k with value \c v to the parameter set \c p.
 
        def_API('Z3_params_set_bool', VOID, (_in(CONTEXT), _in(PARAMS), _in(SYMBOL), _in(BOOL)))
  *)
-procedure Z3_params_set_bool(c: Z3_context; p: Z3_params; k: Z3_symbol; v: Boolean); cdecl;  external z3_dll name _PU + 'Z3_params_set_bool';
+procedure Z3_params_set_bool(c: Z3_context; p: Z3_params; k: Z3_symbol; v: Boolean); cdecl;  external z3_dll name  'Z3_params_set_bool';
 
 (**
        \brief Add a unsigned parameter \c k with value \c v to the parameter set \c p.
 
        def_API('Z3_params_set_uint', VOID, (_in(CONTEXT), _in(PARAMS), _in(SYMBOL), _in(UINT)))
  *)
-procedure Z3_params_set_uint(c: Z3_context; p: Z3_params; k: Z3_symbol; v: Cardinal); cdecl;  external z3_dll name _PU + 'Z3_params_set_uint';
+procedure Z3_params_set_uint(c: Z3_context; p: Z3_params; k: Z3_symbol; v: Cardinal); cdecl;  external z3_dll name  'Z3_params_set_uint';
 
 (**
        \brief Add a double parameter \c k with value \c v to the parameter set \c p.
 
        def_API('Z3_params_set_double', VOID, (_in(CONTEXT), _in(PARAMS), _in(SYMBOL), _in(DOUBLE)))
  *)
-procedure Z3_params_set_double(c: Z3_context; p: Z3_params; k: Z3_symbol; v: Double); cdecl;  external z3_dll name _PU + 'Z3_params_set_double';
+procedure Z3_params_set_double(c: Z3_context; p: Z3_params; k: Z3_symbol; v: Double); cdecl;  external z3_dll name  'Z3_params_set_double';
 
 (**
        \brief Add a symbol parameter \c k with value \c v to the parameter set \c p.
 
        def_API('Z3_params_set_symbol', VOID, (_in(CONTEXT), _in(PARAMS), _in(SYMBOL), _in(SYMBOL)))
  *)
-procedure Z3_params_set_symbol(c: Z3_context; p: Z3_params; k: Z3_symbol; v: Z3_symbol); cdecl;  external z3_dll name _PU + 'Z3_params_set_symbol';
+procedure Z3_params_set_symbol(c: Z3_context; p: Z3_params; k: Z3_symbol; v: Z3_symbol); cdecl;  external z3_dll name  'Z3_params_set_symbol';
 
 (**
        \brief Convert a parameter set into a string. This function is mainly used for printing the
@@ -1542,7 +1540,7 @@ procedure Z3_params_set_symbol(c: Z3_context; p: Z3_params; k: Z3_symbol; v: Z3_
 
        def_API('Z3_params_to_string', STRING, (_in(CONTEXT), _in(PARAMS)))
  *)
-function Z3_params_to_string(c: Z3_context; p: Z3_params): Z3_string; cdecl;  external z3_dll name _PU + 'Z3_params_to_string';
+function Z3_params_to_string(c: Z3_context; p: Z3_params): Z3_string; cdecl;  external z3_dll name  'Z3_params_to_string';
 
 (**
        \brief Validate the parameter set \c p against the parameter description set \c d.
@@ -1551,35 +1549,35 @@ function Z3_params_to_string(c: Z3_context; p: Z3_params): Z3_string; cdecl;  ex
 
        def_API('Z3_params_validate', VOID, (_in(CONTEXT), _in(PARAMS), _in(PARAM_DESCRS)))
  *)
-procedure Z3_params_validate(c: Z3_context; p: Z3_params; d: Z3_param_descrs); cdecl;  external z3_dll name _PU + 'Z3_params_validate';
+procedure Z3_params_validate(c: Z3_context; p: Z3_params; d: Z3_param_descrs); cdecl;  external z3_dll name  'Z3_params_validate';
 
 (**
        \brief Increment the reference counter of the given parameter description set.
 
        def_API('Z3_param_descrs_inc_ref', VOID, (_in(CONTEXT), _in(PARAM_DESCRS)))
  *)
-procedure Z3_param_descrs_inc_ref(c: Z3_context; p: Z3_param_descrs); cdecl;  external z3_dll name _PU + 'Z3_param_descrs_inc_ref';
+procedure Z3_param_descrs_inc_ref(c: Z3_context; p: Z3_param_descrs); cdecl;  external z3_dll name  'Z3_param_descrs_inc_ref';
 
 (**
        \brief Decrement the reference counter of the given parameter description set.
 
        def_API('Z3_param_descrs_dec_ref', VOID, (_in(CONTEXT), _in(PARAM_DESCRS)))
  *)
-procedure Z3_param_descrs_dec_ref(c: Z3_context; p: Z3_param_descrs); cdecl;  external z3_dll name _PU + 'Z3_param_descrs_dec_ref';
+procedure Z3_param_descrs_dec_ref(c: Z3_context; p: Z3_param_descrs); cdecl;  external z3_dll name  'Z3_param_descrs_dec_ref';
 
 (**
        \brief Return the kind associated with the given parameter name \c n.
 
        def_API('Z3_param_descrs_get_kind', UINT, (_in(CONTEXT), _in(PARAM_DESCRS), _in(SYMBOL)))
  *)
-function Z3_param_descrs_get_kind(c: Z3_context; p: Z3_param_descrs; n: Z3_symbol): Z3_param_kind; cdecl;  external z3_dll name _PU + 'Z3_param_descrs_get_kind';
+function Z3_param_descrs_get_kind(c: Z3_context; p: Z3_param_descrs; n: Z3_symbol): Z3_param_kind; cdecl;  external z3_dll name  'Z3_param_descrs_get_kind';
 
 (**
        \brief Return the number of parameters in the given parameter description set.
 
        def_API('Z3_param_descrs_size', UINT, (_in(CONTEXT), _in(PARAM_DESCRS)))
  *)
-function Z3_param_descrs_size(c: Z3_context; p: Z3_param_descrs): Cardinal; cdecl;  external z3_dll name _PU + 'Z3_param_descrs_size';
+function Z3_param_descrs_size(c: Z3_context; p: Z3_param_descrs): Cardinal; cdecl;  external z3_dll name  'Z3_param_descrs_size';
 
 (**
        \brief Return the name of the parameter at given index \c i.
@@ -1588,14 +1586,14 @@ function Z3_param_descrs_size(c: Z3_context; p: Z3_param_descrs): Cardinal; cdec
 
        def_API('Z3_param_descrs_get_name', SYMBOL, (_in(CONTEXT), _in(PARAM_DESCRS), _in(UINT)))
  *)
-function Z3_param_descrs_get_name(c: Z3_context; p: Z3_param_descrs; i: Cardinal): Z3_symbol; cdecl;  external z3_dll name _PU + 'Z3_param_descrs_get_name';
+function Z3_param_descrs_get_name(c: Z3_context; p: Z3_param_descrs; i: Cardinal): Z3_symbol; cdecl;  external z3_dll name  'Z3_param_descrs_get_name';
 
 (**
        \brief Retrieve documentation string corresponding to parameter name \c s.
 
        def_API('Z3_param_descrs_get_documentation', STRING, (_in(CONTEXT), _in(PARAM_DESCRS), _in(SYMBOL)))
  *)
-function Z3_param_descrs_get_documentation(c: Z3_context; p: Z3_param_descrs; s: Z3_symbol): Z3_string; cdecl;  external z3_dll name _PU + 'Z3_param_descrs_get_documentation';
+function Z3_param_descrs_get_documentation(c: Z3_context; p: Z3_param_descrs; s: Z3_symbol): Z3_string; cdecl;  external z3_dll name  'Z3_param_descrs_get_documentation';
 
 (**
        \brief Convert a parameter description set into a string. This function is mainly used for printing the
@@ -1603,7 +1601,7 @@ function Z3_param_descrs_get_documentation(c: Z3_context; p: Z3_param_descrs; s:
 
        def_API('Z3_param_descrs_to_string', STRING, (_in(CONTEXT), _in(PARAM_DESCRS)))
  *)
-function Z3_param_descrs_to_string(c: Z3_context; p: Z3_param_descrs): Z3_string; cdecl;  external z3_dll name _PU + 'Z3_param_descrs_to_string';
+function Z3_param_descrs_to_string(c: Z3_context; p: Z3_param_descrs): Z3_string; cdecl;  external z3_dll name  'Z3_param_descrs_to_string';
 
 (**
        \brief Create a Z3 symbol using an integer.
@@ -1618,7 +1616,7 @@ function Z3_param_descrs_to_string(c: Z3_context; p: Z3_param_descrs): Z3_string
 
        def_API('Z3_mk_int_symbol', SYMBOL, (_in(CONTEXT), _in(INT)))
  *)
-function Z3_mk_int_symbol(c: Z3_context; i: Integer): Z3_symbol; cdecl;  external z3_dll name _PU + 'Z3_mk_int_symbol';
+function Z3_mk_int_symbol(c: Z3_context; i: Integer): Z3_symbol; cdecl;  external z3_dll name  'Z3_mk_int_symbol';
 
 (**
        \brief Create a Z3 symbol using a C string.
@@ -1630,7 +1628,7 @@ function Z3_mk_int_symbol(c: Z3_context; i: Integer): Z3_symbol; cdecl;  externa
 
        def_API('Z3_mk_string_symbol', SYMBOL, (_in(CONTEXT), _in(STRING)))
  *)
-function Z3_mk_string_symbol(c: Z3_context; s: Z3_string): Z3_symbol; cdecl;  external z3_dll name _PU + 'Z3_mk_string_symbol';
+function Z3_mk_string_symbol(c: Z3_context; s: Z3_string): Z3_symbol; cdecl;  external z3_dll name  'Z3_mk_string_symbol';
 
 (**
        \brief Create a free (uninterpreted) type using the given name (symbol).
@@ -1639,7 +1637,7 @@ function Z3_mk_string_symbol(c: Z3_context; s: Z3_string): Z3_symbol; cdecl;  ex
 
        def_API('Z3_mk_uninterpreted_sort', SORT, (_in(CONTEXT), _in(SYMBOL)))
  *)
-function Z3_mk_uninterpreted_sort(c: Z3_context; s: Z3_symbol): Z3_sort; cdecl;  external z3_dll name _PU + 'Z3_mk_uninterpreted_sort';
+function Z3_mk_uninterpreted_sort(c: Z3_context; s: Z3_symbol): Z3_sort; cdecl;  external z3_dll name  'Z3_mk_uninterpreted_sort';
 
 (**
        \brief Create the Boolean type.
@@ -1648,7 +1646,7 @@ function Z3_mk_uninterpreted_sort(c: Z3_context; s: Z3_symbol): Z3_sort; cdecl; 
 
        def_API('Z3_mk_bool_sort', SORT, (_in(CONTEXT), ))
  *)
-function Z3_mk_bool_sort(c: Z3_context): Z3_sort; cdecl;  external z3_dll name _PU + 'Z3_mk_bool_sort';
+function Z3_mk_bool_sort(c: Z3_context): Z3_sort; cdecl;  external z3_dll name  'Z3_mk_bool_sort';
 
 (**
        \brief Create the integer type.
@@ -1662,7 +1660,7 @@ function Z3_mk_bool_sort(c: Z3_context): Z3_sort; cdecl;  external z3_dll name _
        def_API('Z3_mk_int_sort', SORT, (_in(CONTEXT), ))
  *)
 function Z3_mk_int_sort(c: Z3_context): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_mk_int_sort';
+  external z3_dll name  'Z3_mk_int_sort';
 
 (**
        \brief Create the real type.
@@ -1672,7 +1670,7 @@ function Z3_mk_int_sort(c: Z3_context): Z3_sort; cdecl;
        def_API('Z3_mk_real_sort', SORT, (_in(CONTEXT), ))
  *)
 function Z3_mk_real_sort(c: Z3_context): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_mk_real_sort';
+  external z3_dll name  'Z3_mk_real_sort';
 
 (**
        \brief Create a bit-vector type of the given size.
@@ -1684,7 +1682,7 @@ function Z3_mk_real_sort(c: Z3_context): Z3_sort; cdecl;
        def_API('Z3_mk_bv_sort', SORT, (_in(CONTEXT), _in(UINT)))
  *)
 function Z3_mk_bv_sort(c: Z3_context; sz: Cardinal): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bv_sort';
+  external z3_dll name  'Z3_mk_bv_sort';
 
 (**
        \brief Create a named finite domain sort.
@@ -1700,7 +1698,7 @@ function Z3_mk_bv_sort(c: Z3_context; sz: Cardinal): Z3_sort; cdecl;
        def_API('Z3_mk_finite_domain_sort', SORT, (_in(CONTEXT), _in(SYMBOL), _in(UINT64)))
  *)
 function Z3_mk_finite_domain_sort(c: Z3_context; name: Z3_symbol; size: UInt64): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_mk_finite_domain_sort';
+  external z3_dll name  'Z3_mk_finite_domain_sort';
 
 (**
        \brief Create an array type.
@@ -1714,7 +1712,7 @@ function Z3_mk_finite_domain_sort(c: Z3_context; name: Z3_symbol; size: UInt64):
        def_API('Z3_mk_array_sort', SORT, (_in(CONTEXT), _in(SORT), _in(SORT)))
  *)
 function Z3_mk_array_sort(c: Z3_context; domain: Z3_sort; range: Z3_sort): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_mk_array_sort';
+  external z3_dll name  'Z3_mk_array_sort';
 
 (**
        \brief Create an array type with N arguments
@@ -1725,7 +1723,7 @@ function Z3_mk_array_sort(c: Z3_context; domain: Z3_sort; range: Z3_sort): Z3_so
        def_API('Z3_mk_array_sort_n', SORT, (_in(CONTEXT), _in(UINT), _in_array(1, SORT), _in(SORT)))
  *)
 function Z3_mk_array_sort_n(c: Z3_context; n: Cardinal; domain: PZ3_sort; range: Z3_sort): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_mk_array_sort_n';
+  external z3_dll name  'Z3_mk_array_sort_n';
 
 (**
        \brief Create a tuple type.
@@ -1744,7 +1742,7 @@ function Z3_mk_array_sort_n(c: Z3_context; n: Cardinal; domain: PZ3_sort; range:
        def_API('Z3_mk_tuple_sort', SORT, (_in(CONTEXT), _in(SYMBOL), _in(UINT), _in_array(2, SYMBOL), _in_array(2, SORT), _out(FUNC_DECL), _out_array(2, FUNC_DECL)))
  *)
 function Z3_mk_tuple_sort(c: Z3_context; mk_tuple_name: Z3_symbol; num_fields: Cardinal; field_names: PZ3_symbol; field_sorts: PZ3_sort; mk_tuple_decl: PZ3_func_decl; proj_decl: PZ3_func_decl): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_mk_tuple_sort';
+  external z3_dll name  'Z3_mk_tuple_sort';
 
 (**
        \brief Create a enumeration sort.
@@ -1768,7 +1766,7 @@ function Z3_mk_tuple_sort(c: Z3_context; mk_tuple_name: Z3_symbol; num_fields: C
        def_API('Z3_mk_enumeration_sort', SORT, (_in(CONTEXT), _in(SYMBOL), _in(UINT), _in_array(2, SYMBOL), _out_array(2, FUNC_DECL), _out_array(2, FUNC_DECL)))
  *)
 function Z3_mk_enumeration_sort(c: Z3_context; name: Z3_symbol; n: Cardinal; enum_names: PZ3_symbol; enum_consts: PZ3_func_decl; enum_testers: PZ3_func_decl): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_mk_enumeration_sort';
+  external z3_dll name  'Z3_mk_enumeration_sort';
 
 (**
        \brief Create a list sort
@@ -1789,7 +1787,7 @@ function Z3_mk_enumeration_sort(c: Z3_context; name: Z3_symbol; n: Cardinal; enu
        def_API('Z3_mk_list_sort', SORT, (_in(CONTEXT), _in(SYMBOL), _in(SORT), _out(FUNC_DECL), _out(FUNC_DECL), _out(FUNC_DECL), _out(FUNC_DECL), _out(FUNC_DECL), _out(FUNC_DECL)))
  *)
 function Z3_mk_list_sort(c: Z3_context; name: Z3_symbol; elem_sort: Z3_sort; nil_decl: PZ3_func_decl; is_nil_decl: PZ3_func_decl; cons_decl: PZ3_func_decl; is_cons_decl: PZ3_func_decl; head_decl: PZ3_func_decl; tail_decl: PZ3_func_decl): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_mk_list_sort';
+  external z3_dll name  'Z3_mk_list_sort';
 
 (**
        \brief Create a constructor.
@@ -1807,7 +1805,7 @@ function Z3_mk_list_sort(c: Z3_context; name: Z3_symbol; elem_sort: Z3_sort; nil
        def_API('Z3_mk_constructor', CONSTRUCTOR, (_in(CONTEXT), _in(SYMBOL), _in(SYMBOL), _in(UINT), _in_array(3, SYMBOL), _in_array(3, SORT), _in_array(3, UINT)))
  *)
 function Z3_mk_constructor(c: Z3_context; name: Z3_symbol; recognizer: Z3_symbol; num_fields: Cardinal; field_names: PZ3_symbol; sorts: PZ3_sort; sort_refs: PCardinal): Z3_constructor; cdecl;
-  external z3_dll name _PU + 'Z3_mk_constructor';
+  external z3_dll name  'Z3_mk_constructor';
 
 (**
        \brief Reclaim memory allocated to constructor.
@@ -1818,7 +1816,7 @@ function Z3_mk_constructor(c: Z3_context; name: Z3_symbol; recognizer: Z3_symbol
        def_API('Z3_del_constructor', VOID, (_in(CONTEXT), _in(CONSTRUCTOR)))
  *)
 procedure Z3_del_constructor(c: Z3_context; constr: Z3_constructor); cdecl;
-  external z3_dll name _PU + 'Z3_del_constructor';
+  external z3_dll name  'Z3_del_constructor';
 
 (**
        \brief Create datatype, such as lists, trees, records, enumerations or unions of records.
@@ -1832,7 +1830,7 @@ procedure Z3_del_constructor(c: Z3_context; constr: Z3_constructor); cdecl;
        def_API('Z3_mk_datatype', SORT, (_in(CONTEXT), _in(SYMBOL), _in(UINT), _inout_array(2, CONSTRUCTOR)))
  *)
 function Z3_mk_datatype(c: Z3_context; name: Z3_symbol; num_constructors: Cardinal; constructors: PZ3_constructor): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_mk_datatype';
+  external z3_dll name  'Z3_mk_datatype';
 
 (**
        \brief Create list of constructors.
@@ -1844,7 +1842,7 @@ function Z3_mk_datatype(c: Z3_context; name: Z3_symbol; num_constructors: Cardin
        def_API('Z3_mk_constructor_list', CONSTRUCTOR_LIST, (_in(CONTEXT), _in(UINT), _in_array(1, CONSTRUCTOR)))
  *)
 function Z3_mk_constructor_list(c: Z3_context; num_constructors: Cardinal; constructors: PZ3_constructor): Z3_constructor_list; cdecl;
-  external z3_dll name _PU + 'Z3_mk_constructor_list';
+  external z3_dll name  'Z3_mk_constructor_list';
 
 (**
        \brief Reclaim memory allocated for constructor list.
@@ -1857,7 +1855,7 @@ function Z3_mk_constructor_list(c: Z3_context; num_constructors: Cardinal; const
        def_API('Z3_del_constructor_list', VOID, (_in(CONTEXT), _in(CONSTRUCTOR_LIST)))
  *)
 procedure Z3_del_constructor_list(c: Z3_context; clist: Z3_constructor_list); cdecl;
-  external z3_dll name _PU + 'Z3_del_constructor_list';
+  external z3_dll name  'Z3_del_constructor_list';
 
 (**
        \brief Create mutually recursive datatypes.
@@ -1871,7 +1869,7 @@ procedure Z3_del_constructor_list(c: Z3_context; clist: Z3_constructor_list); cd
        def_API('Z3_mk_datatypes', VOID, (_in(CONTEXT), _in(UINT), _in_array(1, SYMBOL), _out_array(1, SORT), _inout_array(1, CONSTRUCTOR_LIST)))
  *)
 procedure Z3_mk_datatypes(c: Z3_context; num_sorts: Cardinal; sort_names: PZ3_symbol; sorts: PZ3_sort; constructor_lists: PZ3_constructor_list); cdecl;
-  external z3_dll name _PU + 'Z3_mk_datatypes';
+  external z3_dll name  'Z3_mk_datatypes';
 
 (**
        \brief Query constructor for declared functions.
@@ -1886,7 +1884,7 @@ procedure Z3_mk_datatypes(c: Z3_context; num_sorts: Cardinal; sort_names: PZ3_sy
        def_API('Z3_query_constructor', VOID, (_in(CONTEXT), _in(CONSTRUCTOR), _in(UINT), _out(FUNC_DECL), _out(FUNC_DECL), _out_array(2, FUNC_DECL)))
  *)
 procedure Z3_query_constructor(c: Z3_context; constr: Z3_constructor; num_fields: Cardinal; &constructor: PZ3_func_decl; tester: PZ3_func_decl; accessors: PZ3_func_decl); cdecl;
-  external z3_dll name _PU + 'Z3_query_constructor';
+  external z3_dll name  'Z3_query_constructor';
 
 (**
        \brief Declare a constant or function.
@@ -1906,7 +1904,7 @@ procedure Z3_query_constructor(c: Z3_context; constr: Z3_constructor; num_fields
        def_API('Z3_mk_func_decl', FUNC_DECL, (_in(CONTEXT), _in(SYMBOL), _in(UINT), _in_array(2, SORT), _in(SORT)))
  *)
 function Z3_mk_func_decl(c: Z3_context; s: Z3_symbol; domain_size: Cardinal; domain: PZ3_sort; range: Z3_sort): Z3_func_decl; cdecl;
-  external z3_dll name _PU + 'Z3_mk_func_decl';
+  external z3_dll name  'Z3_mk_func_decl';
 
 (**
        \brief Create a constant or function application.
@@ -1916,7 +1914,7 @@ function Z3_mk_func_decl(c: Z3_context; s: Z3_symbol; domain_size: Cardinal; dom
        def_API('Z3_mk_app', AST, (_in(CONTEXT), _in(FUNC_DECL), _in(UINT), _in_array(2, AST)))
  *)
 function Z3_mk_app(c: Z3_context; d: Z3_func_decl; num_args: Cardinal; args: PZ3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_app';
+  external z3_dll name  'Z3_mk_app';
 
 (**
        \brief Declare and create a constant.
@@ -1933,7 +1931,7 @@ function Z3_mk_app(c: Z3_context; d: Z3_func_decl; num_args: Cardinal; args: PZ3
        def_API('Z3_mk_const', AST, (_in(CONTEXT), _in(SYMBOL), _in(SORT)))
  *)
 function Z3_mk_const(c: Z3_context; s: Z3_symbol; ty: Z3_sort): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_const';
+  external z3_dll name  'Z3_mk_const';
 
 (**
        \brief Declare a fresh constant or function.
@@ -1948,7 +1946,7 @@ function Z3_mk_const(c: Z3_context; s: Z3_symbol; ty: Z3_sort): Z3_ast; cdecl;
        def_API('Z3_mk_fresh_func_decl', FUNC_DECL, (_in(CONTEXT), _in(STRING), _in(UINT), _in_array(2, SORT), _in(SORT)))
  *)
 function Z3_mk_fresh_func_decl(c: Z3_context; prefix: Z3_string; domain_size: Cardinal; domain: PZ3_sort; range: Z3_sort): Z3_func_decl; cdecl;
-  external z3_dll name _PU + 'Z3_mk_fresh_func_decl';
+  external z3_dll name  'Z3_mk_fresh_func_decl';
 
 (**
        \brief Declare and create a fresh constant.
@@ -1964,7 +1962,7 @@ function Z3_mk_fresh_func_decl(c: Z3_context; prefix: Z3_string; domain_size: Ca
        def_API('Z3_mk_fresh_const', AST, (_in(CONTEXT), _in(STRING), _in(SORT)))
  *)
 function Z3_mk_fresh_const(c: Z3_context; prefix: Z3_string; ty: Z3_sort): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_fresh_const';
+  external z3_dll name  'Z3_mk_fresh_const';
 
 (**
        \brief Declare a recursive function
@@ -1985,7 +1983,7 @@ function Z3_mk_fresh_const(c: Z3_context; prefix: Z3_string; ty: Z3_sort): Z3_as
        def_API('Z3_mk_rec_func_decl', FUNC_DECL, (_in(CONTEXT), _in(SYMBOL), _in(UINT), _in_array(2, SORT), _in(SORT)))
  *)
 function Z3_mk_rec_func_decl(c: Z3_context; s: Z3_symbol; domain_size: Cardinal; domain: PZ3_sort; range: Z3_sort): Z3_func_decl; cdecl;
-  external z3_dll name _PU + 'Z3_mk_rec_func_decl';
+  external z3_dll name  'Z3_mk_rec_func_decl';
 
 (**
        \brief Define the body of a recursive function.
@@ -2004,7 +2002,7 @@ function Z3_mk_rec_func_decl(c: Z3_context; s: Z3_symbol; domain_size: Cardinal;
        def_API('Z3_add_rec_def', VOID, (_in(CONTEXT), _in(FUNC_DECL), _in(UINT), _in_array(2, AST), _in(AST)))
  *)
 procedure Z3_add_rec_def(c: Z3_context; f: Z3_func_decl; n: Cardinal; args: PZ3_ast; body: Z3_ast); cdecl;
-  external z3_dll name _PU + 'Z3_add_rec_def';
+  external z3_dll name  'Z3_add_rec_def';
 
 (**
         \brief Create an AST node representing \c true.
@@ -2012,7 +2010,7 @@ procedure Z3_add_rec_def(c: Z3_context; f: Z3_func_decl; n: Cardinal; args: PZ3_
         def_API('Z3_mk_true', AST, (_in(CONTEXT), ))
  *)
 function Z3_mk_true(c: Z3_context): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_true';
+  external z3_dll name  'Z3_mk_true';
 
 (**
         \brief Create an AST node representing \c false.
@@ -2020,7 +2018,7 @@ function Z3_mk_true(c: Z3_context): Z3_ast; cdecl;
         def_API('Z3_mk_false', AST, (_in(CONTEXT), ))
  *)
 function Z3_mk_false(c: Z3_context): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_false';
+  external z3_dll name  'Z3_mk_false';
 
 (**
         \brief Create an AST node representing \ccode{l = r}.
@@ -2030,7 +2028,7 @@ function Z3_mk_false(c: Z3_context): Z3_ast; cdecl;
         def_API('Z3_mk_eq', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_eq(c: Z3_context; l: Z3_ast; r: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_eq';
+  external z3_dll name  'Z3_mk_eq';
 
 (**
        \brief Create an AST node representing \ccode{distinct(args[0], ..., args[num_args-1])}.
@@ -2045,7 +2043,7 @@ function Z3_mk_eq(c: Z3_context; l: Z3_ast; r: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_distinct', AST, (_in(CONTEXT), _in(UINT), _in_array(1, AST)))
  *)
 function Z3_mk_distinct(c: Z3_context; num_args: Cardinal; args: PZ3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_distinct';
+  external z3_dll name  'Z3_mk_distinct';
 
 (**
         \brief Create an AST node representing \ccode{not(a)}.
@@ -2055,7 +2053,7 @@ function Z3_mk_distinct(c: Z3_context; num_args: Cardinal; args: PZ3_ast): Z3_as
         def_API('Z3_mk_not', AST, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_not(c: Z3_context; a: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_not';
+  external z3_dll name  'Z3_mk_not';
 
 (**
        \brief Create an AST node representing an if-then-else: \ccode{ite(t1, t2, t3)}.
@@ -2066,7 +2064,7 @@ function Z3_mk_not(c: Z3_context; a: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_ite', AST, (_in(CONTEXT), _in(AST), _in(AST), _in(AST)))
  *)
 function Z3_mk_ite(c: Z3_context; t1: Z3_ast; t2: Z3_ast; t3: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_ite';
+  external z3_dll name  'Z3_mk_ite';
 
 (**
        \brief Create an AST node representing \ccode{t1 iff t2}.
@@ -2076,7 +2074,7 @@ function Z3_mk_ite(c: Z3_context; t1: Z3_ast; t2: Z3_ast; t3: Z3_ast): Z3_ast; c
        def_API('Z3_mk_iff', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_iff(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_iff';
+  external z3_dll name  'Z3_mk_iff';
 
 (**
        \brief Create an AST node representing \ccode{t1 implies t2}.
@@ -2086,7 +2084,7 @@ function Z3_mk_iff(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_implies', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_implies(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_implies';
+  external z3_dll name  'Z3_mk_implies';
 
 (**
        \brief Create an AST node representing \ccode{t1 xor t2}.
@@ -2096,7 +2094,7 @@ function Z3_mk_implies(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_xor', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_xor(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_xor';
+  external z3_dll name  'Z3_mk_xor';
 
 (**
        \brief Create an AST node representing \ccode{args[0] and ... and args[num_args-1]}.
@@ -2109,7 +2107,7 @@ function Z3_mk_xor(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_and', AST, (_in(CONTEXT), _in(UINT), _in_array(1, AST)))
  *)
 function Z3_mk_and(c: Z3_context; num_args: Cardinal; args: PZ3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_and';
+  external z3_dll name  'Z3_mk_and';
 
 (**
        \brief Create an AST node representing \ccode{args[0] or ... or args[num_args-1]}.
@@ -2122,7 +2120,7 @@ function Z3_mk_and(c: Z3_context; num_args: Cardinal; args: PZ3_ast): Z3_ast; cd
        def_API('Z3_mk_or', AST, (_in(CONTEXT), _in(UINT), _in_array(1, AST)))
  *)
 function Z3_mk_or(c: Z3_context; num_args: Cardinal; args: PZ3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_or';
+  external z3_dll name  'Z3_mk_or';
 
 (**
        \brief Create an AST node representing \ccode{args[0] + ... + args[num_args-1]}.
@@ -2135,7 +2133,7 @@ function Z3_mk_or(c: Z3_context; num_args: Cardinal; args: PZ3_ast): Z3_ast; cde
        def_API('Z3_mk_add', AST, (_in(CONTEXT), _in(UINT), _in_array(1, AST)))
  *)
 function Z3_mk_add(c: Z3_context; num_args: Cardinal; args: PZ3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_add';
+  external z3_dll name  'Z3_mk_add';
 
 (**
        \brief Create an AST node representing \ccode{args[0] * ... * args[num_args-1]}.
@@ -2149,7 +2147,7 @@ function Z3_mk_add(c: Z3_context; num_args: Cardinal; args: PZ3_ast): Z3_ast; cd
        def_API('Z3_mk_mul', AST, (_in(CONTEXT), _in(UINT), _in_array(1, AST)))
  *)
 function Z3_mk_mul(c: Z3_context; num_args: Cardinal; args: PZ3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_mul';
+  external z3_dll name  'Z3_mk_mul';
 
 (**
        \brief Create an AST node representing \ccode{args[0] - ... - args[num_args - 1]}.
@@ -2162,7 +2160,7 @@ function Z3_mk_mul(c: Z3_context; num_args: Cardinal; args: PZ3_ast): Z3_ast; cd
        def_API('Z3_mk_sub', AST, (_in(CONTEXT), _in(UINT), _in_array(1, AST)))
  *)
 function Z3_mk_sub(c: Z3_context; num_args: Cardinal; args: PZ3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_sub';
+  external z3_dll name  'Z3_mk_sub';
 
 (**
        \brief Create an AST node representing \ccode{- arg}.
@@ -2172,7 +2170,7 @@ function Z3_mk_sub(c: Z3_context; num_args: Cardinal; args: PZ3_ast): Z3_ast; cd
        def_API('Z3_mk_unary_minus', AST, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_unary_minus(c: Z3_context; arg: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_unary_minus';
+  external z3_dll name  'Z3_mk_unary_minus';
 
 (**
        \brief Create an AST node representing \ccode{arg1 div arg2}.
@@ -2184,7 +2182,7 @@ function Z3_mk_unary_minus(c: Z3_context; arg: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_div', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_div(c: Z3_context; arg1: Z3_ast; arg2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_div';
+  external z3_dll name  'Z3_mk_div';
 
 (**
        \brief Create an AST node representing \ccode{arg1 mod arg2}.
@@ -2194,7 +2192,7 @@ function Z3_mk_div(c: Z3_context; arg1: Z3_ast; arg2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_mod', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_mod(c: Z3_context; arg1: Z3_ast; arg2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_mod';
+  external z3_dll name  'Z3_mk_mod';
 
 (**
        \brief Create an AST node representing \ccode{arg1 rem arg2}.
@@ -2204,7 +2202,7 @@ function Z3_mk_mod(c: Z3_context; arg1: Z3_ast; arg2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_rem', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_rem(c: Z3_context; arg1: Z3_ast; arg2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_rem';
+  external z3_dll name  'Z3_mk_rem';
 
 (**
        \brief Create an AST node representing \ccode{arg1 ^ arg2}.
@@ -2214,7 +2212,7 @@ function Z3_mk_rem(c: Z3_context; arg1: Z3_ast; arg2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_power', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_power(c: Z3_context; arg1: Z3_ast; arg2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_power';
+  external z3_dll name  'Z3_mk_power';
 
 (**
         \brief Create less than.
@@ -2224,7 +2222,7 @@ function Z3_mk_power(c: Z3_context; arg1: Z3_ast; arg2: Z3_ast): Z3_ast; cdecl;
         def_API('Z3_mk_lt', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_lt(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_lt';
+  external z3_dll name  'Z3_mk_lt';
 
 (**
         \brief Create less than or equal to.
@@ -2234,7 +2232,7 @@ function Z3_mk_lt(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
         def_API('Z3_mk_le', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_le(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_le';
+  external z3_dll name  'Z3_mk_le';
 
 (**
         \brief Create greater than.
@@ -2244,7 +2242,7 @@ function Z3_mk_le(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
         def_API('Z3_mk_gt', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_gt(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_gt';
+  external z3_dll name  'Z3_mk_gt';
 
 (**
         \brief Create greater than or equal to.
@@ -2254,7 +2252,7 @@ function Z3_mk_gt(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
         def_API('Z3_mk_ge', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_ge(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_ge';
+  external z3_dll name  'Z3_mk_ge';
 
 (**
         \brief Coerce an integer to a real.
@@ -2274,7 +2272,7 @@ function Z3_mk_ge(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
         def_API('Z3_mk_int2real', AST, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_int2real(c: Z3_context; t1: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_int2real';
+  external z3_dll name  'Z3_mk_int2real';
 
 (**
         \brief Coerce a real to an integer.
@@ -2288,7 +2286,7 @@ function Z3_mk_int2real(c: Z3_context; t1: Z3_ast): Z3_ast; cdecl;
         def_API('Z3_mk_real2int', AST, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_real2int(c: Z3_context; t1: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_real2int';
+  external z3_dll name  'Z3_mk_real2int';
 
 (**
         \brief Check if a real number is an integer.
@@ -2299,7 +2297,7 @@ function Z3_mk_real2int(c: Z3_context; t1: Z3_ast): Z3_ast; cdecl;
         def_API('Z3_mk_is_int', AST, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_is_int(c: Z3_context; t1: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_is_int';
+  external z3_dll name  'Z3_mk_is_int';
 
 (**
        \brief Bitwise negation.
@@ -2309,7 +2307,7 @@ function Z3_mk_is_int(c: Z3_context; t1: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvnot', AST, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_bvnot(c: Z3_context; t1: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvnot';
+  external z3_dll name  'Z3_mk_bvnot';
 
 (**
        \brief Take conjunction of bits in vector, return vector of length 1.
@@ -2319,7 +2317,7 @@ function Z3_mk_bvnot(c: Z3_context; t1: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvredand', AST, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_bvredand(c: Z3_context; t1: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvredand';
+  external z3_dll name  'Z3_mk_bvredand';
 
 (**
        \brief Take disjunction of bits in vector, return vector of length 1.
@@ -2329,7 +2327,7 @@ function Z3_mk_bvredand(c: Z3_context; t1: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvredor', AST, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_bvredor(c: Z3_context; t1: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvredor';
+  external z3_dll name  'Z3_mk_bvredor';
 
 (**
        \brief Bitwise and.
@@ -2339,7 +2337,7 @@ function Z3_mk_bvredor(c: Z3_context; t1: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvand', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvand(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvand';
+  external z3_dll name  'Z3_mk_bvand';
 
 (**
        \brief Bitwise or.
@@ -2349,7 +2347,7 @@ function Z3_mk_bvand(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvor', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvor(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvor';
+  external z3_dll name  'Z3_mk_bvor';
 
 (**
        \brief Bitwise exclusive-or.
@@ -2359,7 +2357,7 @@ function Z3_mk_bvor(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvxor', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvxor(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvxor';
+  external z3_dll name  'Z3_mk_bvxor';
 
 (**
        \brief Bitwise nand.
@@ -2369,7 +2367,7 @@ function Z3_mk_bvxor(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvnand', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvnand(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvnand';
+  external z3_dll name  'Z3_mk_bvnand';
 
 (**
        \brief Bitwise nor.
@@ -2379,7 +2377,7 @@ function Z3_mk_bvnand(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvnor', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvnor(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvnor';
+  external z3_dll name  'Z3_mk_bvnor';
 
 (**
        \brief Bitwise xnor.
@@ -2389,7 +2387,7 @@ function Z3_mk_bvnor(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvxnor', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvxnor(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvxnor';
+  external z3_dll name  'Z3_mk_bvxnor';
 
 (**
        \brief Standard two's complement unary minus.
@@ -2399,7 +2397,7 @@ function Z3_mk_bvxnor(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvneg', AST, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_bvneg(c: Z3_context; t1: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvneg';
+  external z3_dll name  'Z3_mk_bvneg';
 
 (**
         \brief Standard two's complement addition.
@@ -2409,7 +2407,7 @@ function Z3_mk_bvneg(c: Z3_context; t1: Z3_ast): Z3_ast; cdecl;
         def_API('Z3_mk_bvadd', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvadd(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvadd';
+  external z3_dll name  'Z3_mk_bvadd';
 
 (**
         \brief Standard two's complement subtraction.
@@ -2419,7 +2417,7 @@ function Z3_mk_bvadd(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
         def_API('Z3_mk_bvsub', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvsub(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvsub';
+  external z3_dll name  'Z3_mk_bvsub';
 
 (**
         \brief Standard two's complement multiplication.
@@ -2429,7 +2427,7 @@ function Z3_mk_bvsub(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
         def_API('Z3_mk_bvmul', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvmul(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvmul';
+  external z3_dll name  'Z3_mk_bvmul';
 
 (**
         \brief Unsigned division.
@@ -2443,7 +2441,7 @@ function Z3_mk_bvmul(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
         def_API('Z3_mk_bvudiv', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvudiv(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvudiv';
+  external z3_dll name  'Z3_mk_bvudiv';
 
 (**
         \brief Two's complement signed division.
@@ -2461,7 +2459,7 @@ function Z3_mk_bvudiv(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
         def_API('Z3_mk_bvsdiv', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvsdiv(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvsdiv';
+  external z3_dll name  'Z3_mk_bvsdiv';
 
 (**
        \brief Unsigned remainder.
@@ -2475,7 +2473,7 @@ function Z3_mk_bvsdiv(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvurem', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvurem(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvurem';
+  external z3_dll name  'Z3_mk_bvurem';
 
 (**
        \brief Two's complement signed remainder (sign follows dividend).
@@ -2492,7 +2490,7 @@ function Z3_mk_bvurem(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvsrem', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvsrem(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvsrem';
+  external z3_dll name  'Z3_mk_bvsrem';
 
 (**
        \brief Two's complement signed remainder (sign follows divisor).
@@ -2506,7 +2504,7 @@ function Z3_mk_bvsrem(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvsmod', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvsmod(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvsmod';
+  external z3_dll name  'Z3_mk_bvsmod';
 
 (**
        \brief Unsigned less than.
@@ -2516,7 +2514,7 @@ function Z3_mk_bvsmod(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvult', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvult(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvult';
+  external z3_dll name  'Z3_mk_bvult';
 
 (**
        \brief Two's complement signed less than.
@@ -2534,7 +2532,7 @@ function Z3_mk_bvult(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvslt', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvslt(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvslt';
+  external z3_dll name  'Z3_mk_bvslt';
 
 (**
        \brief Unsigned less than or equal to.
@@ -2544,7 +2542,7 @@ function Z3_mk_bvslt(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvule', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvule(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvule';
+  external z3_dll name  'Z3_mk_bvule';
 
 (**
        \brief Two's complement signed less than or equal to.
@@ -2554,7 +2552,7 @@ function Z3_mk_bvule(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvsle', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvsle(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvsle';
+  external z3_dll name  'Z3_mk_bvsle';
 
 (**
        \brief Unsigned greater than or equal to.
@@ -2564,7 +2562,7 @@ function Z3_mk_bvsle(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvuge', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvuge(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvuge';
+  external z3_dll name  'Z3_mk_bvuge';
 
 (**
        \brief Two's complement signed greater than or equal to.
@@ -2574,7 +2572,7 @@ function Z3_mk_bvuge(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvsge', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvsge(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvsge';
+  external z3_dll name  'Z3_mk_bvsge';
 
 (**
        \brief Unsigned greater than.
@@ -2584,7 +2582,7 @@ function Z3_mk_bvsge(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvugt', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvugt(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvugt';
+  external z3_dll name  'Z3_mk_bvugt';
 
 (**
        \brief Two's complement signed greater than.
@@ -2594,7 +2592,7 @@ function Z3_mk_bvugt(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvsgt', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvsgt(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvsgt';
+  external z3_dll name  'Z3_mk_bvsgt';
 
 (**
        \brief Concatenate the given bit-vectors.
@@ -2607,7 +2605,7 @@ function Z3_mk_bvsgt(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_concat', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_concat(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_concat';
+  external z3_dll name  'Z3_mk_concat';
 
 (**
        \brief Extract the bits \c high down to \c low from a bit-vector of
@@ -2618,7 +2616,7 @@ function Z3_mk_concat(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_extract', AST, (_in(CONTEXT), _in(UINT), _in(UINT), _in(AST)))
  *)
 function Z3_mk_extract(c: Z3_context; high: Cardinal; low: Cardinal; t1: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_extract';
+  external z3_dll name  'Z3_mk_extract';
 
 (**
        \brief Sign-extend of the given bit-vector to the (signed) equivalent bit-vector of
@@ -2630,7 +2628,7 @@ function Z3_mk_extract(c: Z3_context; high: Cardinal; low: Cardinal; t1: Z3_ast)
        def_API('Z3_mk_sign_ext', AST, (_in(CONTEXT), _in(UINT), _in(AST)))
  *)
 function Z3_mk_sign_ext(c: Z3_context; i: Cardinal; t1: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_sign_ext';
+  external z3_dll name  'Z3_mk_sign_ext';
 
 (**
        \brief Extend the given bit-vector with zeros to the (unsigned) equivalent
@@ -2642,7 +2640,7 @@ function Z3_mk_sign_ext(c: Z3_context; i: Cardinal; t1: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_zero_ext', AST, (_in(CONTEXT), _in(UINT), _in(AST)))
  *)
 function Z3_mk_zero_ext(c: Z3_context; i: Cardinal; t1: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_zero_ext';
+  external z3_dll name  'Z3_mk_zero_ext';
 
 (**
        \brief Repeat the given bit-vector up length \ccode{i}.
@@ -2652,7 +2650,7 @@ function Z3_mk_zero_ext(c: Z3_context; i: Cardinal; t1: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_repeat', AST, (_in(CONTEXT), _in(UINT), _in(AST)))
  *)
 function Z3_mk_repeat(c: Z3_context; i: Cardinal; t1: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_repeat';
+  external z3_dll name  'Z3_mk_repeat';
 
 (**
        \brief Shift left.
@@ -2669,7 +2667,7 @@ function Z3_mk_repeat(c: Z3_context; i: Cardinal; t1: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvshl', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvshl(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvshl';
+  external z3_dll name  'Z3_mk_bvshl';
 
 (**
        \brief Logical shift right.
@@ -2686,7 +2684,7 @@ function Z3_mk_bvshl(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvlshr', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvlshr(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvlshr';
+  external z3_dll name  'Z3_mk_bvlshr';
 
 (**
        \brief Arithmetic shift right.
@@ -2704,7 +2702,7 @@ function Z3_mk_bvlshr(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvashr', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvashr(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvashr';
+  external z3_dll name  'Z3_mk_bvashr';
 
 (**
        \brief Rotate bits of \c t1 to the left \c i times.
@@ -2714,7 +2712,7 @@ function Z3_mk_bvashr(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_rotate_left', AST, (_in(CONTEXT), _in(UINT), _in(AST)))
  *)
 function Z3_mk_rotate_left(c: Z3_context; i: Cardinal; t1: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_rotate_left';
+  external z3_dll name  'Z3_mk_rotate_left';
 
 (**
        \brief Rotate bits of \c t1 to the right \c i times.
@@ -2724,7 +2722,7 @@ function Z3_mk_rotate_left(c: Z3_context; i: Cardinal; t1: Z3_ast): Z3_ast; cdec
        def_API('Z3_mk_rotate_right', AST, (_in(CONTEXT), _in(UINT), _in(AST)))
  *)
 function Z3_mk_rotate_right(c: Z3_context; i: Cardinal; t1: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_rotate_right';
+  external z3_dll name  'Z3_mk_rotate_right';
 
 (**
        \brief Rotate bits of \c t1 to the left \c t2 times.
@@ -2734,7 +2732,7 @@ function Z3_mk_rotate_right(c: Z3_context; i: Cardinal; t1: Z3_ast): Z3_ast; cde
        def_API('Z3_mk_ext_rotate_left', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_ext_rotate_left(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_ext_rotate_left';
+  external z3_dll name  'Z3_mk_ext_rotate_left';
 
 (**
        \brief Rotate bits of \c t1 to the right \c t2 times.
@@ -2744,7 +2742,7 @@ function Z3_mk_ext_rotate_left(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; c
        def_API('Z3_mk_ext_rotate_right', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_ext_rotate_right(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_ext_rotate_right';
+  external z3_dll name  'Z3_mk_ext_rotate_right';
 
 (**
        \brief Create an \c n bit bit-vector from the integer argument \c t1.
@@ -2757,7 +2755,7 @@ function Z3_mk_ext_rotate_right(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; 
        def_API('Z3_mk_int2bv', AST, (_in(CONTEXT), _in(UINT), _in(AST)))
  *)
 function Z3_mk_int2bv(c: Z3_context; n: Cardinal; t1: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_int2bv';
+  external z3_dll name  'Z3_mk_int2bv';
 
 (**
        \brief Create an integer from the bit-vector argument \c t1.
@@ -2772,7 +2770,7 @@ function Z3_mk_int2bv(c: Z3_context; n: Cardinal; t1: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bv2int', AST, (_in(CONTEXT), _in(AST), _in(BOOL)))
  *)
 function Z3_mk_bv2int(c: Z3_context; t1: Z3_ast; is_signed: Boolean): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bv2int';
+  external z3_dll name  'Z3_mk_bv2int';
 
 (**
        \brief Create a predicate that checks that the bit-wise addition
@@ -2783,7 +2781,7 @@ function Z3_mk_bv2int(c: Z3_context; t1: Z3_ast; is_signed: Boolean): Z3_ast; cd
        def_API('Z3_mk_bvadd_no_overflow', AST, (_in(CONTEXT), _in(AST), _in(AST), _in(BOOL)))
  *)
 function Z3_mk_bvadd_no_overflow(c: Z3_context; t1: Z3_ast; t2: Z3_ast; is_signed: Boolean): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvadd_no_overflow';
+  external z3_dll name  'Z3_mk_bvadd_no_overflow';
 
 (**
        \brief Create a predicate that checks that the bit-wise signed addition
@@ -2794,7 +2792,7 @@ function Z3_mk_bvadd_no_overflow(c: Z3_context; t1: Z3_ast; t2: Z3_ast; is_signe
        def_API('Z3_mk_bvadd_no_underflow', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvadd_no_underflow(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvadd_no_underflow';
+  external z3_dll name  'Z3_mk_bvadd_no_underflow';
 
 (**
        \brief Create a predicate that checks that the bit-wise signed subtraction
@@ -2805,7 +2803,7 @@ function Z3_mk_bvadd_no_underflow(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast
        def_API('Z3_mk_bvsub_no_overflow', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvsub_no_overflow(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvsub_no_overflow';
+  external z3_dll name  'Z3_mk_bvsub_no_overflow';
 
 (**
        \brief Create a predicate that checks that the bit-wise subtraction
@@ -2816,7 +2814,7 @@ function Z3_mk_bvsub_no_overflow(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast;
        def_API('Z3_mk_bvsub_no_underflow', AST, (_in(CONTEXT), _in(AST), _in(AST), _in(BOOL)))
  *)
 function Z3_mk_bvsub_no_underflow(c: Z3_context; t1: Z3_ast; t2: Z3_ast; is_signed: Boolean): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvsub_no_underflow';
+  external z3_dll name  'Z3_mk_bvsub_no_underflow';
 
 (**
        \brief Create a predicate that checks that the bit-wise signed division
@@ -2827,7 +2825,7 @@ function Z3_mk_bvsub_no_underflow(c: Z3_context; t1: Z3_ast; t2: Z3_ast; is_sign
        def_API('Z3_mk_bvsdiv_no_overflow', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvsdiv_no_overflow(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvsdiv_no_overflow';
+  external z3_dll name  'Z3_mk_bvsdiv_no_overflow';
 
 (**
        \brief Check that bit-wise negation does not overflow when
@@ -2838,7 +2836,7 @@ function Z3_mk_bvsdiv_no_overflow(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast
        def_API('Z3_mk_bvneg_no_overflow', AST, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_bvneg_no_overflow(c: Z3_context; t1: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvneg_no_overflow';
+  external z3_dll name  'Z3_mk_bvneg_no_overflow';
 
 (**
        \brief Create a predicate that checks that the bit-wise multiplication
@@ -2849,7 +2847,7 @@ function Z3_mk_bvneg_no_overflow(c: Z3_context; t1: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_bvmul_no_overflow', AST, (_in(CONTEXT), _in(AST), _in(AST), _in(BOOL)))
  *)
 function Z3_mk_bvmul_no_overflow(c: Z3_context; t1: Z3_ast; t2: Z3_ast; is_signed: Boolean): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvmul_no_overflow';
+  external z3_dll name  'Z3_mk_bvmul_no_overflow';
 
 (**
        \brief Create a predicate that checks that the bit-wise signed multiplication
@@ -2860,7 +2858,7 @@ function Z3_mk_bvmul_no_overflow(c: Z3_context; t1: Z3_ast; t2: Z3_ast; is_signe
        def_API('Z3_mk_bvmul_no_underflow', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_bvmul_no_underflow(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bvmul_no_underflow';
+  external z3_dll name  'Z3_mk_bvmul_no_underflow';
 
 (**
        \brief Array read.
@@ -2876,7 +2874,7 @@ function Z3_mk_bvmul_no_underflow(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Z3_ast
        def_API('Z3_mk_select', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_select(c: Z3_context; a: Z3_ast; i: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_select';
+  external z3_dll name  'Z3_mk_select';
 
 (**
        \brief n-ary Array read.
@@ -2886,7 +2884,7 @@ function Z3_mk_select(c: Z3_context; a: Z3_ast; i: Z3_ast): Z3_ast; cdecl;
 
  *)
 function Z3_mk_select_n(c: Z3_context; a: Z3_ast; n: Cardinal; idxs: PZ3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_select_n';
+  external z3_dll name  'Z3_mk_select_n';
 
 (**
        \brief Array update.
@@ -2905,7 +2903,7 @@ function Z3_mk_select_n(c: Z3_context; a: Z3_ast; n: Cardinal; idxs: PZ3_ast): Z
        def_API('Z3_mk_store', AST, (_in(CONTEXT), _in(AST), _in(AST), _in(AST)))
  *)
 function Z3_mk_store(c: Z3_context; a: Z3_ast; i: Z3_ast; v: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_store';
+  external z3_dll name  'Z3_mk_store';
 
 (**
        \brief n-ary Array update.
@@ -2914,7 +2912,7 @@ function Z3_mk_store(c: Z3_context; a: Z3_ast; i: Z3_ast; v: Z3_ast): Z3_ast; cd
 
  *)
 function Z3_mk_store_n(c: Z3_context; a: Z3_ast; n: Cardinal; idxs: PZ3_ast; v: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_store_n';
+  external z3_dll name  'Z3_mk_store_n';
 
 (**
         \brief Create the constant array.
@@ -2929,7 +2927,7 @@ function Z3_mk_store_n(c: Z3_context; a: Z3_ast; n: Cardinal; idxs: PZ3_ast; v: 
         def_API('Z3_mk_const_array', AST, (_in(CONTEXT), _in(SORT), _in(AST)))
  *)
 function Z3_mk_const_array(c: Z3_context; domain: Z3_sort; v: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_const_array';
+  external z3_dll name  'Z3_mk_const_array';
 
 (**
        \brief Map f on the argument arrays.
@@ -2945,7 +2943,7 @@ function Z3_mk_const_array(c: Z3_context; domain: Z3_sort; v: Z3_ast): Z3_ast; c
        def_API('Z3_mk_map', AST, (_in(CONTEXT), _in(FUNC_DECL), _in(UINT), _in_array(2, AST)))
  *)
 function Z3_mk_map(c: Z3_context; f: Z3_func_decl; n: Cardinal; args: PZ3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_map';
+  external z3_dll name  'Z3_mk_map';
 
 (**
         \brief Access the array default value.
@@ -2958,7 +2956,7 @@ function Z3_mk_map(c: Z3_context; f: Z3_func_decl; n: Cardinal; args: PZ3_ast): 
         def_API('Z3_mk_array_default', AST, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_array_default(c: Z3_context; &array: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_array_default';
+  external z3_dll name  'Z3_mk_array_default';
 
 (**
        \brief Create array with the same interpretation as a function.
@@ -2968,7 +2966,7 @@ function Z3_mk_array_default(c: Z3_context; &array: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_as_array', AST, (_in(CONTEXT), _in(FUNC_DECL)))
  *)
 function Z3_mk_as_array(c: Z3_context; f: Z3_func_decl): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_as_array';
+  external z3_dll name  'Z3_mk_as_array';
 
 (**
        \brief Create Set type.
@@ -2976,7 +2974,7 @@ function Z3_mk_as_array(c: Z3_context; f: Z3_func_decl): Z3_ast; cdecl;
        def_API('Z3_mk_set_sort', SORT, (_in(CONTEXT), _in(SORT)))
  *)
 function Z3_mk_set_sort(c: Z3_context; ty: Z3_sort): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_mk_set_sort';
+  external z3_dll name  'Z3_mk_set_sort';
 
 (**
         \brief Create the empty set.
@@ -2984,7 +2982,7 @@ function Z3_mk_set_sort(c: Z3_context; ty: Z3_sort): Z3_sort; cdecl;
         def_API('Z3_mk_empty_set', AST, (_in(CONTEXT), _in(SORT)))
  *)
 function Z3_mk_empty_set(c: Z3_context; domain: Z3_sort): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_empty_set';
+  external z3_dll name  'Z3_mk_empty_set';
 
 (**
         \brief Create the full set.
@@ -2992,7 +2990,7 @@ function Z3_mk_empty_set(c: Z3_context; domain: Z3_sort): Z3_ast; cdecl;
         def_API('Z3_mk_full_set', AST, (_in(CONTEXT), _in(SORT)))
  *)
 function Z3_mk_full_set(c: Z3_context; domain: Z3_sort): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_full_set';
+  external z3_dll name  'Z3_mk_full_set';
 
 (**
        \brief Add an element to a set.
@@ -3002,7 +3000,7 @@ function Z3_mk_full_set(c: Z3_context; domain: Z3_sort): Z3_ast; cdecl;
        def_API('Z3_mk_set_add', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_set_add(c: Z3_context; &set: Z3_ast; elem: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_set_add';
+  external z3_dll name  'Z3_mk_set_add';
 
 (**
        \brief Remove an element to a set.
@@ -3012,7 +3010,7 @@ function Z3_mk_set_add(c: Z3_context; &set: Z3_ast; elem: Z3_ast): Z3_ast; cdecl
        def_API('Z3_mk_set_del', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_set_del(c: Z3_context; &set: Z3_ast; elem: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_set_del';
+  external z3_dll name  'Z3_mk_set_del';
 
 (**
        \brief Take the union of a list of sets.
@@ -3020,7 +3018,7 @@ function Z3_mk_set_del(c: Z3_context; &set: Z3_ast; elem: Z3_ast): Z3_ast; cdecl
        def_API('Z3_mk_set_union', AST, (_in(CONTEXT), _in(UINT), _in_array(1, AST)))
  *)
 function Z3_mk_set_union(c: Z3_context; num_args: Cardinal; args: PZ3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_set_union';
+  external z3_dll name  'Z3_mk_set_union';
 
 (**
        \brief Take the intersection of a list of sets.
@@ -3028,7 +3026,7 @@ function Z3_mk_set_union(c: Z3_context; num_args: Cardinal; args: PZ3_ast): Z3_a
        def_API('Z3_mk_set_intersect', AST, (_in(CONTEXT), _in(UINT), _in_array(1, AST)))
  *)
 function Z3_mk_set_intersect(c: Z3_context; num_args: Cardinal; args: PZ3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_set_intersect';
+  external z3_dll name  'Z3_mk_set_intersect';
 
 (**
        \brief Take the set difference between two sets.
@@ -3036,7 +3034,7 @@ function Z3_mk_set_intersect(c: Z3_context; num_args: Cardinal; args: PZ3_ast): 
        def_API('Z3_mk_set_difference', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_set_difference(c: Z3_context; arg1: Z3_ast; arg2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_set_difference';
+  external z3_dll name  'Z3_mk_set_difference';
 
 (**
        \brief Take the complement of a set.
@@ -3044,7 +3042,7 @@ function Z3_mk_set_difference(c: Z3_context; arg1: Z3_ast; arg2: Z3_ast): Z3_ast
        def_API('Z3_mk_set_complement', AST, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_set_complement(c: Z3_context; arg: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_set_complement';
+  external z3_dll name  'Z3_mk_set_complement';
 
 (**
        \brief Check for set membership.
@@ -3054,7 +3052,7 @@ function Z3_mk_set_complement(c: Z3_context; arg: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_set_member', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_set_member(c: Z3_context; elem: Z3_ast; &set: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_set_member';
+  external z3_dll name  'Z3_mk_set_member';
 
 (**
        \brief Check for subsetness of sets.
@@ -3062,7 +3060,7 @@ function Z3_mk_set_member(c: Z3_context; elem: Z3_ast; &set: Z3_ast): Z3_ast; cd
        def_API('Z3_mk_set_subset', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_set_subset(c: Z3_context; arg1: Z3_ast; arg2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_set_subset';
+  external z3_dll name  'Z3_mk_set_subset';
 
 (**
        \brief Create array extensionality index given two arrays with the same sort.
@@ -3072,7 +3070,7 @@ function Z3_mk_set_subset(c: Z3_context; arg1: Z3_ast; arg2: Z3_ast): Z3_ast; cd
        def_API('Z3_mk_array_ext', AST, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_array_ext(c: Z3_context; arg1: Z3_ast; arg2: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_array_ext';
+  external z3_dll name  'Z3_mk_array_ext';
 
 (**
        \brief Create a numeral of a given sort.
@@ -3088,7 +3086,7 @@ function Z3_mk_array_ext(c: Z3_context; arg1: Z3_ast; arg2: Z3_ast): Z3_ast; cde
        def_API('Z3_mk_numeral', AST, (_in(CONTEXT), _in(STRING), _in(SORT)))
  *)
 function Z3_mk_numeral(c: Z3_context; numeral: Z3_string; ty: Z3_sort): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_numeral';
+  external z3_dll name  'Z3_mk_numeral';
 
 (**
        \brief Create a real from a fraction.
@@ -3106,7 +3104,7 @@ function Z3_mk_numeral(c: Z3_context; numeral: Z3_string; ty: Z3_sort): Z3_ast; 
        def_API('Z3_mk_real', AST, (_in(CONTEXT), _in(INT), _in(INT)))
  *)
 function Z3_mk_real(c: Z3_context; num: Integer; den: Integer): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_real';
+  external z3_dll name  'Z3_mk_real';
 
 (**
        \brief Create a numeral of an int, bit-vector, or finite-domain sort.
@@ -3119,7 +3117,7 @@ function Z3_mk_real(c: Z3_context; num: Integer; den: Integer): Z3_ast; cdecl;
        def_API('Z3_mk_int', AST, (_in(CONTEXT), _in(INT), _in(SORT)))
  *)
 function Z3_mk_int(c: Z3_context; v: Integer; ty: Z3_sort): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_int';
+  external z3_dll name  'Z3_mk_int';
 
 (**
        \brief Create a numeral of a int, bit-vector, or finite-domain sort.
@@ -3132,7 +3130,7 @@ function Z3_mk_int(c: Z3_context; v: Integer; ty: Z3_sort): Z3_ast; cdecl;
        def_API('Z3_mk_unsigned_int', AST, (_in(CONTEXT), _in(UINT), _in(SORT)))
  *)
 function Z3_mk_unsigned_int(c: Z3_context; v: Cardinal; ty: Z3_sort): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_unsigned_int';
+  external z3_dll name  'Z3_mk_unsigned_int';
 
 (**
        \brief Create a numeral of a int, bit-vector, or finite-domain sort.
@@ -3145,7 +3143,7 @@ function Z3_mk_unsigned_int(c: Z3_context; v: Cardinal; ty: Z3_sort): Z3_ast; cd
        def_API('Z3_mk_int64', AST, (_in(CONTEXT), _in(INT64), _in(SORT)))
  *)
 function Z3_mk_int64(c: Z3_context; v: Int64; ty: Z3_sort): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_int64';
+  external z3_dll name  'Z3_mk_int64';
 
 (**
        \brief Create a numeral of a int, bit-vector, or finite-domain sort.
@@ -3158,7 +3156,7 @@ function Z3_mk_int64(c: Z3_context; v: Int64; ty: Z3_sort): Z3_ast; cdecl;
        def_API('Z3_mk_unsigned_int64', AST, (_in(CONTEXT), _in(UINT64), _in(SORT)))
  *)
 function Z3_mk_unsigned_int64(c: Z3_context; v: UInt64; ty: Z3_sort): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_unsigned_int64';
+  external z3_dll name  'Z3_mk_unsigned_int64';
 
 (**
        \brief create a bit-vector numeral from a vector of Booleans.
@@ -3167,7 +3165,7 @@ function Z3_mk_unsigned_int64(c: Z3_context; v: UInt64; ty: Z3_sort): Z3_ast; cd
        def_API('Z3_mk_bv_numeral', AST, (_in(CONTEXT), _in(UINT), _in_array(1, BOOL)))
  *)
 function Z3_mk_bv_numeral(c: Z3_context; sz: Cardinal; bits: PBoolean): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bv_numeral';
+  external z3_dll name  'Z3_mk_bv_numeral';
 
 (**
        \brief Create a sequence sort out of the sort for the elements.
@@ -3175,7 +3173,7 @@ function Z3_mk_bv_numeral(c: Z3_context; sz: Cardinal; bits: PBoolean): Z3_ast; 
        def_API('Z3_mk_seq_sort', SORT, (_in(CONTEXT), _in(SORT)))
  *)
 function Z3_mk_seq_sort(c: Z3_context; s: Z3_sort): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_mk_seq_sort';
+  external z3_dll name  'Z3_mk_seq_sort';
 
 (**
        \brief Check if \c s is a sequence sort.
@@ -3183,7 +3181,7 @@ function Z3_mk_seq_sort(c: Z3_context; s: Z3_sort): Z3_sort; cdecl;
        def_API('Z3_is_seq_sort', BOOL, (_in(CONTEXT), _in(SORT)))
  *)
 function Z3_is_seq_sort(c: Z3_context; s: Z3_sort): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_is_seq_sort';
+  external z3_dll name  'Z3_is_seq_sort';
 
 (**
        \brief Create a regular expression sort out of a sequence sort.
@@ -3191,7 +3189,7 @@ function Z3_is_seq_sort(c: Z3_context; s: Z3_sort): Boolean; cdecl;
        def_API('Z3_mk_re_sort', SORT, (_in(CONTEXT), _in(SORT)))
  *)
 function Z3_mk_re_sort(c: Z3_context; seq: Z3_sort): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_mk_re_sort';
+  external z3_dll name  'Z3_mk_re_sort';
 
 (**
        \brief Check if \c s is a regular expression sort.
@@ -3199,7 +3197,7 @@ function Z3_mk_re_sort(c: Z3_context; seq: Z3_sort): Z3_sort; cdecl;
        def_API('Z3_is_re_sort', BOOL, (_in(CONTEXT), _in(SORT)))
  *)
 function Z3_is_re_sort(c: Z3_context; s: Z3_sort): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_is_re_sort';
+  external z3_dll name  'Z3_is_re_sort';
 
 (**
        \brief Create a sort for 8 bit strings.
@@ -3210,7 +3208,7 @@ function Z3_is_re_sort(c: Z3_context; s: Z3_sort): Boolean; cdecl;
        def_API('Z3_mk_string_sort', SORT ,(_in(CONTEXT), ))
  *)
 function Z3_mk_string_sort(c: Z3_context): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_mk_string_sort';
+  external z3_dll name  'Z3_mk_string_sort';
 
 (**
        \brief Check if \c s is a string sort.
@@ -3218,14 +3216,14 @@ function Z3_mk_string_sort(c: Z3_context): Z3_sort; cdecl;
        def_API('Z3_is_string_sort', BOOL, (_in(CONTEXT), _in(SORT)))
  *)
 function Z3_is_string_sort(c: Z3_context; s: Z3_sort): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_is_string_sort';
+  external z3_dll name  'Z3_is_string_sort';
 
 (**
        \brief Create a string constant out of the string that is passed in
        def_API('Z3_mk_string' ,AST ,(_in(CONTEXT), _in(STRING)))
  *)
 function Z3_mk_string(c: Z3_context; s: Z3_string): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_string';
+  external z3_dll name  'Z3_mk_string';
 
 (**
        \brief Determine if \c s is a string constant.
@@ -3233,7 +3231,7 @@ function Z3_mk_string(c: Z3_context; s: Z3_string): Z3_ast; cdecl;
        def_API('Z3_is_string', BOOL, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_is_string(c: Z3_context; s: Z3_ast): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_is_string';
+  external z3_dll name  'Z3_is_string';
 
 (**
        \brief Retrieve the string constant stored in \c s.
@@ -3243,7 +3241,7 @@ function Z3_is_string(c: Z3_context; s: Z3_ast): Boolean; cdecl;
        def_API('Z3_get_string' ,STRING ,(_in(CONTEXT), _in(AST)))
  *)
 function Z3_get_string(c: Z3_context; s: Z3_ast): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_get_string';
+  external z3_dll name  'Z3_get_string';
 
 (**
        \brief Create an empty sequence of the sequence sort \c seq.
@@ -3253,7 +3251,7 @@ function Z3_get_string(c: Z3_context; s: Z3_ast): Z3_string; cdecl;
        def_API('Z3_mk_seq_empty' ,AST ,(_in(CONTEXT), _in(SORT)))
  *)
 function Z3_mk_seq_empty(c: Z3_context; seq: Z3_sort): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_seq_empty';
+  external z3_dll name  'Z3_mk_seq_empty';
 
 (**
        \brief Create a unit sequence of \c a.
@@ -3261,7 +3259,7 @@ function Z3_mk_seq_empty(c: Z3_context; seq: Z3_sort): Z3_ast; cdecl;
        def_API('Z3_mk_seq_unit' ,AST ,(_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_seq_unit(c: Z3_context; a: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_seq_unit';
+  external z3_dll name  'Z3_mk_seq_unit';
 
 (**
        \brief Concatenate sequences.
@@ -3271,7 +3269,7 @@ function Z3_mk_seq_unit(c: Z3_context; a: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_seq_concat' ,AST ,(_in(CONTEXT), _in(UINT), _in_array(1, AST)))
  *)
 function Z3_mk_seq_concat(c: Z3_context; n: Cardinal; args: PZ3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_seq_concat';
+  external z3_dll name  'Z3_mk_seq_concat';
 
 (**
        \brief Check if \c prefix is a prefix of \c s.
@@ -3281,7 +3279,7 @@ function Z3_mk_seq_concat(c: Z3_context; n: Cardinal; args: PZ3_ast): Z3_ast; cd
        def_API('Z3_mk_seq_prefix' ,AST ,(_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_seq_prefix(c: Z3_context; prefix: Z3_ast; s: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_seq_prefix';
+  external z3_dll name  'Z3_mk_seq_prefix';
 
 (**
        \brief Check if \c suffix is a suffix of \c s.
@@ -3291,7 +3289,7 @@ function Z3_mk_seq_prefix(c: Z3_context; prefix: Z3_ast; s: Z3_ast): Z3_ast; cde
        def_API('Z3_mk_seq_suffix' ,AST ,(_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_seq_suffix(c: Z3_context; suffix: Z3_ast; s: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_seq_suffix';
+  external z3_dll name  'Z3_mk_seq_suffix';
 
 (**
        \brief Check if \c container contains \c containee.
@@ -3301,7 +3299,7 @@ function Z3_mk_seq_suffix(c: Z3_context; suffix: Z3_ast; s: Z3_ast): Z3_ast; cde
        def_API('Z3_mk_seq_contains' ,AST ,(_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_seq_contains(c: Z3_context; container: Z3_ast; containee: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_seq_contains';
+  external z3_dll name  'Z3_mk_seq_contains';
 
 (**
        \brief Extract subsequence starting at \c offset of \c length.
@@ -3309,7 +3307,7 @@ function Z3_mk_seq_contains(c: Z3_context; container: Z3_ast; containee: Z3_ast)
        def_API('Z3_mk_seq_extract' ,AST ,(_in(CONTEXT), _in(AST), _in(AST), _in(AST)))
  *)
 function Z3_mk_seq_extract(c: Z3_context; s: Z3_ast; offset: Z3_ast; length: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_seq_extract';
+  external z3_dll name  'Z3_mk_seq_extract';
 
 (**
        \brief Replace the first occurrence of \c src with \c dst in \c s.
@@ -3317,7 +3315,7 @@ function Z3_mk_seq_extract(c: Z3_context; s: Z3_ast; offset: Z3_ast; length: Z3_
        def_API('Z3_mk_seq_replace' ,AST ,(_in(CONTEXT), _in(AST), _in(AST), _in(AST)))
  *)
 function Z3_mk_seq_replace(c: Z3_context; s: Z3_ast; src: Z3_ast; dst: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_seq_replace';
+  external z3_dll name  'Z3_mk_seq_replace';
 
 (**
        \brief Retrieve from \c s the unit sequence positioned at position \c index.
@@ -3325,7 +3323,7 @@ function Z3_mk_seq_replace(c: Z3_context; s: Z3_ast; src: Z3_ast; dst: Z3_ast): 
        def_API('Z3_mk_seq_at' ,AST ,(_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_seq_at(c: Z3_context; s: Z3_ast; index: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_seq_at';
+  external z3_dll name  'Z3_mk_seq_at';
 
 (**
        \brief Return the length of the sequence \c s.
@@ -3333,7 +3331,7 @@ function Z3_mk_seq_at(c: Z3_context; s: Z3_ast; index: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_seq_length' ,AST ,(_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_seq_length(c: Z3_context; s: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_seq_length';
+  external z3_dll name  'Z3_mk_seq_length';
 
 (**
        \brief Return index of first occurrence of \c substr in \c s starting from offset \c offset.
@@ -3343,7 +3341,7 @@ function Z3_mk_seq_length(c: Z3_context; s: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_seq_index' ,AST ,(_in(CONTEXT), _in(AST), _in(AST), _in(AST)))
  *)
 function Z3_mk_seq_index(c: Z3_context; s: Z3_ast; substr: Z3_ast; offset: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_seq_index';
+  external z3_dll name  'Z3_mk_seq_index';
 
 (**
        \brief Convert string to integer.
@@ -3351,7 +3349,7 @@ function Z3_mk_seq_index(c: Z3_context; s: Z3_ast; substr: Z3_ast; offset: Z3_as
        def_API('Z3_mk_str_to_int' ,AST ,(_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_str_to_int(c: Z3_context; s: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_str_to_int';
+  external z3_dll name  'Z3_mk_str_to_int';
 
 (**
        \brief Integer to string conversion.
@@ -3359,7 +3357,7 @@ function Z3_mk_str_to_int(c: Z3_context; s: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_int_to_str' ,AST ,(_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_int_to_str(c: Z3_context; s: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_int_to_str';
+  external z3_dll name  'Z3_mk_int_to_str';
 
 (**
        \brief Create a regular expression that accepts the sequence \c seq.
@@ -3367,7 +3365,7 @@ function Z3_mk_int_to_str(c: Z3_context; s: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_seq_to_re' ,AST ,(_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_seq_to_re(c: Z3_context; seq: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_seq_to_re';
+  external z3_dll name  'Z3_mk_seq_to_re';
 
 (**
        \brief Check if \c seq is in the language generated by the regular expression \c re.
@@ -3375,7 +3373,7 @@ function Z3_mk_seq_to_re(c: Z3_context; seq: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_seq_in_re' ,AST ,(_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_seq_in_re(c: Z3_context; seq: Z3_ast; re: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_seq_in_re';
+  external z3_dll name  'Z3_mk_seq_in_re';
 
 (**
        \brief Create the regular language \c re+.
@@ -3383,7 +3381,7 @@ function Z3_mk_seq_in_re(c: Z3_context; seq: Z3_ast; re: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_re_plus' ,AST ,(_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_re_plus(c: Z3_context; re: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_re_plus';
+  external z3_dll name  'Z3_mk_re_plus';
 
 (**
        \brief Create the regular language \c re*.
@@ -3391,7 +3389,7 @@ function Z3_mk_re_plus(c: Z3_context; re: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_re_star' ,AST ,(_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_re_star(c: Z3_context; re: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_re_star';
+  external z3_dll name  'Z3_mk_re_star';
 
 (**
        \brief Create the regular language \c [re].
@@ -3399,7 +3397,7 @@ function Z3_mk_re_star(c: Z3_context; re: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_re_option' ,AST ,(_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_re_option(c: Z3_context; re: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_re_option';
+  external z3_dll name  'Z3_mk_re_option';
 
 (**
        \brief Create the union of the regular languages.
@@ -3409,7 +3407,7 @@ function Z3_mk_re_option(c: Z3_context; re: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_re_union' ,AST ,(_in(CONTEXT), _in(UINT), _in_array(1, AST)))
  *)
 function Z3_mk_re_union(c: Z3_context; n: Cardinal; args: PZ3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_re_union';
+  external z3_dll name  'Z3_mk_re_union';
 
 (**
        \brief Create the concatenation of the regular languages.
@@ -3419,7 +3417,7 @@ function Z3_mk_re_union(c: Z3_context; n: Cardinal; args: PZ3_ast): Z3_ast; cdec
        def_API('Z3_mk_re_concat' ,AST ,(_in(CONTEXT), _in(UINT), _in_array(1, AST)))
  *)
 function Z3_mk_re_concat(c: Z3_context; n: Cardinal; args: PZ3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_re_concat';
+  external z3_dll name  'Z3_mk_re_concat';
 
 (**
        \brief Create the range regular expression over two sequences of length 1.
@@ -3427,7 +3425,7 @@ function Z3_mk_re_concat(c: Z3_context; n: Cardinal; args: PZ3_ast): Z3_ast; cde
        def_API('Z3_mk_re_range' ,AST ,(_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_mk_re_range(c: Z3_context; lo: Z3_ast; hi: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_re_range';
+  external z3_dll name  'Z3_mk_re_range';
 
 (**
        \brief Create a regular expression loop. The supplied regular expression \c r is repeated
@@ -3438,7 +3436,7 @@ function Z3_mk_re_range(c: Z3_context; lo: Z3_ast; hi: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_re_loop', AST, (_in(CONTEXT), _in(AST), _in(UINT), _in(UINT)))
  *)
 function Z3_mk_re_loop(c: Z3_context; r: Z3_ast; lo: Cardinal; hi: Cardinal): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_re_loop';
+  external z3_dll name  'Z3_mk_re_loop';
 
 (**
        \brief Create the intersection of the regular languages.
@@ -3448,7 +3446,7 @@ function Z3_mk_re_loop(c: Z3_context; r: Z3_ast; lo: Cardinal; hi: Cardinal): Z3
        def_API('Z3_mk_re_intersect' ,AST ,(_in(CONTEXT), _in(UINT), _in_array(1, AST)))
  *)
 function Z3_mk_re_intersect(c: Z3_context; n: Cardinal; args: PZ3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_re_intersect';
+  external z3_dll name  'Z3_mk_re_intersect';
 
 (**
        \brief Create the complement of the regular language \c re.
@@ -3456,7 +3454,7 @@ function Z3_mk_re_intersect(c: Z3_context; n: Cardinal; args: PZ3_ast): Z3_ast; 
        def_API('Z3_mk_re_complement' ,AST ,(_in(CONTEXT), _in(AST)))
  *)
 function Z3_mk_re_complement(c: Z3_context; re: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_re_complement';
+  external z3_dll name  'Z3_mk_re_complement';
 
 (**
        \brief Create an empty regular expression of sort \c re.
@@ -3466,7 +3464,7 @@ function Z3_mk_re_complement(c: Z3_context; re: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_mk_re_empty' ,AST ,(_in(CONTEXT), _in(SORT)))
  *)
 function Z3_mk_re_empty(c: Z3_context; re: Z3_sort): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_re_empty';
+  external z3_dll name  'Z3_mk_re_empty';
 
 (**
        \brief Create an universal regular expression of sort \c re.
@@ -3476,7 +3474,7 @@ function Z3_mk_re_empty(c: Z3_context; re: Z3_sort): Z3_ast; cdecl;
        def_API('Z3_mk_re_full' ,AST ,(_in(CONTEXT), _in(SORT)))
  *)
 function Z3_mk_re_full(c: Z3_context; re: Z3_sort): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_re_full';
+  external z3_dll name  'Z3_mk_re_full';
 
 (**
        \brief Create a pattern for quantifier instantiation.
@@ -3499,7 +3497,7 @@ function Z3_mk_re_full(c: Z3_context; re: Z3_sort): Z3_ast; cdecl;
        def_API('Z3_mk_pattern', PATTERN, (_in(CONTEXT), _in(UINT), _in_array(1, AST)))
  *)
 function Z3_mk_pattern(c: Z3_context; num_patterns: Cardinal; terms: PZ3_ast): Z3_pattern; cdecl;
-  external z3_dll name _PU + 'Z3_mk_pattern';
+  external z3_dll name  'Z3_mk_pattern';
 
 (**
        \brief Create a bound variable.
@@ -3531,7 +3529,7 @@ function Z3_mk_pattern(c: Z3_context; num_patterns: Cardinal; terms: PZ3_ast): Z
        def_API('Z3_mk_bound', AST, (_in(CONTEXT), _in(UINT), _in(SORT)))
  *)
 function Z3_mk_bound(c: Z3_context; index: Cardinal; ty: Z3_sort): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_bound';
+  external z3_dll name  'Z3_mk_bound';
 
 (**
        \brief Create a forall formula. It takes an expression \c body that contains bound variables
@@ -3557,7 +3555,7 @@ function Z3_mk_bound(c: Z3_context; index: Cardinal; ty: Z3_sort): Z3_ast; cdecl
        def_API('Z3_mk_forall', AST, (_in(CONTEXT), _in(UINT), _in(UINT), _in_array(2, PATTERN), _in(UINT), _in_array(4, SORT), _in_array(4, SYMBOL), _in(AST)))
  *)
 function Z3_mk_forall(c: Z3_context; weight: Cardinal; num_patterns: Cardinal; patterns: PZ3_pattern; num_decls: Cardinal; sorts: PZ3_sort; decl_names: PZ3_symbol; body: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_forall';
+  external z3_dll name  'Z3_mk_forall';
 
 (**
        \brief Create an exists formula. Similar to #Z3_mk_forall.
@@ -3570,7 +3568,7 @@ function Z3_mk_forall(c: Z3_context; weight: Cardinal; num_patterns: Cardinal; p
        def_API('Z3_mk_exists', AST, (_in(CONTEXT), _in(UINT), _in(UINT), _in_array(2, PATTERN), _in(UINT), _in_array(4, SORT), _in_array(4, SYMBOL), _in(AST)))
  *)
 function Z3_mk_exists(c: Z3_context; weight: Cardinal; num_patterns: Cardinal; patterns: PZ3_pattern; num_decls: Cardinal; sorts: PZ3_sort; decl_names: PZ3_symbol; body: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_exists';
+  external z3_dll name  'Z3_mk_exists';
 
 (**
        \brief Create a quantifier - universal or existential, with pattern hints.
@@ -3594,7 +3592,7 @@ function Z3_mk_exists(c: Z3_context; weight: Cardinal; num_patterns: Cardinal; p
        def_API('Z3_mk_quantifier', AST, (_in(CONTEXT), _in(BOOL), _in(UINT), _in(UINT), _in_array(3, PATTERN), _in(UINT), _in_array(5, SORT), _in_array(5, SYMBOL), _in(AST)))
  *)
 function Z3_mk_quantifier(c: Z3_context; is_forall: Boolean; weight: Cardinal; num_patterns: Cardinal; patterns: PZ3_pattern; num_decls: Cardinal; sorts: PZ3_sort; decl_names: PZ3_symbol; body: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_quantifier';
+  external z3_dll name  'Z3_mk_quantifier';
 
 (**
        \brief Create a quantifier - universal or existential, with pattern hints, no patterns, and attributes
@@ -3621,7 +3619,7 @@ function Z3_mk_quantifier(c: Z3_context; is_forall: Boolean; weight: Cardinal; n
        def_API('Z3_mk_quantifier_ex', AST, (_in(CONTEXT), _in(BOOL), _in(UINT), _in(SYMBOL), _in(SYMBOL), _in(UINT), _in_array(5, PATTERN), _in(UINT), _in_array(7, AST), _in(UINT), _in_array(9, SORT), _in_array(9, SYMBOL), _in(AST)))
  *)
 function Z3_mk_quantifier_ex(c: Z3_context; is_forall: Boolean; weight: Cardinal; quantifier_id: Z3_symbol; skolem_id: Z3_symbol; num_patterns: Cardinal; patterns: PZ3_pattern; num_no_patterns: Cardinal; no_patterns: PZ3_ast; num_decls: Cardinal; sorts: PZ3_sort; decl_names: PZ3_symbol; body: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_quantifier_ex';
+  external z3_dll name  'Z3_mk_quantifier_ex';
 
 (**
        \brief Create a universal quantifier using a list of constants that
@@ -3642,7 +3640,7 @@ function Z3_mk_quantifier_ex(c: Z3_context; is_forall: Boolean; weight: Cardinal
        def_API('Z3_mk_forall_const', AST, (_in(CONTEXT), _in(UINT), _in(UINT), _in_array(2, APP), _in(UINT), _in_array(4, PATTERN), _in(AST)))
  *)
 function Z3_mk_forall_const(c: Z3_context; weight: Cardinal; num_bound: Cardinal; bound: PZ3_app; num_patterns: Cardinal; patterns: PZ3_pattern; body: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_forall_const';
+  external z3_dll name  'Z3_mk_forall_const';
 
 (**
        \brief Similar to #Z3_mk_forall_const.
@@ -3665,7 +3663,7 @@ function Z3_mk_forall_const(c: Z3_context; weight: Cardinal; num_bound: Cardinal
        def_API('Z3_mk_exists_const', AST, (_in(CONTEXT), _in(UINT), _in(UINT), _in_array(2, APP), _in(UINT), _in_array(4, PATTERN), _in(AST)))
  *)
 function Z3_mk_exists_const(c: Z3_context; weight: Cardinal; num_bound: Cardinal; bound: PZ3_app; num_patterns: Cardinal; patterns: PZ3_pattern; body: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_exists_const';
+  external z3_dll name  'Z3_mk_exists_const';
 
 (**
        \brief Create a universal or existential quantifier using a list of
@@ -3674,7 +3672,7 @@ function Z3_mk_exists_const(c: Z3_context; weight: Cardinal; num_bound: Cardinal
        def_API('Z3_mk_quantifier_const', AST, (_in(CONTEXT), _in(BOOL), _in(UINT), _in(UINT), _in_array(3, APP), _in(UINT), _in_array(5, PATTERN), _in(AST)))
  *)
 function Z3_mk_quantifier_const(c: Z3_context; is_forall: Boolean; weight: Cardinal; num_bound: Cardinal; bound: PZ3_app; num_patterns: Cardinal; patterns: PZ3_pattern; body: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_quantifier_const';
+  external z3_dll name  'Z3_mk_quantifier_const';
 
 (**
        \brief Create a universal or existential quantifier using a list of
@@ -3683,7 +3681,7 @@ function Z3_mk_quantifier_const(c: Z3_context; is_forall: Boolean; weight: Cardi
        def_API('Z3_mk_quantifier_const_ex', AST, (_in(CONTEXT), _in(BOOL), _in(UINT), _in(SYMBOL), _in(SYMBOL), _in(UINT), _in_array(5, APP), _in(UINT), _in_array(7, PATTERN), _in(UINT), _in_array(9, AST), _in(AST)))
  *)
 function Z3_mk_quantifier_const_ex(c: Z3_context; is_forall: Boolean; weight: Cardinal; quantifier_id: Z3_symbol; skolem_id: Z3_symbol; num_bound: Cardinal; bound: PZ3_app; num_patterns: Cardinal; patterns: PZ3_pattern; num_no_patterns: Cardinal; no_patterns: PZ3_ast; body: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_quantifier_const_ex';
+  external z3_dll name  'Z3_mk_quantifier_const_ex';
 
 (**
        \brief Create a lambda expression. It takes an expression \c body that contains bound variables
@@ -3709,7 +3707,7 @@ function Z3_mk_quantifier_const_ex(c: Z3_context; is_forall: Boolean; weight: Ca
        def_API('Z3_mk_lambda', AST, (_in(CONTEXT), _in(UINT), _in_array(1, SORT), _in_array(1, SYMBOL), _in(AST)))
  *)
 function Z3_mk_lambda(c: Z3_context; num_decls: Cardinal; sorts: PZ3_sort; decl_names: PZ3_symbol; body: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_lambda';
+  external z3_dll name  'Z3_mk_lambda';
 
 (**
        \brief Create a lambda expression using a list of constants that form the set
@@ -3727,7 +3725,7 @@ function Z3_mk_lambda(c: Z3_context; num_decls: Cardinal; sorts: PZ3_sort; decl_
        def_API('Z3_mk_lambda_const', AST, (_in(CONTEXT), _in(UINT), _in_array(1, APP), _in(AST)))
  *)
 function Z3_mk_lambda_const(c: Z3_context; num_bound: Cardinal; bound: PZ3_app; body: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_lambda_const';
+  external z3_dll name  'Z3_mk_lambda_const';
 
 (**
        \brief Return \c Z3_INT_SYMBOL if the symbol was constructed
@@ -3737,7 +3735,7 @@ function Z3_mk_lambda_const(c: Z3_context; num_bound: Cardinal; bound: PZ3_app; 
        def_API('Z3_get_symbol_kind', UINT, (_in(CONTEXT), _in(SYMBOL)))
  *)
 function Z3_get_symbol_kind(c: Z3_context; s: Z3_symbol): Z3_symbol_kind; cdecl;
-  external z3_dll name _PU + 'Z3_get_symbol_kind';
+  external z3_dll name  'Z3_get_symbol_kind';
 
 (**
        \brief Return the symbol int value.
@@ -3749,7 +3747,7 @@ function Z3_get_symbol_kind(c: Z3_context; s: Z3_symbol): Z3_symbol_kind; cdecl;
        def_API('Z3_get_symbol_int', INT, (_in(CONTEXT), _in(SYMBOL)))
  *)
 function Z3_get_symbol_int(c: Z3_context; s: Z3_symbol): Integer; cdecl;
-  external z3_dll name _PU + 'Z3_get_symbol_int';
+  external z3_dll name  'Z3_get_symbol_int';
 
 (**
        \brief Return the symbol name.
@@ -3765,7 +3763,7 @@ function Z3_get_symbol_int(c: Z3_context; s: Z3_symbol): Integer; cdecl;
        def_API('Z3_get_symbol_string', STRING, (_in(CONTEXT), _in(SYMBOL)))
  *)
 function Z3_get_symbol_string(c: Z3_context; s: Z3_symbol): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_get_symbol_string';
+  external z3_dll name  'Z3_get_symbol_string';
 
 (**
        \brief Return the sort name as a symbol.
@@ -3773,7 +3771,7 @@ function Z3_get_symbol_string(c: Z3_context; s: Z3_symbol): Z3_string; cdecl;
        def_API('Z3_get_sort_name', SYMBOL, (_in(CONTEXT), _in(SORT)))
  *)
 function Z3_get_sort_name(c: Z3_context; d: Z3_sort): Z3_symbol; cdecl;
-  external z3_dll name _PU + 'Z3_get_sort_name';
+  external z3_dll name  'Z3_get_sort_name';
 
 (**
         \brief Return a unique identifier for \c s.
@@ -3781,7 +3779,7 @@ function Z3_get_sort_name(c: Z3_context; d: Z3_sort): Z3_symbol; cdecl;
         def_API('Z3_get_sort_id', UINT, (_in(CONTEXT), _in(SORT)))
  *)
 function Z3_get_sort_id(c: Z3_context; s: Z3_sort): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_get_sort_id';
+  external z3_dll name  'Z3_get_sort_id';
 
 (**
        \brief Convert a \c Z3_sort into \c Z3_ast. This is just type casting.
@@ -3789,7 +3787,7 @@ function Z3_get_sort_id(c: Z3_context; s: Z3_sort): Cardinal; cdecl;
        def_API('Z3_sort_to_ast', AST, (_in(CONTEXT), _in(SORT)))
  *)
 function Z3_sort_to_ast(c: Z3_context; s: Z3_sort): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_sort_to_ast';
+  external z3_dll name  'Z3_sort_to_ast';
 
 (**
        \brief compare sorts.
@@ -3797,7 +3795,7 @@ function Z3_sort_to_ast(c: Z3_context; s: Z3_sort): Z3_ast; cdecl;
        def_API('Z3_is_eq_sort', BOOL, (_in(CONTEXT), _in(SORT), _in(SORT)))
  *)
 function Z3_is_eq_sort(c: Z3_context; s1: Z3_sort; s2: Z3_sort): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_is_eq_sort';
+  external z3_dll name  'Z3_is_eq_sort';
 
 (**
        \brief Return the sort kind (e.g., array, tuple, int, bool, etc).
@@ -3807,7 +3805,7 @@ function Z3_is_eq_sort(c: Z3_context; s1: Z3_sort; s2: Z3_sort): Boolean; cdecl;
        def_API('Z3_get_sort_kind', UINT, (_in(CONTEXT), _in(SORT)))
  *)
 function Z3_get_sort_kind(c: Z3_context; t: Z3_sort): Z3_sort_kind; cdecl;
-  external z3_dll name _PU + 'Z3_get_sort_kind';
+  external z3_dll name  'Z3_get_sort_kind';
 
 (**
        \brief Return the size of the given bit-vector sort.
@@ -3820,7 +3818,7 @@ function Z3_get_sort_kind(c: Z3_context; t: Z3_sort): Z3_sort_kind; cdecl;
        def_API('Z3_get_bv_sort_size', UINT, (_in(CONTEXT), _in(SORT)))
  *)
 function Z3_get_bv_sort_size(c: Z3_context; t: Z3_sort): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_get_bv_sort_size';
+  external z3_dll name  'Z3_get_bv_sort_size';
 
 (**
         \brief Store the size of the sort in \c r. Return \c false if the call failed.
@@ -3829,7 +3827,7 @@ function Z3_get_bv_sort_size(c: Z3_context; t: Z3_sort): Cardinal; cdecl;
         def_API('Z3_get_finite_domain_sort_size', BOOL, (_in(CONTEXT), _in(SORT), _out(UINT64)))
  *)
 function Z3_get_finite_domain_sort_size(c: Z3_context; s: Z3_sort; r: PUInt64): Z3_bool; cdecl;
-  external z3_dll name _PU + 'Z3_get_finite_domain_sort_size';
+  external z3_dll name  'Z3_get_finite_domain_sort_size';
 
 (**
        \brief Return the domain of the given array sort.
@@ -3843,7 +3841,7 @@ function Z3_get_finite_domain_sort_size(c: Z3_context; s: Z3_sort; r: PUInt64): 
        def_API('Z3_get_array_sort_domain', SORT, (_in(CONTEXT), _in(SORT)))
  *)
 function Z3_get_array_sort_domain(c: Z3_context; t: Z3_sort): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_get_array_sort_domain';
+  external z3_dll name  'Z3_get_array_sort_domain';
 
 (**
        \brief Return the range of the given array sort.
@@ -3856,7 +3854,7 @@ function Z3_get_array_sort_domain(c: Z3_context; t: Z3_sort): Z3_sort; cdecl;
        def_API('Z3_get_array_sort_range', SORT, (_in(CONTEXT), _in(SORT)))
  *)
 function Z3_get_array_sort_range(c: Z3_context; t: Z3_sort): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_get_array_sort_range';
+  external z3_dll name  'Z3_get_array_sort_range';
 
 (**
        \brief Return the constructor declaration of the given tuple
@@ -3870,7 +3868,7 @@ function Z3_get_array_sort_range(c: Z3_context; t: Z3_sort): Z3_sort; cdecl;
        def_API('Z3_get_tuple_sort_mk_decl', FUNC_DECL, (_in(CONTEXT), _in(SORT)))
  *)
 function Z3_get_tuple_sort_mk_decl(c: Z3_context; t: Z3_sort): Z3_func_decl; cdecl;
-  external z3_dll name _PU + 'Z3_get_tuple_sort_mk_decl';
+  external z3_dll name  'Z3_get_tuple_sort_mk_decl';
 
 (**
        \brief Return the number of fields of the given tuple sort.
@@ -3883,7 +3881,7 @@ function Z3_get_tuple_sort_mk_decl(c: Z3_context; t: Z3_sort): Z3_func_decl; cde
        def_API('Z3_get_tuple_sort_num_fields', UINT, (_in(CONTEXT), _in(SORT)))
  *)
 function Z3_get_tuple_sort_num_fields(c: Z3_context; t: Z3_sort): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_get_tuple_sort_num_fields';
+  external z3_dll name  'Z3_get_tuple_sort_num_fields';
 
 (**
        \brief Return the i-th field declaration (i.e., projection function declaration)
@@ -3898,7 +3896,7 @@ function Z3_get_tuple_sort_num_fields(c: Z3_context; t: Z3_sort): Cardinal; cdec
        def_API('Z3_get_tuple_sort_field_decl', FUNC_DECL, (_in(CONTEXT), _in(SORT), _in(UINT)))
  *)
 function Z3_get_tuple_sort_field_decl(c: Z3_context; t: Z3_sort; i: Cardinal): Z3_func_decl; cdecl;
-  external z3_dll name _PU + 'Z3_get_tuple_sort_field_decl';
+  external z3_dll name  'Z3_get_tuple_sort_field_decl';
 
 (**
         \brief Return number of constructors for datatype.
@@ -3912,7 +3910,7 @@ function Z3_get_tuple_sort_field_decl(c: Z3_context; t: Z3_sort; i: Cardinal): Z
         def_API('Z3_get_datatype_sort_num_constructors', UINT, (_in(CONTEXT), _in(SORT)))
  *)
 function Z3_get_datatype_sort_num_constructors(c: Z3_context; t: Z3_sort): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_get_datatype_sort_num_constructors';
+  external z3_dll name  'Z3_get_datatype_sort_num_constructors';
 
 (**
         \brief Return idx'th constructor.
@@ -3927,7 +3925,7 @@ function Z3_get_datatype_sort_num_constructors(c: Z3_context; t: Z3_sort): Cardi
         def_API('Z3_get_datatype_sort_constructor', FUNC_DECL, (_in(CONTEXT), _in(SORT), _in(UINT)))
  *)
 function Z3_get_datatype_sort_constructor(c: Z3_context; t: Z3_sort; idx: Cardinal): Z3_func_decl; cdecl;
-  external z3_dll name _PU + 'Z3_get_datatype_sort_constructor';
+  external z3_dll name  'Z3_get_datatype_sort_constructor';
 
 (**
         \brief Return idx'th recognizer.
@@ -3942,7 +3940,7 @@ function Z3_get_datatype_sort_constructor(c: Z3_context; t: Z3_sort; idx: Cardin
         def_API('Z3_get_datatype_sort_recognizer', FUNC_DECL, (_in(CONTEXT), _in(SORT), _in(UINT)))
  *)
 function Z3_get_datatype_sort_recognizer(c: Z3_context; t: Z3_sort; idx: Cardinal): Z3_func_decl; cdecl;
-  external z3_dll name _PU + 'Z3_get_datatype_sort_recognizer';
+  external z3_dll name  'Z3_get_datatype_sort_recognizer';
 
 (**
         \brief Return idx_a'th accessor for the idx_c'th constructor.
@@ -3958,7 +3956,7 @@ function Z3_get_datatype_sort_recognizer(c: Z3_context; t: Z3_sort; idx: Cardina
         def_API('Z3_get_datatype_sort_constructor_accessor', FUNC_DECL, (_in(CONTEXT), _in(SORT), _in(UINT), _in(UINT)))
  *)
 function Z3_get_datatype_sort_constructor_accessor(c: Z3_context; t: Z3_sort; idx_c: Cardinal; idx_a: Cardinal): Z3_func_decl; cdecl;
-  external z3_dll name _PU + 'Z3_get_datatype_sort_constructor_accessor';
+  external z3_dll name  'Z3_get_datatype_sort_constructor_accessor';
 
 (**
        \brief Update record field with a value.
@@ -3980,7 +3978,7 @@ function Z3_get_datatype_sort_constructor_accessor(c: Z3_context; t: Z3_sort; id
        def_API('Z3_datatype_update_field', AST, (_in(CONTEXT), _in(FUNC_DECL), _in(AST), _in(AST)))
  *)
 function Z3_datatype_update_field(c: Z3_context; field_access: Z3_func_decl; t: Z3_ast; value: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_datatype_update_field';
+  external z3_dll name  'Z3_datatype_update_field';
 
 (**
         \brief Return arity of relation.
@@ -3992,7 +3990,7 @@ function Z3_datatype_update_field(c: Z3_context; field_access: Z3_func_decl; t: 
         def_API('Z3_get_relation_arity', UINT, (_in(CONTEXT), _in(SORT)))
  *)
 function Z3_get_relation_arity(c: Z3_context; s: Z3_sort): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_get_relation_arity';
+  external z3_dll name  'Z3_get_relation_arity';
 
 (**
         \brief Return sort at i'th column of relation sort.
@@ -4005,7 +4003,7 @@ function Z3_get_relation_arity(c: Z3_context; s: Z3_sort): Cardinal; cdecl;
         def_API('Z3_get_relation_column', SORT, (_in(CONTEXT), _in(SORT), _in(UINT)))
  *)
 function Z3_get_relation_column(c: Z3_context; s: Z3_sort; col: Cardinal): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_get_relation_column';
+  external z3_dll name  'Z3_get_relation_column';
 
 (**
        \brief Pseudo-Boolean relations.
@@ -4015,7 +4013,7 @@ function Z3_get_relation_column(c: Z3_context; s: Z3_sort; col: Cardinal): Z3_so
        def_API('Z3_mk_atmost', AST, (_in(CONTEXT), _in(UINT), _in_array(1,AST), _in(UINT)))
  *)
 function Z3_mk_atmost(c: Z3_context; num_args: Cardinal; args: PZ3_ast; k: Cardinal): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_atmost';
+  external z3_dll name  'Z3_mk_atmost';
 
 (**
        \brief Pseudo-Boolean relations.
@@ -4025,7 +4023,7 @@ function Z3_mk_atmost(c: Z3_context; num_args: Cardinal; args: PZ3_ast; k: Cardi
        def_API('Z3_mk_atleast', AST, (_in(CONTEXT), _in(UINT), _in_array(1,AST), _in(UINT)))
  *)
 function Z3_mk_atleast(c: Z3_context; num_args: Cardinal; args: PZ3_ast; k: Cardinal): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_atleast';
+  external z3_dll name  'Z3_mk_atleast';
 
 (**
        \brief Pseudo-Boolean relations.
@@ -4035,7 +4033,7 @@ function Z3_mk_atleast(c: Z3_context; num_args: Cardinal; args: PZ3_ast; k: Card
        def_API('Z3_mk_pble', AST, (_in(CONTEXT), _in(UINT), _in_array(1,AST), _in_array(1,INT), _in(INT)))
  *)
 function Z3_mk_pble(c: Z3_context; num_args: Cardinal; args: PZ3_ast; coeffs: PInteger; k: Integer): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_pble';
+  external z3_dll name  'Z3_mk_pble';
 
 (**
        \brief Pseudo-Boolean relations.
@@ -4045,7 +4043,7 @@ function Z3_mk_pble(c: Z3_context; num_args: Cardinal; args: PZ3_ast; coeffs: PI
        def_API('Z3_mk_pbge', AST, (_in(CONTEXT), _in(UINT), _in_array(1,AST), _in_array(1,INT), _in(INT)))
  *)
 function Z3_mk_pbge(c: Z3_context; num_args: Cardinal; args: PZ3_ast; coeffs: PInteger; k: Integer): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_pbge';
+  external z3_dll name  'Z3_mk_pbge';
 
 (**
        \brief Pseudo-Boolean relations.
@@ -4055,7 +4053,7 @@ function Z3_mk_pbge(c: Z3_context; num_args: Cardinal; args: PZ3_ast; coeffs: PI
        def_API('Z3_mk_pbeq', AST, (_in(CONTEXT), _in(UINT), _in_array(1,AST), _in_array(1,INT), _in(INT)))
  *)
 function Z3_mk_pbeq(c: Z3_context; num_args: Cardinal; args: PZ3_ast; coeffs: PInteger; k: Integer): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_mk_pbeq';
+  external z3_dll name  'Z3_mk_pbeq';
 
 (**
        \brief Convert a \c Z3_func_decl into \c Z3_ast. This is just type casting.
@@ -4063,7 +4061,7 @@ function Z3_mk_pbeq(c: Z3_context; num_args: Cardinal; args: PZ3_ast; coeffs: PI
        def_API('Z3_func_decl_to_ast', AST, (_in(CONTEXT), _in(FUNC_DECL)))
  *)
 function Z3_func_decl_to_ast(c: Z3_context; f: Z3_func_decl): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_func_decl_to_ast';
+  external z3_dll name  'Z3_func_decl_to_ast';
 
 (**
        \brief Compare terms.
@@ -4071,7 +4069,7 @@ function Z3_func_decl_to_ast(c: Z3_context; f: Z3_func_decl): Z3_ast; cdecl;
        def_API('Z3_is_eq_func_decl', BOOL, (_in(CONTEXT), _in(FUNC_DECL), _in(FUNC_DECL)))
  *)
 function Z3_is_eq_func_decl(c: Z3_context; f1: Z3_func_decl; f2: Z3_func_decl): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_is_eq_func_decl';
+  external z3_dll name  'Z3_is_eq_func_decl';
 
 (**
         \brief Return a unique identifier for \c f.
@@ -4079,7 +4077,7 @@ function Z3_is_eq_func_decl(c: Z3_context; f1: Z3_func_decl; f2: Z3_func_decl): 
         def_API('Z3_get_func_decl_id', UINT, (_in(CONTEXT), _in(FUNC_DECL)))
  *)
 function Z3_get_func_decl_id(c: Z3_context; f: Z3_func_decl): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_get_func_decl_id';
+  external z3_dll name  'Z3_get_func_decl_id';
 
 (**
        \brief Return the constant declaration name as a symbol.
@@ -4087,7 +4085,7 @@ function Z3_get_func_decl_id(c: Z3_context; f: Z3_func_decl): Cardinal; cdecl;
        def_API('Z3_get_decl_name', SYMBOL, (_in(CONTEXT), _in(FUNC_DECL)))
  *)
 function Z3_get_decl_name(c: Z3_context; d: Z3_func_decl): Z3_symbol; cdecl;
-  external z3_dll name _PU + 'Z3_get_decl_name';
+  external z3_dll name  'Z3_get_decl_name';
 
 (**
        \brief Return declaration kind corresponding to declaration.
@@ -4095,7 +4093,7 @@ function Z3_get_decl_name(c: Z3_context; d: Z3_func_decl): Z3_symbol; cdecl;
        def_API('Z3_get_decl_kind', UINT, (_in(CONTEXT), _in(FUNC_DECL)))
  *)
 function Z3_get_decl_kind(c: Z3_context; d: Z3_func_decl): Z3_decl_kind; cdecl;
-  external z3_dll name _PU + 'Z3_get_decl_kind';
+  external z3_dll name  'Z3_get_decl_kind';
 
 (**
        \brief Return the number of parameters of the given declaration.
@@ -4105,7 +4103,7 @@ function Z3_get_decl_kind(c: Z3_context; d: Z3_func_decl): Z3_decl_kind; cdecl;
        def_API('Z3_get_domain_size', UINT, (_in(CONTEXT), _in(FUNC_DECL)))
  *)
 function Z3_get_domain_size(c: Z3_context; d: Z3_func_decl): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_get_domain_size';
+  external z3_dll name  'Z3_get_domain_size';
 
 (**
        \brief Alias for \c Z3_get_domain_size.
@@ -4115,7 +4113,7 @@ function Z3_get_domain_size(c: Z3_context; d: Z3_func_decl): Cardinal; cdecl;
        def_API('Z3_get_arity', UINT, (_in(CONTEXT), _in(FUNC_DECL)))
  *)
 function Z3_get_arity(c: Z3_context; d: Z3_func_decl): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_get_arity';
+  external z3_dll name  'Z3_get_arity';
 
 (**
        \brief Return the sort of the i-th parameter of the given function declaration.
@@ -4127,7 +4125,7 @@ function Z3_get_arity(c: Z3_context; d: Z3_func_decl): Cardinal; cdecl;
        def_API('Z3_get_domain', SORT, (_in(CONTEXT), _in(FUNC_DECL), _in(UINT)))
  *)
 function Z3_get_domain(c: Z3_context; d: Z3_func_decl; i: Cardinal): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_get_domain';
+  external z3_dll name  'Z3_get_domain';
 
 (**
        \brief Return the range of the given declaration.
@@ -4138,7 +4136,7 @@ function Z3_get_domain(c: Z3_context; d: Z3_func_decl; i: Cardinal): Z3_sort; cd
        def_API('Z3_get_range', SORT, (_in(CONTEXT), _in(FUNC_DECL)))
  *)
 function Z3_get_range(c: Z3_context; d: Z3_func_decl): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_get_range';
+  external z3_dll name  'Z3_get_range';
 
 (**
        \brief Return the number of parameters associated with a declaration.
@@ -4146,7 +4144,7 @@ function Z3_get_range(c: Z3_context; d: Z3_func_decl): Z3_sort; cdecl;
        def_API('Z3_get_decl_num_parameters', UINT, (_in(CONTEXT), _in(FUNC_DECL)))
  *)
 function Z3_get_decl_num_parameters(c: Z3_context; d: Z3_func_decl): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_get_decl_num_parameters';
+  external z3_dll name  'Z3_get_decl_num_parameters';
 
 (**
        \brief Return the parameter type associated with a declaration.
@@ -4158,7 +4156,7 @@ function Z3_get_decl_num_parameters(c: Z3_context; d: Z3_func_decl): Cardinal; c
        def_API('Z3_get_decl_parameter_kind', UINT, (_in(CONTEXT), _in(FUNC_DECL), _in(UINT)))
  *)
 function Z3_get_decl_parameter_kind(c: Z3_context; d: Z3_func_decl; idx: Cardinal): Z3_parameter_kind; cdecl;
-  external z3_dll name _PU + 'Z3_get_decl_parameter_kind';
+  external z3_dll name  'Z3_get_decl_parameter_kind';
 
 (**
        \brief Return the integer value associated with an integer parameter.
@@ -4168,7 +4166,7 @@ function Z3_get_decl_parameter_kind(c: Z3_context; d: Z3_func_decl; idx: Cardina
        def_API('Z3_get_decl_int_parameter', INT, (_in(CONTEXT), _in(FUNC_DECL), _in(UINT)))
  *)
 function Z3_get_decl_int_parameter(c: Z3_context; d: Z3_func_decl; idx: Cardinal): Integer; cdecl;
-  external z3_dll name _PU + 'Z3_get_decl_int_parameter';
+  external z3_dll name  'Z3_get_decl_int_parameter';
 
 (**
        \brief Return the double value associated with an double parameter.
@@ -4178,7 +4176,7 @@ function Z3_get_decl_int_parameter(c: Z3_context; d: Z3_func_decl; idx: Cardinal
        def_API('Z3_get_decl_double_parameter', DOUBLE, (_in(CONTEXT), _in(FUNC_DECL), _in(UINT)))
  *)
 function Z3_get_decl_double_parameter(c: Z3_context; d: Z3_func_decl; idx: Cardinal): Double; cdecl;
-  external z3_dll name _PU + 'Z3_get_decl_double_parameter';
+  external z3_dll name  'Z3_get_decl_double_parameter';
 
 (**
        \brief Return the double value associated with an double parameter.
@@ -4188,7 +4186,7 @@ function Z3_get_decl_double_parameter(c: Z3_context; d: Z3_func_decl; idx: Cardi
        def_API('Z3_get_decl_symbol_parameter', SYMBOL, (_in(CONTEXT), _in(FUNC_DECL), _in(UINT)))
  *)
 function Z3_get_decl_symbol_parameter(c: Z3_context; d: Z3_func_decl; idx: Cardinal): Z3_symbol; cdecl;
-  external z3_dll name _PU + 'Z3_get_decl_symbol_parameter';
+  external z3_dll name  'Z3_get_decl_symbol_parameter';
 
 (**
        \brief Return the sort value associated with a sort parameter.
@@ -4198,7 +4196,7 @@ function Z3_get_decl_symbol_parameter(c: Z3_context; d: Z3_func_decl; idx: Cardi
        def_API('Z3_get_decl_sort_parameter', SORT, (_in(CONTEXT), _in(FUNC_DECL), _in(UINT)))
  *)
 function Z3_get_decl_sort_parameter(c: Z3_context; d: Z3_func_decl; idx: Cardinal): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_get_decl_sort_parameter';
+  external z3_dll name  'Z3_get_decl_sort_parameter';
 
 (**
        \brief Return the expression value associated with an expression parameter.
@@ -4208,7 +4206,7 @@ function Z3_get_decl_sort_parameter(c: Z3_context; d: Z3_func_decl; idx: Cardina
        def_API('Z3_get_decl_ast_parameter', AST, (_in(CONTEXT), _in(FUNC_DECL), _in(UINT)))
  *)
 function Z3_get_decl_ast_parameter(c: Z3_context; d: Z3_func_decl; idx: Cardinal): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_get_decl_ast_parameter';
+  external z3_dll name  'Z3_get_decl_ast_parameter';
 
 (**
        \brief Return the expression value associated with an expression parameter.
@@ -4218,7 +4216,7 @@ function Z3_get_decl_ast_parameter(c: Z3_context; d: Z3_func_decl; idx: Cardinal
        def_API('Z3_get_decl_func_decl_parameter', FUNC_DECL, (_in(CONTEXT), _in(FUNC_DECL), _in(UINT)))
  *)
 function Z3_get_decl_func_decl_parameter(c: Z3_context; d: Z3_func_decl; idx: Cardinal): Z3_func_decl; cdecl;
-  external z3_dll name _PU + 'Z3_get_decl_func_decl_parameter';
+  external z3_dll name  'Z3_get_decl_func_decl_parameter';
 
 (**
        \brief Return the rational value, as a string, associated with a rational parameter.
@@ -4228,7 +4226,7 @@ function Z3_get_decl_func_decl_parameter(c: Z3_context; d: Z3_func_decl; idx: Ca
        def_API('Z3_get_decl_rational_parameter', STRING, (_in(CONTEXT), _in(FUNC_DECL), _in(UINT)))
  *)
 function Z3_get_decl_rational_parameter(c: Z3_context; d: Z3_func_decl; idx: Cardinal): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_get_decl_rational_parameter';
+  external z3_dll name  'Z3_get_decl_rational_parameter';
 
 (**
        \brief Convert a \c Z3_app into \c Z3_ast. This is just type casting.
@@ -4236,7 +4234,7 @@ function Z3_get_decl_rational_parameter(c: Z3_context; d: Z3_func_decl; idx: Car
        def_API('Z3_app_to_ast', AST, (_in(CONTEXT), _in(APP)))
  *)
 function Z3_app_to_ast(c: Z3_context; a: Z3_app): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_app_to_ast';
+  external z3_dll name  'Z3_app_to_ast';
 
 (**
        \brief Return the declaration of a constant or function application.
@@ -4244,7 +4242,7 @@ function Z3_app_to_ast(c: Z3_context; a: Z3_app): Z3_ast; cdecl;
        def_API('Z3_get_app_decl', FUNC_DECL, (_in(CONTEXT), _in(APP)))
  *)
 function Z3_get_app_decl(c: Z3_context; a: Z3_app): Z3_func_decl; cdecl;
-  external z3_dll name _PU + 'Z3_get_app_decl';
+  external z3_dll name  'Z3_get_app_decl';
 
 (**
        \brief Return the number of argument of an application. If \c t
@@ -4253,7 +4251,7 @@ function Z3_get_app_decl(c: Z3_context; a: Z3_app): Z3_func_decl; cdecl;
        def_API('Z3_get_app_num_args', UINT, (_in(CONTEXT), _in(APP)))
  *)
 function Z3_get_app_num_args(c: Z3_context; a: Z3_app): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_get_app_num_args';
+  external z3_dll name  'Z3_get_app_num_args';
 
 (**
        \brief Return the i-th argument of the given application.
@@ -4263,7 +4261,7 @@ function Z3_get_app_num_args(c: Z3_context; a: Z3_app): Cardinal; cdecl;
        def_API('Z3_get_app_arg', AST, (_in(CONTEXT), _in(APP), _in(UINT)))
  *)
 function Z3_get_app_arg(c: Z3_context; a: Z3_app; i: Cardinal): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_get_app_arg';
+  external z3_dll name  'Z3_get_app_arg';
 
 (**
        \brief Compare terms.
@@ -4271,7 +4269,7 @@ function Z3_get_app_arg(c: Z3_context; a: Z3_app; i: Cardinal): Z3_ast; cdecl;
        def_API('Z3_is_eq_ast', BOOL, (_in(CONTEXT), _in(AST), _in(AST)))
  *)
 function Z3_is_eq_ast(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_is_eq_ast';
+  external z3_dll name  'Z3_is_eq_ast';
 
 (**
         \brief Return a unique identifier for \c t.
@@ -4285,7 +4283,7 @@ function Z3_is_eq_ast(c: Z3_context; t1: Z3_ast; t2: Z3_ast): Boolean; cdecl;
         def_API('Z3_get_ast_id', UINT, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_get_ast_id(c: Z3_context; t: Z3_ast): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_get_ast_id';
+  external z3_dll name  'Z3_get_ast_id';
 
 (**
        \brief Return a hash code for the given AST.
@@ -4295,7 +4293,7 @@ function Z3_get_ast_id(c: Z3_context; t: Z3_ast): Cardinal; cdecl;
        def_API('Z3_get_ast_hash', UINT, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_get_ast_hash(c: Z3_context; a: Z3_ast): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_get_ast_hash';
+  external z3_dll name  'Z3_get_ast_hash';
 
 (**
        \brief Return the sort of an AST node.
@@ -4305,7 +4303,7 @@ function Z3_get_ast_hash(c: Z3_context; a: Z3_ast): Cardinal; cdecl;
        def_API('Z3_get_sort', SORT, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_get_sort(c: Z3_context; a: Z3_ast): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_get_sort';
+  external z3_dll name  'Z3_get_sort';
 
 (**
        \brief Return true if the given expression \c t is well sorted.
@@ -4313,7 +4311,7 @@ function Z3_get_sort(c: Z3_context; a: Z3_ast): Z3_sort; cdecl;
        def_API('Z3_is_well_sorted', BOOL, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_is_well_sorted(c: Z3_context; t: Z3_ast): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_is_well_sorted';
+  external z3_dll name  'Z3_is_well_sorted';
 
 (**
        \brief Return \c Z3_L_TRUE if \c a is true, \c Z3_L_FALSE if it is false, and \c Z3_L_UNDEF otherwise.
@@ -4321,7 +4319,7 @@ function Z3_is_well_sorted(c: Z3_context; t: Z3_ast): Boolean; cdecl;
        def_API('Z3_get_bool_value', INT, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_get_bool_value(c: Z3_context; a: Z3_ast): Z3_lbool; cdecl;
-  external z3_dll name _PU + 'Z3_get_bool_value';
+  external z3_dll name  'Z3_get_bool_value';
 
 (**
        \brief Return the kind of the given AST.
@@ -4329,19 +4327,19 @@ function Z3_get_bool_value(c: Z3_context; a: Z3_ast): Z3_lbool; cdecl;
        def_API('Z3_get_ast_kind', UINT, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_get_ast_kind(c: Z3_context; a: Z3_ast): Z3_ast_kind; cdecl;
-  external z3_dll name _PU + 'Z3_get_ast_kind';
+  external z3_dll name  'Z3_get_ast_kind';
 
 (**
       def_API('Z3_is_app', BOOL, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_is_app(c: Z3_context; a: Z3_ast): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_is_app';
+  external z3_dll name  'Z3_is_app';
 
 (**
       def_API('Z3_is_numeral_ast', BOOL, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_is_numeral_ast(c: Z3_context; a: Z3_ast): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_is_numeral_ast';
+  external z3_dll name  'Z3_is_numeral_ast';
 
 (**
        \brief Return true if the given AST is a real algebraic number.
@@ -4349,7 +4347,7 @@ function Z3_is_numeral_ast(c: Z3_context; a: Z3_ast): Boolean; cdecl;
        def_API('Z3_is_algebraic_number', BOOL, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_is_algebraic_number(c: Z3_context; a: Z3_ast): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_is_algebraic_number';
+  external z3_dll name  'Z3_is_algebraic_number';
 
 (**
        \brief Convert an \c ast into an \c APP_AST. This is just type casting.
@@ -4359,7 +4357,7 @@ function Z3_is_algebraic_number(c: Z3_context; a: Z3_ast): Boolean; cdecl;
        def_API('Z3_to_app', APP, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_to_app(c: Z3_context; a: Z3_ast): Z3_app; cdecl;
-  external z3_dll name _PU + 'Z3_to_app';
+  external z3_dll name  'Z3_to_app';
 
 (**
        \brief Convert an AST into a FUNC_DECL_AST. This is just type casting.
@@ -4369,7 +4367,7 @@ function Z3_to_app(c: Z3_context; a: Z3_ast): Z3_app; cdecl;
        def_API('Z3_to_func_decl', FUNC_DECL, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_to_func_decl(c: Z3_context; a: Z3_ast): Z3_func_decl; cdecl;
-  external z3_dll name _PU + 'Z3_to_func_decl';
+  external z3_dll name  'Z3_to_func_decl';
 
 (**
        \brief Return numeral value, as a string of a numeric constant term
@@ -4379,7 +4377,7 @@ function Z3_to_func_decl(c: Z3_context; a: Z3_ast): Z3_func_decl; cdecl;
        def_API('Z3_get_numeral_string', STRING, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_get_numeral_string(c: Z3_context; a: Z3_ast): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_get_numeral_string';
+  external z3_dll name  'Z3_get_numeral_string';
 
 (**
        \brief Return numeral as a string in decimal notation.
@@ -4390,7 +4388,7 @@ function Z3_get_numeral_string(c: Z3_context; a: Z3_ast): Z3_string; cdecl;
        def_API('Z3_get_numeral_decimal_string', STRING, (_in(CONTEXT), _in(AST), _in(UINT)))
  *)
 function Z3_get_numeral_decimal_string(c: Z3_context; a: Z3_ast; precision: Cardinal): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_get_numeral_decimal_string';
+  external z3_dll name  'Z3_get_numeral_decimal_string';
 
 (**
        \brief Return numeral as a double.
@@ -4400,7 +4398,7 @@ function Z3_get_numeral_decimal_string(c: Z3_context; a: Z3_ast; precision: Card
        def_API('Z3_get_numeral_double', DOUBLE, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_get_numeral_double(c: Z3_context; a: Z3_ast): Double; cdecl;
-  external z3_dll name _PU + 'Z3_get_numeral_double';
+  external z3_dll name  'Z3_get_numeral_double';
 
 (**
        \brief Return the numerator (as a numeral AST) of a numeral AST of sort Real.
@@ -4410,7 +4408,7 @@ function Z3_get_numeral_double(c: Z3_context; a: Z3_ast): Double; cdecl;
        def_API('Z3_get_numerator', AST, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_get_numerator(c: Z3_context; a: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_get_numerator';
+  external z3_dll name  'Z3_get_numerator';
 
 (**
        \brief Return the denominator (as a numeral AST) of a numeral AST of sort Real.
@@ -4420,7 +4418,7 @@ function Z3_get_numerator(c: Z3_context; a: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_get_denominator', AST, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_get_denominator(c: Z3_context; a: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_get_denominator';
+  external z3_dll name  'Z3_get_denominator';
 
 (**
        \brief Return numeral value, as a pair of 64 bit numbers if the representation fits.
@@ -4437,7 +4435,7 @@ function Z3_get_denominator(c: Z3_context; a: Z3_ast): Z3_ast; cdecl;
        def_API('Z3_get_numeral_small', BOOL, (_in(CONTEXT), _in(AST), _out(INT64), _out(INT64)))
  *)
 function Z3_get_numeral_small(c: Z3_context; a: Z3_ast; num: PInt64; den: PInt64): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_get_numeral_small';
+  external z3_dll name  'Z3_get_numeral_small';
 
 (**
        \brief Similar to #Z3_get_numeral_string, but only succeeds if
@@ -4450,7 +4448,7 @@ function Z3_get_numeral_small(c: Z3_context; a: Z3_ast; num: PInt64; den: PInt64
        def_API('Z3_get_numeral_int', BOOL, (_in(CONTEXT), _in(AST), _out(INT)))
  *)
 function Z3_get_numeral_int(c: Z3_context; v: Z3_ast; i: PInteger): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_get_numeral_int';
+  external z3_dll name  'Z3_get_numeral_int';
 
 (**
        \brief Similar to #Z3_get_numeral_string, but only succeeds if
@@ -4463,7 +4461,7 @@ function Z3_get_numeral_int(c: Z3_context; v: Z3_ast; i: PInteger): Boolean; cde
        def_API('Z3_get_numeral_uint', BOOL, (_in(CONTEXT), _in(AST), _out(UINT)))
  *)
 function Z3_get_numeral_uint(c: Z3_context; v: Z3_ast; u: PCardinal): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_get_numeral_uint';
+  external z3_dll name  'Z3_get_numeral_uint';
 
 (**
        \brief Similar to #Z3_get_numeral_string, but only succeeds if
@@ -4476,7 +4474,7 @@ function Z3_get_numeral_uint(c: Z3_context; v: Z3_ast; u: PCardinal): Boolean; c
        def_API('Z3_get_numeral_uint64', BOOL, (_in(CONTEXT), _in(AST), _out(UINT64)))
  *)
 function Z3_get_numeral_uint64(c: Z3_context; v: Z3_ast; u: PUInt64): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_get_numeral_uint64';
+  external z3_dll name  'Z3_get_numeral_uint64';
 
 (**
        \brief Similar to #Z3_get_numeral_string, but only succeeds if
@@ -4489,7 +4487,7 @@ function Z3_get_numeral_uint64(c: Z3_context; v: Z3_ast; u: PUInt64): Boolean; c
        def_API('Z3_get_numeral_int64', BOOL, (_in(CONTEXT), _in(AST), _out(INT64)))
  *)
 function Z3_get_numeral_int64(c: Z3_context; v: Z3_ast; i: PInt64): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_get_numeral_int64';
+  external z3_dll name  'Z3_get_numeral_int64';
 
 (**
        \brief Similar to #Z3_get_numeral_string, but only succeeds if
@@ -4502,7 +4500,7 @@ function Z3_get_numeral_int64(c: Z3_context; v: Z3_ast; i: PInt64): Boolean; cde
        def_API('Z3_get_numeral_rational_int64', BOOL, (_in(CONTEXT), _in(AST), _out(INT64), _out(INT64)))
  *)
 function Z3_get_numeral_rational_int64(c: Z3_context; v: Z3_ast; num: PInt64; den: PInt64): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_get_numeral_rational_int64';
+  external z3_dll name  'Z3_get_numeral_rational_int64';
 
 (**
        \brief Return a lower bound for the given real algebraic number.
@@ -4514,7 +4512,7 @@ function Z3_get_numeral_rational_int64(c: Z3_context; v: Z3_ast; num: PInt64; de
        def_API('Z3_get_algebraic_number_lower', AST, (_in(CONTEXT), _in(AST), _in(UINT)))
  *)
 function Z3_get_algebraic_number_lower(c: Z3_context; a: Z3_ast; precision: Cardinal): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_get_algebraic_number_lower';
+  external z3_dll name  'Z3_get_algebraic_number_lower';
 
 (**
        \brief Return a upper bound for the given real algebraic number.
@@ -4526,7 +4524,7 @@ function Z3_get_algebraic_number_lower(c: Z3_context; a: Z3_ast; precision: Card
        def_API('Z3_get_algebraic_number_upper', AST, (_in(CONTEXT), _in(AST), _in(UINT)))
  *)
 function Z3_get_algebraic_number_upper(c: Z3_context; a: Z3_ast; precision: Cardinal): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_get_algebraic_number_upper';
+  external z3_dll name  'Z3_get_algebraic_number_upper';
 
 (**
        \brief Convert a Z3_pattern into Z3_ast. This is just type casting.
@@ -4534,7 +4532,7 @@ function Z3_get_algebraic_number_upper(c: Z3_context; a: Z3_ast; precision: Card
        def_API('Z3_pattern_to_ast', AST, (_in(CONTEXT), _in(PATTERN)))
  *)
 function Z3_pattern_to_ast(c: Z3_context; p: Z3_pattern): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_pattern_to_ast';
+  external z3_dll name  'Z3_pattern_to_ast';
 
 (**
         \brief Return number of terms in pattern.
@@ -4542,7 +4540,7 @@ function Z3_pattern_to_ast(c: Z3_context; p: Z3_pattern): Z3_ast; cdecl;
         def_API('Z3_get_pattern_num_terms', UINT, (_in(CONTEXT), _in(PATTERN)))
  *)
 function Z3_get_pattern_num_terms(c: Z3_context; p: Z3_pattern): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_get_pattern_num_terms';
+  external z3_dll name  'Z3_get_pattern_num_terms';
 
 (**
        \brief Return i'th ast in pattern.
@@ -4550,7 +4548,7 @@ function Z3_get_pattern_num_terms(c: Z3_context; p: Z3_pattern): Cardinal; cdecl
        def_API('Z3_get_pattern', AST, (_in(CONTEXT), _in(PATTERN), _in(UINT)))
  *)
 function Z3_get_pattern(c: Z3_context; p: Z3_pattern; idx: Cardinal): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_get_pattern';
+  external z3_dll name  'Z3_get_pattern';
 
 (**
        \brief Return index of de-Bruijn bound variable.
@@ -4560,7 +4558,7 @@ function Z3_get_pattern(c: Z3_context; p: Z3_pattern; idx: Cardinal): Z3_ast; cd
        def_API('Z3_get_index_value', UINT, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_get_index_value(c: Z3_context; a: Z3_ast): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_get_index_value';
+  external z3_dll name  'Z3_get_index_value';
 
 (**
        \brief Determine if an ast is a universal quantifier.
@@ -4568,7 +4566,7 @@ function Z3_get_index_value(c: Z3_context; a: Z3_ast): Cardinal; cdecl;
        def_API('Z3_is_quantifier_forall', BOOL, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_is_quantifier_forall(c: Z3_context; a: Z3_ast): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_is_quantifier_forall';
+  external z3_dll name  'Z3_is_quantifier_forall';
 
 (**
        \brief Determine if ast is an existential quantifier.
@@ -4577,7 +4575,7 @@ function Z3_is_quantifier_forall(c: Z3_context; a: Z3_ast): Boolean; cdecl;
        def_API('Z3_is_quantifier_exists', BOOL, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_is_quantifier_exists(c: Z3_context; a: Z3_ast): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_is_quantifier_exists';
+  external z3_dll name  'Z3_is_quantifier_exists';
 
 (**
        \brief Determine if ast is a lambda expression.
@@ -4587,7 +4585,7 @@ function Z3_is_quantifier_exists(c: Z3_context; a: Z3_ast): Boolean; cdecl;
        def_API('Z3_is_lambda', BOOL, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_is_lambda(c: Z3_context; a: Z3_ast): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_is_lambda';
+  external z3_dll name  'Z3_is_lambda';
 
 (**
        \brief Obtain weight of quantifier.
@@ -4597,7 +4595,7 @@ function Z3_is_lambda(c: Z3_context; a: Z3_ast): Boolean; cdecl;
        def_API('Z3_get_quantifier_weight', UINT, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_get_quantifier_weight(c: Z3_context; a: Z3_ast): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_get_quantifier_weight';
+  external z3_dll name  'Z3_get_quantifier_weight';
 
 (**
        \brief Return number of patterns used in quantifier.
@@ -4607,7 +4605,7 @@ function Z3_get_quantifier_weight(c: Z3_context; a: Z3_ast): Cardinal; cdecl;
        def_API('Z3_get_quantifier_num_patterns', UINT, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_get_quantifier_num_patterns(c: Z3_context; a: Z3_ast): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_get_quantifier_num_patterns';
+  external z3_dll name  'Z3_get_quantifier_num_patterns';
 
 (**
        \brief Return i'th pattern.
@@ -4617,7 +4615,7 @@ function Z3_get_quantifier_num_patterns(c: Z3_context; a: Z3_ast): Cardinal; cde
        def_API('Z3_get_quantifier_pattern_ast', PATTERN, (_in(CONTEXT), _in(AST), _in(UINT)))
  *)
 function Z3_get_quantifier_pattern_ast(c: Z3_context; a: Z3_ast; i: Cardinal): Z3_pattern; cdecl;
-  external z3_dll name _PU + 'Z3_get_quantifier_pattern_ast';
+  external z3_dll name  'Z3_get_quantifier_pattern_ast';
 
 (**
        \brief Return number of no_patterns used in quantifier.
@@ -4627,7 +4625,7 @@ function Z3_get_quantifier_pattern_ast(c: Z3_context; a: Z3_ast; i: Cardinal): Z
        def_API('Z3_get_quantifier_num_no_patterns', UINT, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_get_quantifier_num_no_patterns(c: Z3_context; a: Z3_ast): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_get_quantifier_num_no_patterns';
+  external z3_dll name  'Z3_get_quantifier_num_no_patterns';
 
 (**
        \brief Return i'th no_pattern.
@@ -4637,7 +4635,7 @@ function Z3_get_quantifier_num_no_patterns(c: Z3_context; a: Z3_ast): Cardinal; 
        def_API('Z3_get_quantifier_no_pattern_ast', AST, (_in(CONTEXT), _in(AST), _in(UINT)))
  *)
 function Z3_get_quantifier_no_pattern_ast(c: Z3_context; a: Z3_ast; i: Cardinal): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_get_quantifier_no_pattern_ast';
+  external z3_dll name  'Z3_get_quantifier_no_pattern_ast';
 
 (**
        \brief Return number of bound variables of quantifier.
@@ -4647,7 +4645,7 @@ function Z3_get_quantifier_no_pattern_ast(c: Z3_context; a: Z3_ast; i: Cardinal)
        def_API('Z3_get_quantifier_num_bound', UINT, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_get_quantifier_num_bound(c: Z3_context; a: Z3_ast): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_get_quantifier_num_bound';
+  external z3_dll name  'Z3_get_quantifier_num_bound';
 
 (**
        \brief Return symbol of the i'th bound variable.
@@ -4657,7 +4655,7 @@ function Z3_get_quantifier_num_bound(c: Z3_context; a: Z3_ast): Cardinal; cdecl;
        def_API('Z3_get_quantifier_bound_name', SYMBOL, (_in(CONTEXT), _in(AST), _in(UINT)))
  *)
 function Z3_get_quantifier_bound_name(c: Z3_context; a: Z3_ast; i: Cardinal): Z3_symbol; cdecl;
-  external z3_dll name _PU + 'Z3_get_quantifier_bound_name';
+  external z3_dll name  'Z3_get_quantifier_bound_name';
 
 (**
        \brief Return sort of the i'th bound variable.
@@ -4667,7 +4665,7 @@ function Z3_get_quantifier_bound_name(c: Z3_context; a: Z3_ast; i: Cardinal): Z3
        def_API('Z3_get_quantifier_bound_sort', SORT, (_in(CONTEXT), _in(AST), _in(UINT)))
  *)
 function Z3_get_quantifier_bound_sort(c: Z3_context; a: Z3_ast; i: Cardinal): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_get_quantifier_bound_sort';
+  external z3_dll name  'Z3_get_quantifier_bound_sort';
 
 (**
        \brief Return body of quantifier.
@@ -4677,7 +4675,7 @@ function Z3_get_quantifier_bound_sort(c: Z3_context; a: Z3_ast; i: Cardinal): Z3
        def_API('Z3_get_quantifier_body', AST, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_get_quantifier_body(c: Z3_context; a: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_get_quantifier_body';
+  external z3_dll name  'Z3_get_quantifier_body';
 
 (**
         \brief Interface to simplifier.
@@ -4692,7 +4690,7 @@ function Z3_get_quantifier_body(c: Z3_context; a: Z3_ast): Z3_ast; cdecl;
         def_API('Z3_simplify', AST, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_simplify(c: Z3_context; a: Z3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_simplify';
+  external z3_dll name  'Z3_simplify';
 
 (**
         \brief Interface to simplifier.
@@ -4708,7 +4706,7 @@ function Z3_simplify(c: Z3_context; a: Z3_ast): Z3_ast; cdecl;
         def_API('Z3_simplify_ex', AST, (_in(CONTEXT), _in(AST), _in(PARAMS)))
  *)
 function Z3_simplify_ex(c: Z3_context; a: Z3_ast; p: Z3_params): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_simplify_ex';
+  external z3_dll name  'Z3_simplify_ex';
 
 (**
        \brief Return a string describing all available parameters.
@@ -4719,7 +4717,7 @@ function Z3_simplify_ex(c: Z3_context; a: Z3_ast; p: Z3_params): Z3_ast; cdecl;
        def_API('Z3_simplify_get_help', STRING, (_in(CONTEXT),))
  *)
 function Z3_simplify_get_help(c: Z3_context): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_simplify_get_help';
+  external z3_dll name  'Z3_simplify_get_help';
 
 (**
        \brief Return the parameter description set for the simplify procedure.
@@ -4730,7 +4728,7 @@ function Z3_simplify_get_help(c: Z3_context): Z3_string; cdecl;
        def_API('Z3_simplify_get_param_descrs', PARAM_DESCRS, (_in(CONTEXT),))
  *)
 function Z3_simplify_get_param_descrs(c: Z3_context): Z3_param_descrs; cdecl;
-  external z3_dll name _PU + 'Z3_simplify_get_param_descrs';
+  external z3_dll name  'Z3_simplify_get_param_descrs';
 
 (**
        \brief Update the arguments of term \c a using the arguments \c args.
@@ -4741,7 +4739,7 @@ function Z3_simplify_get_param_descrs(c: Z3_context): Z3_param_descrs; cdecl;
        def_API('Z3_update_term', AST, (_in(CONTEXT), _in(AST), _in(UINT), _in_array(2, AST)))
  *)
 function Z3_update_term(c: Z3_context; a: Z3_ast; num_args: Cardinal; args: PZ3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_update_term';
+  external z3_dll name  'Z3_update_term';
 
 (**
        \brief Substitute every occurrence of \ccode{from[i]} in \c a with \ccode{to[i]}, for \c i smaller than \c num_exprs.
@@ -4751,7 +4749,7 @@ function Z3_update_term(c: Z3_context; a: Z3_ast; num_args: Cardinal; args: PZ3_
        def_API('Z3_substitute', AST, (_in(CONTEXT), _in(AST), _in(UINT), _in_array(2, AST), _in_array(2, AST)))
  *)
 function Z3_substitute(c: Z3_context; a: Z3_ast; num_exprs: Cardinal; from: PZ3_ast; &to: PZ3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_substitute';
+  external z3_dll name  'Z3_substitute';
 
 (**
        \brief Substitute the free variables in \c a with the expressions in \c to.
@@ -4760,7 +4758,7 @@ function Z3_substitute(c: Z3_context; a: Z3_ast; num_exprs: Cardinal; from: PZ3_
        def_API('Z3_substitute_vars', AST, (_in(CONTEXT), _in(AST), _in(UINT), _in_array(2, AST)))
  *)
 function Z3_substitute_vars(c: Z3_context; a: Z3_ast; num_exprs: Cardinal; &to: PZ3_ast): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_substitute_vars';
+  external z3_dll name  'Z3_substitute_vars';
 
 (**
        \brief Translate/Copy the AST \c a from context \c source to context \c target.
@@ -4770,7 +4768,7 @@ function Z3_substitute_vars(c: Z3_context; a: Z3_ast; num_exprs: Cardinal; &to: 
        def_API('Z3_translate', AST, (_in(CONTEXT), _in(AST), _in(CONTEXT)))
  *)
 function Z3_translate(source: Z3_context; a: Z3_ast; target: Z3_context): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_translate';
+  external z3_dll name  'Z3_translate';
 
 (**
        \brief Create a fresh model object. It has reference count 0.
@@ -4778,7 +4776,7 @@ function Z3_translate(source: Z3_context; a: Z3_ast; target: Z3_context): Z3_ast
        def_API('Z3_mk_model', MODEL, (_in(CONTEXT),))
  *)
 function Z3_mk_model(c: Z3_context): Z3_model; cdecl;
-  external z3_dll name _PU + 'Z3_mk_model';
+  external z3_dll name  'Z3_mk_model';
 
 (**
        \brief Increment the reference counter of the given model.
@@ -4786,7 +4784,7 @@ function Z3_mk_model(c: Z3_context): Z3_model; cdecl;
        def_API('Z3_model_inc_ref', VOID, (_in(CONTEXT), _in(MODEL)))
  *)
 procedure Z3_model_inc_ref(c: Z3_context; m: Z3_model); cdecl;
-  external z3_dll name _PU + 'Z3_model_inc_ref';
+  external z3_dll name  'Z3_model_inc_ref';
 
 (**
        \brief Decrement the reference counter of the given model.
@@ -4794,7 +4792,7 @@ procedure Z3_model_inc_ref(c: Z3_context; m: Z3_model); cdecl;
        def_API('Z3_model_dec_ref', VOID, (_in(CONTEXT), _in(MODEL)))
  *)
 procedure Z3_model_dec_ref(c: Z3_context; m: Z3_model); cdecl;
-  external z3_dll name _PU + 'Z3_model_dec_ref';
+  external z3_dll name  'Z3_model_dec_ref';
 
 (**
        \brief Evaluate the AST node \c t in the given model.
@@ -4820,7 +4818,7 @@ procedure Z3_model_dec_ref(c: Z3_context; m: Z3_model); cdecl;
        def_API('Z3_model_eval', BOOL, (_in(CONTEXT), _in(MODEL), _in(AST), _in(BOOL), _out(AST)))
  *)
 function Z3_model_eval(c: Z3_context; m: Z3_model; t: Z3_ast; model_completion: Boolean; v: PZ3_ast): Z3_bool; cdecl;
-  external z3_dll name _PU + 'Z3_model_eval';
+  external z3_dll name  'Z3_model_eval';
 
 (**
        \brief Return the interpretation (i.e., assignment) of constant \c a in the model \c m.
@@ -4832,7 +4830,7 @@ function Z3_model_eval(c: Z3_context; m: Z3_model; t: Z3_ast; model_completion: 
        def_API('Z3_model_get_const_interp', AST, (_in(CONTEXT), _in(MODEL), _in(FUNC_DECL)))
  *)
 function Z3_model_get_const_interp(c: Z3_context; m: Z3_model; a: Z3_func_decl): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_model_get_const_interp';
+  external z3_dll name  'Z3_model_get_const_interp';
 
 (**
        \brief Test if there exists an interpretation (i.e., assignment) for \c a in the model \c m.
@@ -4840,7 +4838,7 @@ function Z3_model_get_const_interp(c: Z3_context; m: Z3_model; a: Z3_func_decl):
        def_API('Z3_model_has_interp', BOOL, (_in(CONTEXT), _in(MODEL), _in(FUNC_DECL)))
  *)
 function Z3_model_has_interp(c: Z3_context; m: Z3_model; a: Z3_func_decl): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_model_has_interp';
+  external z3_dll name  'Z3_model_has_interp';
 
 (**
        \brief Return the interpretation of the function \c f in the model \c m.
@@ -4855,7 +4853,7 @@ function Z3_model_has_interp(c: Z3_context; m: Z3_model; a: Z3_func_decl): Boole
        def_API('Z3_model_get_func_interp', FUNC_INTERP, (_in(CONTEXT), _in(MODEL), _in(FUNC_DECL)))
  *)
 function Z3_model_get_func_interp(c: Z3_context; m: Z3_model; f: Z3_func_decl): Z3_func_interp; cdecl;
-  external z3_dll name _PU + 'Z3_model_get_func_interp';
+  external z3_dll name  'Z3_model_get_func_interp';
 
 (**
        \brief Return the number of constants assigned by the given model.
@@ -4865,7 +4863,7 @@ function Z3_model_get_func_interp(c: Z3_context; m: Z3_model; f: Z3_func_decl): 
        def_API('Z3_model_get_num_consts', UINT, (_in(CONTEXT), _in(MODEL)))
  *)
 function Z3_model_get_num_consts(c: Z3_context; m: Z3_model): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_model_get_num_consts';
+  external z3_dll name  'Z3_model_get_num_consts';
 
 (**
        \brief Return the i-th constant in the given model.
@@ -4877,7 +4875,7 @@ function Z3_model_get_num_consts(c: Z3_context; m: Z3_model): Cardinal; cdecl;
        def_API('Z3_model_get_const_decl', FUNC_DECL, (_in(CONTEXT), _in(MODEL), _in(UINT)))
  *)
 function Z3_model_get_const_decl(c: Z3_context; m: Z3_model; i: Cardinal): Z3_func_decl; cdecl;
-  external z3_dll name _PU + 'Z3_model_get_const_decl';
+  external z3_dll name  'Z3_model_get_const_decl';
 
 (**
        \brief Return the number of function interpretations in the given model.
@@ -4888,7 +4886,7 @@ function Z3_model_get_const_decl(c: Z3_context; m: Z3_model; i: Cardinal): Z3_fu
        def_API('Z3_model_get_num_funcs', UINT, (_in(CONTEXT), _in(MODEL)))
  *)
 function Z3_model_get_num_funcs(c: Z3_context; m: Z3_model): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_model_get_num_funcs';
+  external z3_dll name  'Z3_model_get_num_funcs';
 
 (**
        \brief Return the declaration of the i-th function in the given model.
@@ -4900,7 +4898,7 @@ function Z3_model_get_num_funcs(c: Z3_context; m: Z3_model): Cardinal; cdecl;
        def_API('Z3_model_get_func_decl', FUNC_DECL, (_in(CONTEXT), _in(MODEL), _in(UINT)))
  *)
 function Z3_model_get_func_decl(c: Z3_context; m: Z3_model; i: Cardinal): Z3_func_decl; cdecl;
-  external z3_dll name _PU + 'Z3_model_get_func_decl';
+  external z3_dll name  'Z3_model_get_func_decl';
 
 (**
        \brief Return the number of uninterpreted sorts that \c m assigns an interpretation to.
@@ -4915,7 +4913,7 @@ function Z3_model_get_func_decl(c: Z3_context; m: Z3_model; i: Cardinal): Z3_fun
        def_API('Z3_model_get_num_sorts', UINT, (_in(CONTEXT), _in(MODEL)))
  *)
 function Z3_model_get_num_sorts(c: Z3_context; m: Z3_model): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_model_get_num_sorts';
+  external z3_dll name  'Z3_model_get_num_sorts';
 
 (**
        \brief Return a uninterpreted sort that \c m assigns an interpretation.
@@ -4928,7 +4926,7 @@ function Z3_model_get_num_sorts(c: Z3_context; m: Z3_model): Cardinal; cdecl;
        def_API('Z3_model_get_sort', SORT, (_in(CONTEXT), _in(MODEL), _in(UINT)))
  *)
 function Z3_model_get_sort(c: Z3_context; m: Z3_model; i: Cardinal): Z3_sort; cdecl;
-  external z3_dll name _PU + 'Z3_model_get_sort';
+  external z3_dll name  'Z3_model_get_sort';
 
 (**
        \brief Return the finite set of distinct values that represent the interpretation for sort \c s.
@@ -4939,7 +4937,7 @@ function Z3_model_get_sort(c: Z3_context; m: Z3_model; i: Cardinal): Z3_sort; cd
        def_API('Z3_model_get_sort_universe', AST_VECTOR, (_in(CONTEXT), _in(MODEL), _in(SORT)))
  *)
 function Z3_model_get_sort_universe(c: Z3_context; m: Z3_model; s: Z3_sort): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_model_get_sort_universe';
+  external z3_dll name  'Z3_model_get_sort_universe';
 
 (**
        \brief translate model from context \c c to context \c dst.
@@ -4947,7 +4945,7 @@ function Z3_model_get_sort_universe(c: Z3_context; m: Z3_model; s: Z3_sort): Z3_
        def_API('Z3_model_translate', MODEL, (_in(CONTEXT), _in(MODEL), _in(CONTEXT)))
  *)
 function Z3_model_translate(c: Z3_context; m: Z3_model; dst: Z3_context): Z3_model; cdecl;
-  external z3_dll name _PU + 'Z3_model_translate';
+  external z3_dll name  'Z3_model_translate';
 
 (**
        \brief The \ccode{(_ as-array f)} AST node is a construct for assigning interpretations for arrays in Z3.
@@ -4961,7 +4959,7 @@ function Z3_model_translate(c: Z3_context; m: Z3_model; dst: Z3_context): Z3_mod
        def_API('Z3_is_as_array', BOOL, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_is_as_array(c: Z3_context; a: Z3_ast): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_is_as_array';
+  external z3_dll name  'Z3_is_as_array';
 
 (**
        \brief Return the function declaration \c f associated with a \ccode{(_ as_array f)} node.
@@ -4971,7 +4969,7 @@ function Z3_is_as_array(c: Z3_context; a: Z3_ast): Boolean; cdecl;
        def_API('Z3_get_as_array_func_decl', FUNC_DECL, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_get_as_array_func_decl(c: Z3_context; a: Z3_ast): Z3_func_decl; cdecl;
-  external z3_dll name _PU + 'Z3_get_as_array_func_decl';
+  external z3_dll name  'Z3_get_as_array_func_decl';
 
 (**
        \brief Create a fresh func_interp object, add it to a model for a specified function.
@@ -4985,7 +4983,7 @@ function Z3_get_as_array_func_decl(c: Z3_context; a: Z3_ast): Z3_func_decl; cdec
        def_API('Z3_add_func_interp', FUNC_INTERP, (_in(CONTEXT), _in(MODEL), _in(FUNC_DECL), _in(AST)))
  *)
 function Z3_add_func_interp(c: Z3_context; m: Z3_model; f: Z3_func_decl; default_value: Z3_ast): Z3_func_interp; cdecl;
-  external z3_dll name _PU + 'Z3_add_func_interp';
+  external z3_dll name  'Z3_add_func_interp';
 
 (**
        \brief Add a constant interpretation.
@@ -4993,7 +4991,7 @@ function Z3_add_func_interp(c: Z3_context; m: Z3_model; f: Z3_func_decl; default
        def_API('Z3_add_const_interp', VOID, (_in(CONTEXT), _in(MODEL), _in(FUNC_DECL), _in(AST)))
  *)
 procedure Z3_add_const_interp(c: Z3_context; m: Z3_model; f: Z3_func_decl; a: Z3_ast); cdecl;
-  external z3_dll name _PU + 'Z3_add_const_interp';
+  external z3_dll name  'Z3_add_const_interp';
 
 (**
        \brief Increment the reference counter of the given Z3_func_interp object.
@@ -5001,7 +4999,7 @@ procedure Z3_add_const_interp(c: Z3_context; m: Z3_model; f: Z3_func_decl; a: Z3
        def_API('Z3_func_interp_inc_ref', VOID, (_in(CONTEXT), _in(FUNC_INTERP)))
  *)
 procedure Z3_func_interp_inc_ref(c: Z3_context; f: Z3_func_interp); cdecl;
-  external z3_dll name _PU + 'Z3_func_interp_inc_ref';
+  external z3_dll name  'Z3_func_interp_inc_ref';
 
 (**
        \brief Decrement the reference counter of the given Z3_func_interp object.
@@ -5009,7 +5007,7 @@ procedure Z3_func_interp_inc_ref(c: Z3_context; f: Z3_func_interp); cdecl;
        def_API('Z3_func_interp_dec_ref', VOID, (_in(CONTEXT), _in(FUNC_INTERP)))
  *)
 procedure Z3_func_interp_dec_ref(c: Z3_context; f: Z3_func_interp); cdecl;
-  external z3_dll name _PU + 'Z3_func_interp_dec_ref';
+  external z3_dll name  'Z3_func_interp_dec_ref';
 
 (**
        \brief Return the number of entries in the given function interpretation.
@@ -5021,7 +5019,7 @@ procedure Z3_func_interp_dec_ref(c: Z3_context; f: Z3_func_interp); cdecl;
        def_API('Z3_func_interp_get_num_entries', UINT, (_in(CONTEXT), _in(FUNC_INTERP)))
  *)
 function Z3_func_interp_get_num_entries(c: Z3_context; f: Z3_func_interp): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_func_interp_get_num_entries';
+  external z3_dll name  'Z3_func_interp_get_num_entries';
 
 (**
        \brief Return a "point" of the given function interpretation. It represents the
@@ -5034,7 +5032,7 @@ function Z3_func_interp_get_num_entries(c: Z3_context; f: Z3_func_interp): Cardi
        def_API('Z3_func_interp_get_entry', FUNC_ENTRY, (_in(CONTEXT), _in(FUNC_INTERP), _in(UINT)))
  *)
 function Z3_func_interp_get_entry(c: Z3_context; f: Z3_func_interp; i: Cardinal): Z3_func_entry; cdecl;
-  external z3_dll name _PU + 'Z3_func_interp_get_entry';
+  external z3_dll name  'Z3_func_interp_get_entry';
 
 (**
        \brief Return the 'else' value of the given function interpretation.
@@ -5045,7 +5043,7 @@ function Z3_func_interp_get_entry(c: Z3_context; f: Z3_func_interp; i: Cardinal)
        def_API('Z3_func_interp_get_else', AST, (_in(CONTEXT), _in(FUNC_INTERP)))
  *)
 function Z3_func_interp_get_else(c: Z3_context; f: Z3_func_interp): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_func_interp_get_else';
+  external z3_dll name  'Z3_func_interp_get_else';
 
 (**
        \brief Return the 'else' value of the given function interpretation.
@@ -5056,7 +5054,7 @@ function Z3_func_interp_get_else(c: Z3_context; f: Z3_func_interp): Z3_ast; cdec
        def_API('Z3_func_interp_set_else', VOID, (_in(CONTEXT), _in(FUNC_INTERP), _in(AST)))
  *)
 procedure Z3_func_interp_set_else(c: Z3_context; f: Z3_func_interp; else_value: Z3_ast); cdecl;
-  external z3_dll name _PU + 'Z3_func_interp_set_else';
+  external z3_dll name  'Z3_func_interp_set_else';
 
 (**
        \brief Return the arity (number of arguments) of the given function interpretation.
@@ -5064,7 +5062,7 @@ procedure Z3_func_interp_set_else(c: Z3_context; f: Z3_func_interp; else_value: 
        def_API('Z3_func_interp_get_arity', UINT, (_in(CONTEXT), _in(FUNC_INTERP)))
  *)
 function Z3_func_interp_get_arity(c: Z3_context; f: Z3_func_interp): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_func_interp_get_arity';
+  external z3_dll name  'Z3_func_interp_get_arity';
 
 (**
        \brief add a function entry to a function interpretation.
@@ -5081,7 +5079,7 @@ function Z3_func_interp_get_arity(c: Z3_context; f: Z3_func_interp): Cardinal; c
        def_API('Z3_func_interp_add_entry', VOID, (_in(CONTEXT), _in(FUNC_INTERP), _in(AST_VECTOR), _in(AST)))
  *)
 procedure Z3_func_interp_add_entry(c: Z3_context; fi: Z3_func_interp; args: Z3_ast_vector; value: Z3_ast); cdecl;
-  external z3_dll name _PU + 'Z3_func_interp_add_entry';
+  external z3_dll name  'Z3_func_interp_add_entry';
 
 (**
        \brief Increment the reference counter of the given Z3_func_entry object.
@@ -5089,7 +5087,7 @@ procedure Z3_func_interp_add_entry(c: Z3_context; fi: Z3_func_interp; args: Z3_a
        def_API('Z3_func_entry_inc_ref', VOID, (_in(CONTEXT), _in(FUNC_ENTRY)))
  *)
 procedure Z3_func_entry_inc_ref(c: Z3_context; e: Z3_func_entry); cdecl;
-  external z3_dll name _PU + 'Z3_func_entry_inc_ref';
+  external z3_dll name  'Z3_func_entry_inc_ref';
 
 (**
        \brief Decrement the reference counter of the given Z3_func_entry object.
@@ -5097,7 +5095,7 @@ procedure Z3_func_entry_inc_ref(c: Z3_context; e: Z3_func_entry); cdecl;
        def_API('Z3_func_entry_dec_ref', VOID, (_in(CONTEXT), _in(FUNC_ENTRY)))
  *)
 procedure Z3_func_entry_dec_ref(c: Z3_context; e: Z3_func_entry); cdecl;
-  external z3_dll name _PU + 'Z3_func_entry_dec_ref';
+  external z3_dll name  'Z3_func_entry_dec_ref';
 
 (**
        \brief Return the value of this point.
@@ -5110,7 +5108,7 @@ procedure Z3_func_entry_dec_ref(c: Z3_context; e: Z3_func_entry); cdecl;
        def_API('Z3_func_entry_get_value', AST, (_in(CONTEXT), _in(FUNC_ENTRY)))
  *)
 function Z3_func_entry_get_value(c: Z3_context; e: Z3_func_entry): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_func_entry_get_value';
+  external z3_dll name  'Z3_func_entry_get_value';
 
 (**
        \brief Return the number of arguments in a Z3_func_entry object.
@@ -5120,7 +5118,7 @@ function Z3_func_entry_get_value(c: Z3_context; e: Z3_func_entry): Z3_ast; cdecl
        def_API('Z3_func_entry_get_num_args', UINT, (_in(CONTEXT), _in(FUNC_ENTRY)))
  *)
 function Z3_func_entry_get_num_args(c: Z3_context; e: Z3_func_entry): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_func_entry_get_num_args';
+  external z3_dll name  'Z3_func_entry_get_num_args';
 
 (**
        \brief Return an argument of a Z3_func_entry object.
@@ -5132,7 +5130,7 @@ function Z3_func_entry_get_num_args(c: Z3_context; e: Z3_func_entry): Cardinal; 
        def_API('Z3_func_entry_get_arg', AST, (_in(CONTEXT), _in(FUNC_ENTRY), _in(UINT)))
  *)
 function Z3_func_entry_get_arg(c: Z3_context; e: Z3_func_entry; i: Cardinal): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_func_entry_get_arg';
+  external z3_dll name  'Z3_func_entry_get_arg';
 
 (**
        \brief Log interaction to a file.
@@ -5140,7 +5138,7 @@ function Z3_func_entry_get_arg(c: Z3_context; e: Z3_func_entry; i: Cardinal): Z3
        extra_API('Z3_open_log', INT, (_in(STRING),))
  *)
 function Z3_open_log(filename: Z3_string): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_open_log';
+  external z3_dll name  'Z3_open_log';
 
 (**
        \brief Append user-defined string to interaction log.
@@ -5152,7 +5150,7 @@ function Z3_open_log(filename: Z3_string): Boolean; cdecl;
        extra_API('Z3_append_log', VOID, (_in(STRING),))
  *)
 procedure Z3_append_log(&string: Z3_string); cdecl;
-  external z3_dll name _PU + 'Z3_append_log';
+  external z3_dll name  'Z3_append_log';
 
 (**
        \brief Close interaction log.
@@ -5160,7 +5158,7 @@ procedure Z3_append_log(&string: Z3_string); cdecl;
        extra_API('Z3_close_log', VOID, ())
  *)
 procedure Z3_close_log(); cdecl;
-  external z3_dll name _PU + 'Z3_close_log';
+  external z3_dll name  'Z3_close_log';
 
 (**
        \brief Enable/disable printing warning messages to the console.
@@ -5171,7 +5169,7 @@ procedure Z3_close_log(); cdecl;
        def_API('Z3_toggle_warning_messages', VOID, (_in(BOOL),))
  *)
 procedure Z3_toggle_warning_messages(enabled: Boolean); cdecl;
-  external z3_dll name _PU + 'Z3_toggle_warning_messages';
+  external z3_dll name  'Z3_toggle_warning_messages';
 
 (**
        \brief Select mode for the format used for pretty-printing AST nodes.
@@ -5191,7 +5189,7 @@ procedure Z3_toggle_warning_messages(enabled: Boolean); cdecl;
        def_API('Z3_set_ast_print_mode', VOID, (_in(CONTEXT), _in(PRINT_MODE)))
  *)
 procedure Z3_set_ast_print_mode(c: Z3_context; mode: Z3_ast_print_mode); cdecl;
-  external z3_dll name _PU + 'Z3_set_ast_print_mode';
+  external z3_dll name  'Z3_set_ast_print_mode';
 
 (**
        \brief Convert the given AST node into a string.
@@ -5206,25 +5204,25 @@ procedure Z3_set_ast_print_mode(c: Z3_context; mode: Z3_ast_print_mode); cdecl;
        def_API('Z3_ast_to_string', STRING, (_in(CONTEXT), _in(AST)))
  *)
 function Z3_ast_to_string(c: Z3_context; a: Z3_ast): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_ast_to_string';
+  external z3_dll name  'Z3_ast_to_string';
 
 (**
       def_API('Z3_pattern_to_string', STRING, (_in(CONTEXT), _in(PATTERN)))
  *)
 function Z3_pattern_to_string(c: Z3_context; p: Z3_pattern): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_pattern_to_string';
+  external z3_dll name  'Z3_pattern_to_string';
 
 (**
       def_API('Z3_sort_to_string', STRING, (_in(CONTEXT), _in(SORT)))
  *)
 function Z3_sort_to_string(c: Z3_context; s: Z3_sort): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_sort_to_string';
+  external z3_dll name  'Z3_sort_to_string';
 
 (**
       def_API('Z3_func_decl_to_string', STRING, (_in(CONTEXT), _in(FUNC_DECL)))
  *)
 function Z3_func_decl_to_string(c: Z3_context; d: Z3_func_decl): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_func_decl_to_string';
+  external z3_dll name  'Z3_func_decl_to_string';
 
 (**
        \brief Convert the given model into a string.
@@ -5236,7 +5234,7 @@ function Z3_func_decl_to_string(c: Z3_context; d: Z3_func_decl): Z3_string; cdec
        def_API('Z3_model_to_string', STRING, (_in(CONTEXT), _in(MODEL)))
  *)
 function Z3_model_to_string(c: Z3_context; m: Z3_model): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_model_to_string';
+  external z3_dll name  'Z3_model_to_string';
 
 (**
        \brief Convert the given benchmark into SMT-LIB formatted string.
@@ -5257,7 +5255,7 @@ function Z3_model_to_string(c: Z3_context; m: Z3_model): Z3_string; cdecl;
        def_API('Z3_benchmark_to_smtlib_string', STRING, (_in(CONTEXT), _in(STRING), _in(STRING), _in(STRING), _in(STRING), _in(UINT), _in_array(5, AST), _in(AST)))
  *)
 function Z3_benchmark_to_smtlib_string(c: Z3_context; name: Z3_string; logic: Z3_string; status: Z3_string; attributes: Z3_string; num_assumptions: Cardinal; assumptions: PZ3_ast; formula: Z3_ast): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_benchmark_to_smtlib_string';
+  external z3_dll name  'Z3_benchmark_to_smtlib_string';
 
 (**
        \brief Parse the given string using the SMT-LIB2 parser.
@@ -5268,7 +5266,7 @@ function Z3_benchmark_to_smtlib_string(c: Z3_context; name: Z3_string; logic: Z3
        def_API('Z3_parse_smtlib2_string', AST_VECTOR, (_in(CONTEXT), _in(STRING), _in(UINT), _in_array(2, SYMBOL), _in_array(2, SORT), _in(UINT), _in_array(5, SYMBOL), _in_array(5, FUNC_DECL)))
  *)
 function Z3_parse_smtlib2_string(c: Z3_context; str: Z3_string; num_sorts: Cardinal; sort_names: PZ3_symbol; sorts: PZ3_sort; num_decls: Cardinal; decl_names: PZ3_symbol; decls: PZ3_func_decl): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_parse_smtlib2_string';
+  external z3_dll name  'Z3_parse_smtlib2_string';
 
 (**
        \brief Similar to #Z3_parse_smtlib2_string, but reads the benchmark from a file.
@@ -5276,7 +5274,7 @@ function Z3_parse_smtlib2_string(c: Z3_context; str: Z3_string; num_sorts: Cardi
        def_API('Z3_parse_smtlib2_file', AST_VECTOR, (_in(CONTEXT), _in(STRING), _in(UINT), _in_array(2, SYMBOL), _in_array(2, SORT), _in(UINT), _in_array(5, SYMBOL), _in_array(5, FUNC_DECL)))
  *)
 function Z3_parse_smtlib2_file(c: Z3_context; file_name: Z3_string; num_sorts: Cardinal; sort_names: PZ3_symbol; sorts: PZ3_sort; num_decls: Cardinal; decl_names: PZ3_symbol; decls: PZ3_func_decl): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_parse_smtlib2_file';
+  external z3_dll name  'Z3_parse_smtlib2_file';
 
 (**
        \brief Parse and evaluate and SMT-LIB2 command sequence. The state from a previous call is saved so the next
@@ -5287,7 +5285,7 @@ function Z3_parse_smtlib2_file(c: Z3_context; file_name: Z3_string; num_sorts: C
        def_API('Z3_eval_smtlib2_string', STRING, (_in(CONTEXT), _in(STRING),))
  *)
 function Z3_eval_smtlib2_string(p1: Z3_context; str: Z3_string): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_eval_smtlib2_string';
+  external z3_dll name  'Z3_eval_smtlib2_string';
 
 (**
        \brief Return the error code for the last API call.
@@ -5300,7 +5298,7 @@ function Z3_eval_smtlib2_string(p1: Z3_context; str: Z3_string): Z3_string; cdec
        def_API('Z3_get_error_code', UINT, (_in(CONTEXT), ))
  *)
 function Z3_get_error_code(c: Z3_context): Z3_error_code; cdecl;
-  external z3_dll name _PU + 'Z3_get_error_code';
+  external z3_dll name  'Z3_get_error_code';
 
 (**
        \brief Register a Z3 error handler.
@@ -5315,7 +5313,7 @@ function Z3_get_error_code(c: Z3_context): Z3_error_code; cdecl;
        \sa Z3_get_error_code
  *)
 procedure Z3_set_error_handler(c: Z3_context; h: Z3_error_handler); cdecl;
-  external z3_dll name _PU + 'Z3_set_error_handler';
+  external z3_dll name  'Z3_set_error_handler';
 
 (**
        \brief Set an error.
@@ -5323,7 +5321,7 @@ procedure Z3_set_error_handler(c: Z3_context; h: Z3_error_handler); cdecl;
        def_API('Z3_set_error', VOID, (_in(CONTEXT), _in(ERROR_CODE)))
  *)
 procedure Z3_set_error(c: Z3_context; e: Z3_error_code); cdecl;
-  external z3_dll name _PU + 'Z3_set_error';
+  external z3_dll name  'Z3_set_error';
 
 (**
        \brief Return a string describing the given error code.
@@ -5331,7 +5329,7 @@ procedure Z3_set_error(c: Z3_context; e: Z3_error_code); cdecl;
        def_API('Z3_get_error_msg', STRING, (_in(CONTEXT), _in(ERROR_CODE)))
  *)
 function Z3_get_error_msg(c: Z3_context; err: Z3_error_code): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_get_error_msg';
+  external z3_dll name  'Z3_get_error_msg';
 
 (**
        \brief Return Z3 version number information.
@@ -5339,7 +5337,7 @@ function Z3_get_error_msg(c: Z3_context; err: Z3_error_code): Z3_string; cdecl;
        def_API('Z3_get_version', VOID, (_out(UINT), _out(UINT), _out(UINT), _out(UINT)))
  *)
 procedure Z3_get_version(major: PCardinal; minor: PCardinal; build_number: PCardinal; revision_number: PCardinal); cdecl;
-  external z3_dll name _PU + 'Z3_get_version';
+  external z3_dll name  'Z3_get_version';
 
 (**
         \brief Return a string that fully describes the version of Z3 in use.
@@ -5347,7 +5345,7 @@ procedure Z3_get_version(major: PCardinal; minor: PCardinal; build_number: PCard
         def_API('Z3_get_full_version', STRING, ())
  *)
 function Z3_get_full_version(): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_get_full_version';
+  external z3_dll name  'Z3_get_full_version';
 
 (**
        \brief Enable tracing messages tagged as \c tag when Z3 is compiled in debug mode.
@@ -5356,7 +5354,7 @@ function Z3_get_full_version(): Z3_string; cdecl;
        def_API('Z3_enable_trace', VOID, (_in(STRING),))
  *)
 procedure Z3_enable_trace(tag: Z3_string); cdecl;
-  external z3_dll name _PU + 'Z3_enable_trace';
+  external z3_dll name  'Z3_enable_trace';
 
 (**
        \brief Disable tracing messages tagged as \c tag when Z3 is compiled in debug mode.
@@ -5365,7 +5363,7 @@ procedure Z3_enable_trace(tag: Z3_string); cdecl;
        def_API('Z3_disable_trace', VOID, (_in(STRING),))
  *)
 procedure Z3_disable_trace(tag: Z3_string); cdecl;
-  external z3_dll name _PU + 'Z3_disable_trace';
+  external z3_dll name  'Z3_disable_trace';
 
 (**
        \brief Reset all allocated resources.
@@ -5378,7 +5376,7 @@ procedure Z3_disable_trace(tag: Z3_string); cdecl;
        def_API('Z3_reset_memory', VOID, ())
  *)
 procedure Z3_reset_memory(); cdecl;
-  external z3_dll name _PU + 'Z3_reset_memory';
+  external z3_dll name  'Z3_reset_memory';
 
 (**
        \brief Destroy all allocated resources.
@@ -5389,7 +5387,7 @@ procedure Z3_reset_memory(); cdecl;
        def_API('Z3_finalize_memory', VOID, ())
  *)
 procedure Z3_finalize_memory(); cdecl;
-  external z3_dll name _PU + 'Z3_finalize_memory';
+  external z3_dll name  'Z3_finalize_memory';
 
 (**
        \brief Create a goal (aka problem). A goal is essentially a set
@@ -5409,7 +5407,7 @@ procedure Z3_finalize_memory(); cdecl;
        def_API('Z3_mk_goal', GOAL, (_in(CONTEXT), _in(BOOL), _in(BOOL), _in(BOOL)))
  *)
 function Z3_mk_goal(c: Z3_context; models: Boolean; unsat_cores: Boolean; proofs: Boolean): Z3_goal; cdecl;
-  external z3_dll name _PU + 'Z3_mk_goal';
+  external z3_dll name  'Z3_mk_goal';
 
 (**
        \brief Increment the reference counter of the given goal.
@@ -5417,7 +5415,7 @@ function Z3_mk_goal(c: Z3_context; models: Boolean; unsat_cores: Boolean; proofs
        def_API('Z3_goal_inc_ref', VOID, (_in(CONTEXT), _in(GOAL)))
  *)
 procedure Z3_goal_inc_ref(c: Z3_context; g: Z3_goal); cdecl;
-  external z3_dll name _PU + 'Z3_goal_inc_ref';
+  external z3_dll name  'Z3_goal_inc_ref';
 
 (**
        \brief Decrement the reference counter of the given goal.
@@ -5425,7 +5423,7 @@ procedure Z3_goal_inc_ref(c: Z3_context; g: Z3_goal); cdecl;
        def_API('Z3_goal_dec_ref', VOID, (_in(CONTEXT), _in(GOAL)))
  *)
 procedure Z3_goal_dec_ref(c: Z3_context; g: Z3_goal); cdecl;
-  external z3_dll name _PU + 'Z3_goal_dec_ref';
+  external z3_dll name  'Z3_goal_dec_ref';
 
 (**
        \brief Return the "precision" of the given goal. Goals can be transformed using over and under approximations.
@@ -5435,7 +5433,7 @@ procedure Z3_goal_dec_ref(c: Z3_context; g: Z3_goal); cdecl;
        def_API('Z3_goal_precision', UINT, (_in(CONTEXT), _in(GOAL)))
  *)
 function Z3_goal_precision(c: Z3_context; g: Z3_goal): Z3_goal_prec; cdecl;
-  external z3_dll name _PU + 'Z3_goal_precision';
+  external z3_dll name  'Z3_goal_precision';
 
 (**
        \brief Add a new formula \c a to the given goal.
@@ -5450,7 +5448,7 @@ function Z3_goal_precision(c: Z3_context; g: Z3_goal): Z3_goal_prec; cdecl;
        def_API('Z3_goal_assert', VOID, (_in(CONTEXT), _in(GOAL), _in(AST)))
  *)
 procedure Z3_goal_assert(c: Z3_context; g: Z3_goal; a: Z3_ast); cdecl;
-  external z3_dll name _PU + 'Z3_goal_assert';
+  external z3_dll name  'Z3_goal_assert';
 
 (**
        \brief Return true if the given goal contains the formula \c false.
@@ -5458,7 +5456,7 @@ procedure Z3_goal_assert(c: Z3_context; g: Z3_goal; a: Z3_ast); cdecl;
        def_API('Z3_goal_inconsistent', BOOL, (_in(CONTEXT), _in(GOAL)))
  *)
 function Z3_goal_inconsistent(c: Z3_context; g: Z3_goal): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_goal_inconsistent';
+  external z3_dll name  'Z3_goal_inconsistent';
 
 (**
        \brief Return the depth of the given goal. It tracks how many transformations were applied to it.
@@ -5466,7 +5464,7 @@ function Z3_goal_inconsistent(c: Z3_context; g: Z3_goal): Boolean; cdecl;
        def_API('Z3_goal_depth', UINT, (_in(CONTEXT), _in(GOAL)))
  *)
 function Z3_goal_depth(c: Z3_context; g: Z3_goal): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_goal_depth';
+  external z3_dll name  'Z3_goal_depth';
 
 (**
        \brief Erase all formulas from the given goal.
@@ -5474,7 +5472,7 @@ function Z3_goal_depth(c: Z3_context; g: Z3_goal): Cardinal; cdecl;
        def_API('Z3_goal_reset', VOID, (_in(CONTEXT), _in(GOAL)))
  *)
 procedure Z3_goal_reset(c: Z3_context; g: Z3_goal); cdecl;
-  external z3_dll name _PU + 'Z3_goal_reset';
+  external z3_dll name  'Z3_goal_reset';
 
 (**
        \brief Return the number of formulas in the given goal.
@@ -5482,7 +5480,7 @@ procedure Z3_goal_reset(c: Z3_context; g: Z3_goal); cdecl;
        def_API('Z3_goal_size', UINT, (_in(CONTEXT), _in(GOAL)))
  *)
 function Z3_goal_size(c: Z3_context; g: Z3_goal): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_goal_size';
+  external z3_dll name  'Z3_goal_size';
 
 (**
        \brief Return a formula from the given goal.
@@ -5492,7 +5490,7 @@ function Z3_goal_size(c: Z3_context; g: Z3_goal): Cardinal; cdecl;
        def_API('Z3_goal_formula', AST, (_in(CONTEXT), _in(GOAL), _in(UINT)))
  *)
 function Z3_goal_formula(c: Z3_context; g: Z3_goal; idx: Cardinal): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_goal_formula';
+  external z3_dll name  'Z3_goal_formula';
 
 (**
        \brief Return the number of formulas, subformulas and terms in the given goal.
@@ -5500,7 +5498,7 @@ function Z3_goal_formula(c: Z3_context; g: Z3_goal; idx: Cardinal): Z3_ast; cdec
        def_API('Z3_goal_num_exprs', UINT, (_in(CONTEXT), _in(GOAL)))
  *)
 function Z3_goal_num_exprs(c: Z3_context; g: Z3_goal): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_goal_num_exprs';
+  external z3_dll name  'Z3_goal_num_exprs';
 
 (**
        \brief Return true if the goal is empty, and it is precise or the product of a under approximation.
@@ -5508,7 +5506,7 @@ function Z3_goal_num_exprs(c: Z3_context; g: Z3_goal): Cardinal; cdecl;
        def_API('Z3_goal_is_decided_sat', BOOL, (_in(CONTEXT), _in(GOAL)))
  *)
 function Z3_goal_is_decided_sat(c: Z3_context; g: Z3_goal): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_goal_is_decided_sat';
+  external z3_dll name  'Z3_goal_is_decided_sat';
 
 (**
        \brief Return true if the goal contains false, and it is precise or the product of an over approximation.
@@ -5516,7 +5514,7 @@ function Z3_goal_is_decided_sat(c: Z3_context; g: Z3_goal): Boolean; cdecl;
        def_API('Z3_goal_is_decided_unsat', BOOL, (_in(CONTEXT), _in(GOAL)))
  *)
 function Z3_goal_is_decided_unsat(c: Z3_context; g: Z3_goal): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_goal_is_decided_unsat';
+  external z3_dll name  'Z3_goal_is_decided_unsat';
 
 (**
        \brief Copy a goal \c g from the context \c source to the context \c target.
@@ -5524,7 +5522,7 @@ function Z3_goal_is_decided_unsat(c: Z3_context; g: Z3_goal): Boolean; cdecl;
        def_API('Z3_goal_translate', GOAL, (_in(CONTEXT), _in(GOAL), _in(CONTEXT)))
  *)
 function Z3_goal_translate(source: Z3_context; g: Z3_goal; target: Z3_context): Z3_goal; cdecl;
-  external z3_dll name _PU + 'Z3_goal_translate';
+  external z3_dll name  'Z3_goal_translate';
 
 (**
        \brief Convert a model of the formulas of a goal to a model of an original goal.
@@ -5534,7 +5532,7 @@ function Z3_goal_translate(source: Z3_context; g: Z3_goal; target: Z3_context): 
        def_API('Z3_goal_convert_model', MODEL, (_in(CONTEXT), _in(GOAL), _in(MODEL)))
  *)
 function Z3_goal_convert_model(c: Z3_context; g: Z3_goal; m: Z3_model): Z3_model; cdecl;
-  external z3_dll name _PU + 'Z3_goal_convert_model';
+  external z3_dll name  'Z3_goal_convert_model';
 
 (**
        \brief Convert a goal into a string.
@@ -5542,7 +5540,7 @@ function Z3_goal_convert_model(c: Z3_context; g: Z3_goal; m: Z3_model): Z3_model
        def_API('Z3_goal_to_string', STRING, (_in(CONTEXT), _in(GOAL)))
  *)
 function Z3_goal_to_string(c: Z3_context; g: Z3_goal): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_goal_to_string';
+  external z3_dll name  'Z3_goal_to_string';
 
 (**
        \brief Convert a goal into a DIMACS formatted string.
@@ -5555,7 +5553,7 @@ function Z3_goal_to_string(c: Z3_context; g: Z3_goal): Z3_string; cdecl;
        def_API('Z3_goal_to_dimacs_string', STRING, (_in(CONTEXT), _in(GOAL)))
  *)
 function Z3_goal_to_dimacs_string(c: Z3_context; g: Z3_goal): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_goal_to_dimacs_string';
+  external z3_dll name  'Z3_goal_to_dimacs_string';
 
 (**
        \brief Return a tactic associated with the given name.
@@ -5567,7 +5565,7 @@ function Z3_goal_to_dimacs_string(c: Z3_context; g: Z3_goal): Z3_string; cdecl;
        def_API('Z3_mk_tactic', TACTIC, (_in(CONTEXT), _in(STRING)))
  *)
 function Z3_mk_tactic(c: Z3_context; name: Z3_string): Z3_tactic; cdecl;
-  external z3_dll name _PU + 'Z3_mk_tactic';
+  external z3_dll name  'Z3_mk_tactic';
 
 (**
        \brief Increment the reference counter of the given tactic.
@@ -5575,7 +5573,7 @@ function Z3_mk_tactic(c: Z3_context; name: Z3_string): Z3_tactic; cdecl;
        def_API('Z3_tactic_inc_ref', VOID, (_in(CONTEXT), _in(TACTIC)))
  *)
 procedure Z3_tactic_inc_ref(c: Z3_context; t: Z3_tactic); cdecl;
-  external z3_dll name _PU + 'Z3_tactic_inc_ref';
+  external z3_dll name  'Z3_tactic_inc_ref';
 
 (**
        \brief Decrement the reference counter of the given tactic.
@@ -5583,7 +5581,7 @@ procedure Z3_tactic_inc_ref(c: Z3_context; t: Z3_tactic); cdecl;
        def_API('Z3_tactic_dec_ref', VOID, (_in(CONTEXT), _in(TACTIC)))
  *)
 procedure Z3_tactic_dec_ref(c: Z3_context; g: Z3_tactic); cdecl;
-  external z3_dll name _PU + 'Z3_tactic_dec_ref';
+  external z3_dll name  'Z3_tactic_dec_ref';
 
 (**
        \brief Return a probe associated with the given name.
@@ -5596,7 +5594,7 @@ procedure Z3_tactic_dec_ref(c: Z3_context; g: Z3_tactic); cdecl;
        def_API('Z3_mk_probe', PROBE, (_in(CONTEXT), _in(STRING)))
  *)
 function Z3_mk_probe(c: Z3_context; name: Z3_string): Z3_probe; cdecl;
-  external z3_dll name _PU + 'Z3_mk_probe';
+  external z3_dll name  'Z3_mk_probe';
 
 (**
        \brief Increment the reference counter of the given probe.
@@ -5604,7 +5602,7 @@ function Z3_mk_probe(c: Z3_context; name: Z3_string): Z3_probe; cdecl;
        def_API('Z3_probe_inc_ref', VOID, (_in(CONTEXT), _in(PROBE)))
  *)
 procedure Z3_probe_inc_ref(c: Z3_context; p: Z3_probe); cdecl;
-  external z3_dll name _PU + 'Z3_probe_inc_ref';
+  external z3_dll name  'Z3_probe_inc_ref';
 
 (**
        \brief Decrement the reference counter of the given probe.
@@ -5612,7 +5610,7 @@ procedure Z3_probe_inc_ref(c: Z3_context; p: Z3_probe); cdecl;
        def_API('Z3_probe_dec_ref', VOID, (_in(CONTEXT), _in(PROBE)))
  *)
 procedure Z3_probe_dec_ref(c: Z3_context; p: Z3_probe); cdecl;
-  external z3_dll name _PU + 'Z3_probe_dec_ref';
+  external z3_dll name  'Z3_probe_dec_ref';
 
 (**
        \brief Return a tactic that applies \c t1 to a given goal and \c t2
@@ -5621,7 +5619,7 @@ procedure Z3_probe_dec_ref(c: Z3_context; p: Z3_probe); cdecl;
        def_API('Z3_tactic_and_then', TACTIC, (_in(CONTEXT), _in(TACTIC), _in(TACTIC)))
  *)
 function Z3_tactic_and_then(c: Z3_context; t1: Z3_tactic; t2: Z3_tactic): Z3_tactic; cdecl;
-  external z3_dll name _PU + 'Z3_tactic_and_then';
+  external z3_dll name  'Z3_tactic_and_then';
 
 (**
        \brief Return a tactic that first applies \c t1 to a given goal,
@@ -5630,7 +5628,7 @@ function Z3_tactic_and_then(c: Z3_context; t1: Z3_tactic; t2: Z3_tactic): Z3_tac
        def_API('Z3_tactic_or_else', TACTIC, (_in(CONTEXT), _in(TACTIC), _in(TACTIC)))
  *)
 function Z3_tactic_or_else(c: Z3_context; t1: Z3_tactic; t2: Z3_tactic): Z3_tactic; cdecl;
-  external z3_dll name _PU + 'Z3_tactic_or_else';
+  external z3_dll name  'Z3_tactic_or_else';
 
 (**
        \brief Return a tactic that applies the given tactics in parallel.
@@ -5638,7 +5636,7 @@ function Z3_tactic_or_else(c: Z3_context; t1: Z3_tactic; t2: Z3_tactic): Z3_tact
        def_API('Z3_tactic_par_or', TACTIC, (_in(CONTEXT), _in(UINT), _in_array(1, TACTIC)))
  *)
 function Z3_tactic_par_or(c: Z3_context; num: Cardinal; ts: PZ3_tactic): Z3_tactic; cdecl;
-  external z3_dll name _PU + 'Z3_tactic_par_or';
+  external z3_dll name  'Z3_tactic_par_or';
 
 (**
        \brief Return a tactic that applies \c t1 to a given goal and then \c t2
@@ -5647,7 +5645,7 @@ function Z3_tactic_par_or(c: Z3_context; num: Cardinal; ts: PZ3_tactic): Z3_tact
        def_API('Z3_tactic_par_and_then', TACTIC, (_in(CONTEXT), _in(TACTIC), _in(TACTIC)))
  *)
 function Z3_tactic_par_and_then(c: Z3_context; t1: Z3_tactic; t2: Z3_tactic): Z3_tactic; cdecl;
-  external z3_dll name _PU + 'Z3_tactic_par_and_then';
+  external z3_dll name  'Z3_tactic_par_and_then';
 
 (**
        \brief Return a tactic that applies \c t to a given goal for \c ms milliseconds.
@@ -5656,7 +5654,7 @@ function Z3_tactic_par_and_then(c: Z3_context; t1: Z3_tactic; t2: Z3_tactic): Z3
        def_API('Z3_tactic_try_for', TACTIC, (_in(CONTEXT), _in(TACTIC), _in(UINT)))
  *)
 function Z3_tactic_try_for(c: Z3_context; t: Z3_tactic; ms: Cardinal): Z3_tactic; cdecl;
-  external z3_dll name _PU + 'Z3_tactic_try_for';
+  external z3_dll name  'Z3_tactic_try_for';
 
 (**
        \brief Return a tactic that applies \c t to a given goal is the probe \c p evaluates to true.
@@ -5665,7 +5663,7 @@ function Z3_tactic_try_for(c: Z3_context; t: Z3_tactic; ms: Cardinal): Z3_tactic
        def_API('Z3_tactic_when', TACTIC, (_in(CONTEXT), _in(PROBE), _in(TACTIC)))
  *)
 function Z3_tactic_when(c: Z3_context; p: Z3_probe; t: Z3_tactic): Z3_tactic; cdecl;
-  external z3_dll name _PU + 'Z3_tactic_when';
+  external z3_dll name  'Z3_tactic_when';
 
 (**
        \brief Return a tactic that applies \c t1 to a given goal if the probe \c p evaluates to true,
@@ -5674,7 +5672,7 @@ function Z3_tactic_when(c: Z3_context; p: Z3_probe; t: Z3_tactic): Z3_tactic; cd
        def_API('Z3_tactic_cond', TACTIC, (_in(CONTEXT), _in(PROBE), _in(TACTIC), _in(TACTIC)))
  *)
 function Z3_tactic_cond(c: Z3_context; p: Z3_probe; t1: Z3_tactic; t2: Z3_tactic): Z3_tactic; cdecl;
-  external z3_dll name _PU + 'Z3_tactic_cond';
+  external z3_dll name  'Z3_tactic_cond';
 
 (**
        \brief Return a tactic that keeps applying \c t until the goal is not modified anymore or the maximum
@@ -5683,7 +5681,7 @@ function Z3_tactic_cond(c: Z3_context; p: Z3_probe; t1: Z3_tactic; t2: Z3_tactic
        def_API('Z3_tactic_repeat', TACTIC, (_in(CONTEXT), _in(TACTIC), _in(UINT)))
  *)
 function Z3_tactic_repeat(c: Z3_context; t: Z3_tactic; max: Cardinal): Z3_tactic; cdecl;
-  external z3_dll name _PU + 'Z3_tactic_repeat';
+  external z3_dll name  'Z3_tactic_repeat';
 
 (**
        \brief Return a tactic that just return the given goal.
@@ -5691,7 +5689,7 @@ function Z3_tactic_repeat(c: Z3_context; t: Z3_tactic; max: Cardinal): Z3_tactic
        def_API('Z3_tactic_skip', TACTIC, (_in(CONTEXT),))
  *)
 function Z3_tactic_skip(c: Z3_context): Z3_tactic; cdecl;
-  external z3_dll name _PU + 'Z3_tactic_skip';
+  external z3_dll name  'Z3_tactic_skip';
 
 (**
        \brief Return a tactic that always fails.
@@ -5699,7 +5697,7 @@ function Z3_tactic_skip(c: Z3_context): Z3_tactic; cdecl;
        def_API('Z3_tactic_fail', TACTIC, (_in(CONTEXT),))
  *)
 function Z3_tactic_fail(c: Z3_context): Z3_tactic; cdecl;
-  external z3_dll name _PU + 'Z3_tactic_fail';
+  external z3_dll name  'Z3_tactic_fail';
 
 (**
        \brief Return a tactic that fails if the probe \c p evaluates to false.
@@ -5707,7 +5705,7 @@ function Z3_tactic_fail(c: Z3_context): Z3_tactic; cdecl;
        def_API('Z3_tactic_fail_if', TACTIC, (_in(CONTEXT), _in(PROBE)))
  *)
 function Z3_tactic_fail_if(c: Z3_context; p: Z3_probe): Z3_tactic; cdecl;
-  external z3_dll name _PU + 'Z3_tactic_fail_if';
+  external z3_dll name  'Z3_tactic_fail_if';
 
 (**
        \brief Return a tactic that fails if the goal is not trivially satisfiable (i.e., empty) or
@@ -5716,7 +5714,7 @@ function Z3_tactic_fail_if(c: Z3_context; p: Z3_probe): Z3_tactic; cdecl;
        def_API('Z3_tactic_fail_if_not_decided', TACTIC, (_in(CONTEXT),))
  *)
 function Z3_tactic_fail_if_not_decided(c: Z3_context): Z3_tactic; cdecl;
-  external z3_dll name _PU + 'Z3_tactic_fail_if_not_decided';
+  external z3_dll name  'Z3_tactic_fail_if_not_decided';
 
 (**
        \brief Return a tactic that applies \c t using the given set of parameters.
@@ -5724,7 +5722,7 @@ function Z3_tactic_fail_if_not_decided(c: Z3_context): Z3_tactic; cdecl;
        def_API('Z3_tactic_using_params', TACTIC, (_in(CONTEXT), _in(TACTIC), _in(PARAMS)))
  *)
 function Z3_tactic_using_params(c: Z3_context; t: Z3_tactic; p: Z3_params): Z3_tactic; cdecl;
-  external z3_dll name _PU + 'Z3_tactic_using_params';
+  external z3_dll name  'Z3_tactic_using_params';
 
 (**
        \brief Return a probe that always evaluates to val.
@@ -5732,7 +5730,7 @@ function Z3_tactic_using_params(c: Z3_context; t: Z3_tactic; p: Z3_params): Z3_t
        def_API('Z3_probe_const', PROBE, (_in(CONTEXT), _in(DOUBLE)))
  *)
 function Z3_probe_const(x: Z3_context; val: Double): Z3_probe; cdecl;
-  external z3_dll name _PU + 'Z3_probe_const';
+  external z3_dll name  'Z3_probe_const';
 
 (**
        \brief Return a probe that evaluates to "true" when the value returned by \c p1 is less than the value returned by \c p2.
@@ -5742,7 +5740,7 @@ function Z3_probe_const(x: Z3_context; val: Double): Z3_probe; cdecl;
        def_API('Z3_probe_lt', PROBE, (_in(CONTEXT), _in(PROBE), _in(PROBE)))
  *)
 function Z3_probe_lt(x: Z3_context; p1: Z3_probe; p2: Z3_probe): Z3_probe; cdecl;
-  external z3_dll name _PU + 'Z3_probe_lt';
+  external z3_dll name  'Z3_probe_lt';
 
 (**
        \brief Return a probe that evaluates to "true" when the value returned by \c p1 is greater than the value returned by \c p2.
@@ -5752,7 +5750,7 @@ function Z3_probe_lt(x: Z3_context; p1: Z3_probe; p2: Z3_probe): Z3_probe; cdecl
        def_API('Z3_probe_gt', PROBE, (_in(CONTEXT), _in(PROBE), _in(PROBE)))
  *)
 function Z3_probe_gt(x: Z3_context; p1: Z3_probe; p2: Z3_probe): Z3_probe; cdecl;
-  external z3_dll name _PU + 'Z3_probe_gt';
+  external z3_dll name  'Z3_probe_gt';
 
 (**
        \brief Return a probe that evaluates to "true" when the value returned by \c p1 is less than or equal to the value returned by \c p2.
@@ -5762,7 +5760,7 @@ function Z3_probe_gt(x: Z3_context; p1: Z3_probe; p2: Z3_probe): Z3_probe; cdecl
        def_API('Z3_probe_le', PROBE, (_in(CONTEXT), _in(PROBE), _in(PROBE)))
  *)
 function Z3_probe_le(x: Z3_context; p1: Z3_probe; p2: Z3_probe): Z3_probe; cdecl;
-  external z3_dll name _PU + 'Z3_probe_le';
+  external z3_dll name  'Z3_probe_le';
 
 (**
        \brief Return a probe that evaluates to "true" when the value returned by \c p1 is greater than or equal to the value returned by \c p2.
@@ -5772,7 +5770,7 @@ function Z3_probe_le(x: Z3_context; p1: Z3_probe; p2: Z3_probe): Z3_probe; cdecl
        def_API('Z3_probe_ge', PROBE, (_in(CONTEXT), _in(PROBE), _in(PROBE)))
  *)
 function Z3_probe_ge(x: Z3_context; p1: Z3_probe; p2: Z3_probe): Z3_probe; cdecl;
-  external z3_dll name _PU + 'Z3_probe_ge';
+  external z3_dll name  'Z3_probe_ge';
 
 (**
        \brief Return a probe that evaluates to "true" when the value returned by \c p1 is equal to the value returned by \c p2.
@@ -5782,7 +5780,7 @@ function Z3_probe_ge(x: Z3_context; p1: Z3_probe; p2: Z3_probe): Z3_probe; cdecl
        def_API('Z3_probe_eq', PROBE, (_in(CONTEXT), _in(PROBE), _in(PROBE)))
  *)
 function Z3_probe_eq(x: Z3_context; p1: Z3_probe; p2: Z3_probe): Z3_probe; cdecl;
-  external z3_dll name _PU + 'Z3_probe_eq';
+  external z3_dll name  'Z3_probe_eq';
 
 (**
        \brief Return a probe that evaluates to "true" when \c p1 and \c p2 evaluates to true.
@@ -5792,7 +5790,7 @@ function Z3_probe_eq(x: Z3_context; p1: Z3_probe; p2: Z3_probe): Z3_probe; cdecl
        def_API('Z3_probe_and', PROBE, (_in(CONTEXT), _in(PROBE), _in(PROBE)))
  *)
 function Z3_probe_and(x: Z3_context; p1: Z3_probe; p2: Z3_probe): Z3_probe; cdecl;
-  external z3_dll name _PU + 'Z3_probe_and';
+  external z3_dll name  'Z3_probe_and';
 
 (**
        \brief Return a probe that evaluates to "true" when \c p1 or \c p2 evaluates to true.
@@ -5802,7 +5800,7 @@ function Z3_probe_and(x: Z3_context; p1: Z3_probe; p2: Z3_probe): Z3_probe; cdec
        def_API('Z3_probe_or', PROBE, (_in(CONTEXT), _in(PROBE), _in(PROBE)))
  *)
 function Z3_probe_or(x: Z3_context; p1: Z3_probe; p2: Z3_probe): Z3_probe; cdecl;
-  external z3_dll name _PU + 'Z3_probe_or';
+  external z3_dll name  'Z3_probe_or';
 
 (**
        \brief Return a probe that evaluates to "true" when \c p does not evaluate to true.
@@ -5812,7 +5810,7 @@ function Z3_probe_or(x: Z3_context; p1: Z3_probe; p2: Z3_probe): Z3_probe; cdecl
        def_API('Z3_probe_not', PROBE, (_in(CONTEXT), _in(PROBE)))
  *)
 function Z3_probe_not(x: Z3_context; p: Z3_probe): Z3_probe; cdecl;
-  external z3_dll name _PU + 'Z3_probe_not';
+  external z3_dll name  'Z3_probe_not';
 
 (**
        \brief Return the number of builtin tactics available in Z3.
@@ -5820,7 +5818,7 @@ function Z3_probe_not(x: Z3_context; p: Z3_probe): Z3_probe; cdecl;
        def_API('Z3_get_num_tactics', UINT, (_in(CONTEXT),))
  *)
 function Z3_get_num_tactics(c: Z3_context): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_get_num_tactics';
+  external z3_dll name  'Z3_get_num_tactics';
 
 (**
        \brief Return the name of the idx tactic.
@@ -5830,7 +5828,7 @@ function Z3_get_num_tactics(c: Z3_context): Cardinal; cdecl;
        def_API('Z3_get_tactic_name', STRING, (_in(CONTEXT), _in(UINT)))
  *)
 function Z3_get_tactic_name(c: Z3_context; i: Cardinal): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_get_tactic_name';
+  external z3_dll name  'Z3_get_tactic_name';
 
 (**
        \brief Return the number of builtin probes available in Z3.
@@ -5838,7 +5836,7 @@ function Z3_get_tactic_name(c: Z3_context; i: Cardinal): Z3_string; cdecl;
        def_API('Z3_get_num_probes', UINT, (_in(CONTEXT),))
  *)
 function Z3_get_num_probes(c: Z3_context): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_get_num_probes';
+  external z3_dll name  'Z3_get_num_probes';
 
 (**
        \brief Return the name of the i probe.
@@ -5848,7 +5846,7 @@ function Z3_get_num_probes(c: Z3_context): Cardinal; cdecl;
        def_API('Z3_get_probe_name', STRING, (_in(CONTEXT), _in(UINT)))
  *)
 function Z3_get_probe_name(c: Z3_context; i: Cardinal): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_get_probe_name';
+  external z3_dll name  'Z3_get_probe_name';
 
 (**
        \brief Return a string containing a description of parameters accepted by the given tactic.
@@ -5856,7 +5854,7 @@ function Z3_get_probe_name(c: Z3_context; i: Cardinal): Z3_string; cdecl;
        def_API('Z3_tactic_get_help', STRING, (_in(CONTEXT), _in(TACTIC)))
  *)
 function Z3_tactic_get_help(c: Z3_context; t: Z3_tactic): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_tactic_get_help';
+  external z3_dll name  'Z3_tactic_get_help';
 
 (**
        \brief Return the parameter description set for the given tactic object.
@@ -5864,7 +5862,7 @@ function Z3_tactic_get_help(c: Z3_context; t: Z3_tactic): Z3_string; cdecl;
        def_API('Z3_tactic_get_param_descrs', PARAM_DESCRS, (_in(CONTEXT), _in(TACTIC)))
  *)
 function Z3_tactic_get_param_descrs(c: Z3_context; t: Z3_tactic): Z3_param_descrs; cdecl;
-  external z3_dll name _PU + 'Z3_tactic_get_param_descrs';
+  external z3_dll name  'Z3_tactic_get_param_descrs';
 
 (**
        \brief Return a string containing a description of the tactic with the given name.
@@ -5872,7 +5870,7 @@ function Z3_tactic_get_param_descrs(c: Z3_context; t: Z3_tactic): Z3_param_descr
        def_API('Z3_tactic_get_descr', STRING, (_in(CONTEXT), _in(STRING)))
  *)
 function Z3_tactic_get_descr(c: Z3_context; name: Z3_string): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_tactic_get_descr';
+  external z3_dll name  'Z3_tactic_get_descr';
 
 (**
        \brief Return a string containing a description of the probe with the given name.
@@ -5880,7 +5878,7 @@ function Z3_tactic_get_descr(c: Z3_context; name: Z3_string): Z3_string; cdecl;
        def_API('Z3_probe_get_descr', STRING, (_in(CONTEXT), _in(STRING)))
  *)
 function Z3_probe_get_descr(c: Z3_context; name: Z3_string): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_probe_get_descr';
+  external z3_dll name  'Z3_probe_get_descr';
 
 (**
        \brief Execute the probe over the goal. The probe always produce a double value.
@@ -5889,7 +5887,7 @@ function Z3_probe_get_descr(c: Z3_context; name: Z3_string): Z3_string; cdecl;
        def_API('Z3_probe_apply', DOUBLE, (_in(CONTEXT), _in(PROBE), _in(GOAL)))
  *)
 function Z3_probe_apply(c: Z3_context; p: Z3_probe; g: Z3_goal): Double; cdecl;
-  external z3_dll name _PU + 'Z3_probe_apply';
+  external z3_dll name  'Z3_probe_apply';
 
 (**
        \brief Apply tactic \c t to the goal \c g.
@@ -5897,7 +5895,7 @@ function Z3_probe_apply(c: Z3_context; p: Z3_probe; g: Z3_goal): Double; cdecl;
        def_API('Z3_tactic_apply', APPLY_RESULT, (_in(CONTEXT), _in(TACTIC), _in(GOAL)))
  *)
 function Z3_tactic_apply(c: Z3_context; t: Z3_tactic; g: Z3_goal): Z3_apply_result; cdecl;
-  external z3_dll name _PU + 'Z3_tactic_apply';
+  external z3_dll name  'Z3_tactic_apply';
 
 (**
        \brief Apply tactic \c t to the goal \c g using the parameter set \c p.
@@ -5905,7 +5903,7 @@ function Z3_tactic_apply(c: Z3_context; t: Z3_tactic; g: Z3_goal): Z3_apply_resu
        def_API('Z3_tactic_apply_ex', APPLY_RESULT, (_in(CONTEXT), _in(TACTIC), _in(GOAL), _in(PARAMS)))
  *)
 function Z3_tactic_apply_ex(c: Z3_context; t: Z3_tactic; g: Z3_goal; p: Z3_params): Z3_apply_result; cdecl;
-  external z3_dll name _PU + 'Z3_tactic_apply_ex';
+  external z3_dll name  'Z3_tactic_apply_ex';
 
 (**
        \brief Increment the reference counter of the given \c Z3_apply_result object.
@@ -5913,7 +5911,7 @@ function Z3_tactic_apply_ex(c: Z3_context; t: Z3_tactic; g: Z3_goal; p: Z3_param
        def_API('Z3_apply_result_inc_ref', VOID, (_in(CONTEXT), _in(APPLY_RESULT)))
  *)
 procedure Z3_apply_result_inc_ref(c: Z3_context; r: Z3_apply_result); cdecl;
-  external z3_dll name _PU + 'Z3_apply_result_inc_ref';
+  external z3_dll name  'Z3_apply_result_inc_ref';
 
 (**
        \brief Decrement the reference counter of the given \c Z3_apply_result object.
@@ -5921,7 +5919,7 @@ procedure Z3_apply_result_inc_ref(c: Z3_context; r: Z3_apply_result); cdecl;
        def_API('Z3_apply_result_dec_ref', VOID, (_in(CONTEXT), _in(APPLY_RESULT)))
  *)
 procedure Z3_apply_result_dec_ref(c: Z3_context; r: Z3_apply_result); cdecl;
-  external z3_dll name _PU + 'Z3_apply_result_dec_ref';
+  external z3_dll name  'Z3_apply_result_dec_ref';
 
 (**
        \brief Convert the \c Z3_apply_result object returned by #Z3_tactic_apply into a string.
@@ -5929,7 +5927,7 @@ procedure Z3_apply_result_dec_ref(c: Z3_context; r: Z3_apply_result); cdecl;
        def_API('Z3_apply_result_to_string', STRING, (_in(CONTEXT), _in(APPLY_RESULT)))
  *)
 function Z3_apply_result_to_string(c: Z3_context; r: Z3_apply_result): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_apply_result_to_string';
+  external z3_dll name  'Z3_apply_result_to_string';
 
 (**
        \brief Return the number of subgoals in the \c Z3_apply_result object returned by #Z3_tactic_apply.
@@ -5937,7 +5935,7 @@ function Z3_apply_result_to_string(c: Z3_context; r: Z3_apply_result): Z3_string
        def_API('Z3_apply_result_get_num_subgoals', UINT, (_in(CONTEXT), _in(APPLY_RESULT)))
  *)
 function Z3_apply_result_get_num_subgoals(c: Z3_context; r: Z3_apply_result): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_apply_result_get_num_subgoals';
+  external z3_dll name  'Z3_apply_result_get_num_subgoals';
 
 (**
        \brief Return one of the subgoals in the \c Z3_apply_result object returned by #Z3_tactic_apply.
@@ -5947,7 +5945,7 @@ function Z3_apply_result_get_num_subgoals(c: Z3_context; r: Z3_apply_result): Ca
        def_API('Z3_apply_result_get_subgoal', GOAL, (_in(CONTEXT), _in(APPLY_RESULT), _in(UINT)))
  *)
 function Z3_apply_result_get_subgoal(c: Z3_context; r: Z3_apply_result; i: Cardinal): Z3_goal; cdecl;
-  external z3_dll name _PU + 'Z3_apply_result_get_subgoal';
+  external z3_dll name  'Z3_apply_result_get_subgoal';
 
 (**
        \brief Create a new solver. This solver is a "combined solver" (see
@@ -5986,7 +5984,7 @@ function Z3_apply_result_get_subgoal(c: Z3_context; r: Z3_apply_result; i: Cardi
        def_API('Z3_mk_solver', SOLVER, (_in(CONTEXT),))
  *)
 function Z3_mk_solver(c: Z3_context): Z3_solver; cdecl;
-  external z3_dll name _PU + 'Z3_mk_solver';
+  external z3_dll name  'Z3_mk_solver';
 
 (**
        \brief Create a new incremental solver.
@@ -6014,7 +6012,7 @@ function Z3_mk_solver(c: Z3_context): Z3_solver; cdecl;
        def_API('Z3_mk_simple_solver', SOLVER, (_in(CONTEXT),))
  *)
 function Z3_mk_simple_solver(c: Z3_context): Z3_solver; cdecl;
-  external z3_dll name _PU + 'Z3_mk_simple_solver';
+  external z3_dll name  'Z3_mk_simple_solver';
 
 (**
        \brief Create a new solver customized for the given logic.
@@ -6026,7 +6024,7 @@ function Z3_mk_simple_solver(c: Z3_context): Z3_solver; cdecl;
        def_API('Z3_mk_solver_for_logic', SOLVER, (_in(CONTEXT), _in(SYMBOL)))
  *)
 function Z3_mk_solver_for_logic(c: Z3_context; logic: Z3_symbol): Z3_solver; cdecl;
-  external z3_dll name _PU + 'Z3_mk_solver_for_logic';
+  external z3_dll name  'Z3_mk_solver_for_logic';
 
 (**
        \brief Create a new solver that is implemented using the given tactic.
@@ -6039,7 +6037,7 @@ function Z3_mk_solver_for_logic(c: Z3_context; logic: Z3_symbol): Z3_solver; cde
        def_API('Z3_mk_solver_from_tactic', SOLVER, (_in(CONTEXT), _in(TACTIC)))
  *)
 function Z3_mk_solver_from_tactic(c: Z3_context; t: Z3_tactic): Z3_solver; cdecl;
-  external z3_dll name _PU + 'Z3_mk_solver_from_tactic';
+  external z3_dll name  'Z3_mk_solver_from_tactic';
 
 (**
        \brief Copy a solver \c s from the context \c source to the context \c target.
@@ -6047,7 +6045,7 @@ function Z3_mk_solver_from_tactic(c: Z3_context; t: Z3_tactic): Z3_solver; cdecl
        def_API('Z3_solver_translate', SOLVER, (_in(CONTEXT), _in(SOLVER), _in(CONTEXT)))
  *)
 function Z3_solver_translate(source: Z3_context; s: Z3_solver; target: Z3_context): Z3_solver; cdecl;
-  external z3_dll name _PU + 'Z3_solver_translate';
+  external z3_dll name  'Z3_solver_translate';
 
 (**
        \brief Ad-hoc method for importing model conversion from solver.
@@ -6055,7 +6053,7 @@ function Z3_solver_translate(source: Z3_context; s: Z3_solver; target: Z3_contex
        def_API('Z3_solver_import_model_converter', VOID, (_in(CONTEXT), _in(SOLVER), _in(SOLVER)))
  *)
 procedure Z3_solver_import_model_converter(ctx: Z3_context; src: Z3_solver; dst: Z3_solver); cdecl;
-  external z3_dll name _PU + 'Z3_solver_import_model_converter';
+  external z3_dll name  'Z3_solver_import_model_converter';
 
 (**
        \brief Return a string describing all solver available parameters.
@@ -6066,7 +6064,7 @@ procedure Z3_solver_import_model_converter(ctx: Z3_context; src: Z3_solver; dst:
        def_API('Z3_solver_get_help', STRING, (_in(CONTEXT), _in(SOLVER)))
  *)
 function Z3_solver_get_help(c: Z3_context; s: Z3_solver): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_solver_get_help';
+  external z3_dll name  'Z3_solver_get_help';
 
 (**
        \brief Return the parameter description set for the given solver object.
@@ -6077,7 +6075,7 @@ function Z3_solver_get_help(c: Z3_context; s: Z3_solver): Z3_string; cdecl;
        def_API('Z3_solver_get_param_descrs', PARAM_DESCRS, (_in(CONTEXT), _in(SOLVER)))
  *)
 function Z3_solver_get_param_descrs(c: Z3_context; s: Z3_solver): Z3_param_descrs; cdecl;
-  external z3_dll name _PU + 'Z3_solver_get_param_descrs';
+  external z3_dll name  'Z3_solver_get_param_descrs';
 
 (**
        \brief Set the given solver using the given parameters.
@@ -6088,7 +6086,7 @@ function Z3_solver_get_param_descrs(c: Z3_context; s: Z3_solver): Z3_param_descr
        def_API('Z3_solver_set_params', VOID, (_in(CONTEXT), _in(SOLVER), _in(PARAMS)))
  *)
 procedure Z3_solver_set_params(c: Z3_context; s: Z3_solver; p: Z3_params); cdecl;
-  external z3_dll name _PU + 'Z3_solver_set_params';
+  external z3_dll name  'Z3_solver_set_params';
 
 (**
        \brief Increment the reference counter of the given solver.
@@ -6096,7 +6094,7 @@ procedure Z3_solver_set_params(c: Z3_context; s: Z3_solver; p: Z3_params); cdecl
        def_API('Z3_solver_inc_ref', VOID, (_in(CONTEXT), _in(SOLVER)))
  *)
 procedure Z3_solver_inc_ref(c: Z3_context; s: Z3_solver); cdecl;
-  external z3_dll name _PU + 'Z3_solver_inc_ref';
+  external z3_dll name  'Z3_solver_inc_ref';
 
 (**
        \brief Decrement the reference counter of the given solver.
@@ -6104,7 +6102,7 @@ procedure Z3_solver_inc_ref(c: Z3_context; s: Z3_solver); cdecl;
        def_API('Z3_solver_dec_ref', VOID, (_in(CONTEXT), _in(SOLVER)))
  *)
 procedure Z3_solver_dec_ref(c: Z3_context; s: Z3_solver); cdecl;
-  external z3_dll name _PU + 'Z3_solver_dec_ref';
+  external z3_dll name  'Z3_solver_dec_ref';
 
 (**
        \brief Create a backtracking point.
@@ -6117,7 +6115,7 @@ procedure Z3_solver_dec_ref(c: Z3_context; s: Z3_solver); cdecl;
        def_API('Z3_solver_push', VOID, (_in(CONTEXT), _in(SOLVER)))
  *)
 procedure Z3_solver_push(c: Z3_context; s: Z3_solver); cdecl;
-  external z3_dll name _PU + 'Z3_solver_push';
+  external z3_dll name  'Z3_solver_push';
 
 (**
        \brief Backtrack \c n backtracking points.
@@ -6130,7 +6128,7 @@ procedure Z3_solver_push(c: Z3_context; s: Z3_solver); cdecl;
        def_API('Z3_solver_pop', VOID, (_in(CONTEXT), _in(SOLVER), _in(UINT)))
  *)
 procedure Z3_solver_pop(c: Z3_context; s: Z3_solver; n: Cardinal); cdecl;
-  external z3_dll name _PU + 'Z3_solver_pop';
+  external z3_dll name  'Z3_solver_pop';
 
 (**
        \brief Remove all assertions from the solver.
@@ -6141,7 +6139,7 @@ procedure Z3_solver_pop(c: Z3_context; s: Z3_solver; n: Cardinal); cdecl;
        def_API('Z3_solver_reset', VOID, (_in(CONTEXT), _in(SOLVER)))
  *)
 procedure Z3_solver_reset(c: Z3_context; s: Z3_solver); cdecl;
-  external z3_dll name _PU + 'Z3_solver_reset';
+  external z3_dll name  'Z3_solver_reset';
 
 (**
        \brief Return the number of backtracking points.
@@ -6152,7 +6150,7 @@ procedure Z3_solver_reset(c: Z3_context; s: Z3_solver); cdecl;
        def_API('Z3_solver_get_num_scopes', UINT, (_in(CONTEXT), _in(SOLVER)))
  *)
 function Z3_solver_get_num_scopes(c: Z3_context; s: Z3_solver): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_solver_get_num_scopes';
+  external z3_dll name  'Z3_solver_get_num_scopes';
 
 (**
        \brief Assert a constraint into the solver.
@@ -6166,7 +6164,7 @@ function Z3_solver_get_num_scopes(c: Z3_context; s: Z3_solver): Cardinal; cdecl;
        def_API('Z3_solver_assert', VOID, (_in(CONTEXT), _in(SOLVER), _in(AST)))
  *)
 procedure Z3_solver_assert(c: Z3_context; s: Z3_solver; a: Z3_ast); cdecl;
-  external z3_dll name _PU + 'Z3_solver_assert';
+  external z3_dll name  'Z3_solver_assert';
 
 (**
        \brief Assert a constraint \c a into the solver, and track it (in the unsat) core using
@@ -6186,7 +6184,7 @@ procedure Z3_solver_assert(c: Z3_context; s: Z3_solver; a: Z3_ast); cdecl;
        def_API('Z3_solver_assert_and_track', VOID, (_in(CONTEXT), _in(SOLVER), _in(AST), _in(AST)))
  *)
 procedure Z3_solver_assert_and_track(c: Z3_context; s: Z3_solver; a: Z3_ast; p: Z3_ast); cdecl;
-  external z3_dll name _PU + 'Z3_solver_assert_and_track';
+  external z3_dll name  'Z3_solver_assert_and_track';
 
 (**
        \brief load solver assertions from a file.
@@ -6197,7 +6195,7 @@ procedure Z3_solver_assert_and_track(c: Z3_context; s: Z3_solver; a: Z3_ast; p: 
        def_API('Z3_solver_from_file', VOID, (_in(CONTEXT), _in(SOLVER), _in(STRING)))
  *)
 procedure Z3_solver_from_file(c: Z3_context; s: Z3_solver; file_name: Z3_string); cdecl;
-  external z3_dll name _PU + 'Z3_solver_from_file';
+  external z3_dll name  'Z3_solver_from_file';
 
 (**
        \brief load solver assertions from a string.
@@ -6208,7 +6206,7 @@ procedure Z3_solver_from_file(c: Z3_context; s: Z3_solver; file_name: Z3_string)
        def_API('Z3_solver_from_string', VOID, (_in(CONTEXT), _in(SOLVER), _in(STRING)))
  *)
 procedure Z3_solver_from_string(c: Z3_context; s: Z3_solver; file_name: Z3_string); cdecl;
-  external z3_dll name _PU + 'Z3_solver_from_string';
+  external z3_dll name  'Z3_solver_from_string';
 
 (**
        \brief Return the set of asserted formulas on the solver.
@@ -6216,7 +6214,7 @@ procedure Z3_solver_from_string(c: Z3_context; s: Z3_solver; file_name: Z3_strin
        def_API('Z3_solver_get_assertions', AST_VECTOR, (_in(CONTEXT), _in(SOLVER)))
  *)
 function Z3_solver_get_assertions(c: Z3_context; s: Z3_solver): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_solver_get_assertions';
+  external z3_dll name  'Z3_solver_get_assertions';
 
 (**
        \brief Return the set of units modulo model conversion.
@@ -6224,7 +6222,7 @@ function Z3_solver_get_assertions(c: Z3_context; s: Z3_solver): Z3_ast_vector; c
        def_API('Z3_solver_get_units', AST_VECTOR, (_in(CONTEXT), _in(SOLVER)))
  *)
 function Z3_solver_get_units(c: Z3_context; s: Z3_solver): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_solver_get_units';
+  external z3_dll name  'Z3_solver_get_units';
 
 (**
        \brief Return the set of non units in the solver state.
@@ -6232,7 +6230,7 @@ function Z3_solver_get_units(c: Z3_context; s: Z3_solver): Z3_ast_vector; cdecl;
        def_API('Z3_solver_get_non_units', AST_VECTOR, (_in(CONTEXT), _in(SOLVER)))
  *)
 function Z3_solver_get_non_units(c: Z3_context; s: Z3_solver): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_solver_get_non_units';
+  external z3_dll name  'Z3_solver_get_non_units';
 
 (**
        \brief Check whether the assertions in a given solver are consistent or not.
@@ -6253,7 +6251,7 @@ function Z3_solver_get_non_units(c: Z3_context; s: Z3_solver): Z3_ast_vector; cd
        def_API('Z3_solver_check', INT, (_in(CONTEXT), _in(SOLVER)))
  *)
 function Z3_solver_check(c: Z3_context; s: Z3_solver): Z3_lbool; cdecl;
-  external z3_dll name _PU + 'Z3_solver_check';
+  external z3_dll name  'Z3_solver_check';
 
 (**
        \brief Check whether the assertions in the given solver and
@@ -6267,7 +6265,7 @@ function Z3_solver_check(c: Z3_context; s: Z3_solver): Z3_lbool; cdecl;
        def_API('Z3_solver_check_assumptions', INT, (_in(CONTEXT), _in(SOLVER), _in(UINT), _in_array(2, AST)))
  *)
 function Z3_solver_check_assumptions(c: Z3_context; s: Z3_solver; num_assumptions: Cardinal; assumptions: PZ3_ast): Z3_lbool; cdecl;
-  external z3_dll name _PU + 'Z3_solver_check_assumptions';
+  external z3_dll name  'Z3_solver_check_assumptions';
 
 (**
        \brief Retrieve congruence class representatives for terms.
@@ -6288,7 +6286,7 @@ function Z3_solver_check_assumptions(c: Z3_context; s: Z3_solver; num_assumption
        def_API('Z3_get_implied_equalities', INT, (_in(CONTEXT), _in(SOLVER), _in(UINT), _in_array(2, AST), _out_array(2, UINT)))
  *)
 function Z3_get_implied_equalities(c: Z3_context; s: Z3_solver; num_terms: Cardinal; terms: PZ3_ast; class_ids: PCardinal): Z3_lbool; cdecl;
-  external z3_dll name _PU + 'Z3_get_implied_equalities';
+  external z3_dll name  'Z3_get_implied_equalities';
 
 (**
        \brief retrieve consequences from solver that determine values of the supplied function symbols.
@@ -6296,7 +6294,7 @@ function Z3_get_implied_equalities(c: Z3_context; s: Z3_solver; num_terms: Cardi
        def_API('Z3_solver_get_consequences', INT, (_in(CONTEXT), _in(SOLVER), _in(AST_VECTOR), _in(AST_VECTOR), _in(AST_VECTOR)))
  *)
 function Z3_solver_get_consequences(c: Z3_context; s: Z3_solver; assumptions: Z3_ast_vector; variables: Z3_ast_vector; consequences: Z3_ast_vector): Z3_lbool; cdecl;
-  external z3_dll name _PU + 'Z3_solver_get_consequences';
+  external z3_dll name  'Z3_solver_get_consequences';
 
 (**
        \brief extract a next cube for a solver. The last cube is the constant \c true or \c false.
@@ -6316,7 +6314,7 @@ function Z3_solver_get_consequences(c: Z3_context; s: Z3_solver; assumptions: Z3
        def_API('Z3_solver_cube', AST_VECTOR, (_in(CONTEXT), _in(SOLVER), _in(AST_VECTOR), _in(UINT)))
  *)
 function Z3_solver_cube(c: Z3_context; s: Z3_solver; vars: Z3_ast_vector; backtrack_level: Cardinal): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_solver_cube';
+  external z3_dll name  'Z3_solver_cube';
 
 (**
        \brief Retrieve the model for the last #Z3_solver_check or #Z3_solver_check_assumptions
@@ -6327,7 +6325,7 @@ function Z3_solver_cube(c: Z3_context; s: Z3_solver; vars: Z3_ast_vector; backtr
        def_API('Z3_solver_get_model', MODEL, (_in(CONTEXT), _in(SOLVER)))
  *)
 function Z3_solver_get_model(c: Z3_context; s: Z3_solver): Z3_model; cdecl;
-  external z3_dll name _PU + 'Z3_solver_get_model';
+  external z3_dll name  'Z3_solver_get_model';
 
 (**
        \brief Retrieve the proof for the last #Z3_solver_check or #Z3_solver_check_assumptions
@@ -6339,7 +6337,7 @@ function Z3_solver_get_model(c: Z3_context; s: Z3_solver): Z3_model; cdecl;
        def_API('Z3_solver_get_proof', AST, (_in(CONTEXT), _in(SOLVER)))
  *)
 function Z3_solver_get_proof(c: Z3_context; s: Z3_solver): Z3_ast; cdecl;
-  external z3_dll name _PU + 'Z3_solver_get_proof';
+  external z3_dll name  'Z3_solver_get_proof';
 
 (**
        \brief Retrieve the unsat core for the last #Z3_solver_check_assumptions
@@ -6348,7 +6346,7 @@ function Z3_solver_get_proof(c: Z3_context; s: Z3_solver): Z3_ast; cdecl;
        def_API('Z3_solver_get_unsat_core', AST_VECTOR, (_in(CONTEXT), _in(SOLVER)))
  *)
 function Z3_solver_get_unsat_core(c: Z3_context; s: Z3_solver): Z3_ast_vector; cdecl;
-  external z3_dll name _PU + 'Z3_solver_get_unsat_core';
+  external z3_dll name  'Z3_solver_get_unsat_core';
 
 (**
        \brief Return a brief justification for an "unknown" result (i.e., \c Z3_L_UNDEF) for
@@ -6357,7 +6355,7 @@ function Z3_solver_get_unsat_core(c: Z3_context; s: Z3_solver): Z3_ast_vector; c
        def_API('Z3_solver_get_reason_unknown', STRING, (_in(CONTEXT), _in(SOLVER)))
  *)
 function Z3_solver_get_reason_unknown(c: Z3_context; s: Z3_solver): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_solver_get_reason_unknown';
+  external z3_dll name  'Z3_solver_get_reason_unknown';
 
 (**
        \brief Return statistics for the given solver.
@@ -6367,7 +6365,7 @@ function Z3_solver_get_reason_unknown(c: Z3_context; s: Z3_solver): Z3_string; c
        def_API('Z3_solver_get_statistics', STATS, (_in(CONTEXT), _in(SOLVER)))
  *)
 function Z3_solver_get_statistics(c: Z3_context; s: Z3_solver): Z3_stats; cdecl;
-  external z3_dll name _PU + 'Z3_solver_get_statistics';
+  external z3_dll name  'Z3_solver_get_statistics';
 
 (**
        \brief Convert a solver into a string.
@@ -6378,7 +6376,7 @@ function Z3_solver_get_statistics(c: Z3_context; s: Z3_solver): Z3_stats; cdecl;
        def_API('Z3_solver_to_string', STRING, (_in(CONTEXT), _in(SOLVER)))
  *)
 function Z3_solver_to_string(c: Z3_context; s: Z3_solver): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_solver_to_string';
+  external z3_dll name  'Z3_solver_to_string';
 
 (**
        \brief Convert a statistics into a string.
@@ -6386,7 +6384,7 @@ function Z3_solver_to_string(c: Z3_context; s: Z3_solver): Z3_string; cdecl;
        def_API('Z3_stats_to_string', STRING, (_in(CONTEXT), _in(STATS)))
  *)
 function Z3_stats_to_string(c: Z3_context; s: Z3_stats): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_stats_to_string';
+  external z3_dll name  'Z3_stats_to_string';
 
 (**
        \brief Increment the reference counter of the given statistics object.
@@ -6394,7 +6392,7 @@ function Z3_stats_to_string(c: Z3_context; s: Z3_stats): Z3_string; cdecl;
        def_API('Z3_stats_inc_ref', VOID, (_in(CONTEXT), _in(STATS)))
  *)
 procedure Z3_stats_inc_ref(c: Z3_context; s: Z3_stats); cdecl;
-  external z3_dll name _PU + 'Z3_stats_inc_ref';
+  external z3_dll name  'Z3_stats_inc_ref';
 
 (**
        \brief Decrement the reference counter of the given statistics object.
@@ -6402,7 +6400,7 @@ procedure Z3_stats_inc_ref(c: Z3_context; s: Z3_stats); cdecl;
        def_API('Z3_stats_dec_ref', VOID, (_in(CONTEXT), _in(STATS)))
  *)
 procedure Z3_stats_dec_ref(c: Z3_context; s: Z3_stats); cdecl;
-  external z3_dll name _PU + 'Z3_stats_dec_ref';
+  external z3_dll name  'Z3_stats_dec_ref';
 
 (**
        \brief Return the number of statistical data in \c s.
@@ -6410,7 +6408,7 @@ procedure Z3_stats_dec_ref(c: Z3_context; s: Z3_stats); cdecl;
        def_API('Z3_stats_size', UINT, (_in(CONTEXT), _in(STATS)))
  *)
 function Z3_stats_size(c: Z3_context; s: Z3_stats): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_stats_size';
+  external z3_dll name  'Z3_stats_size';
 
 (**
        \brief Return the key (a string) for a particular statistical data.
@@ -6420,7 +6418,7 @@ function Z3_stats_size(c: Z3_context; s: Z3_stats): Cardinal; cdecl;
        def_API('Z3_stats_get_key', STRING, (_in(CONTEXT), _in(STATS), _in(UINT)))
  *)
 function Z3_stats_get_key(c: Z3_context; s: Z3_stats; idx: Cardinal): Z3_string; cdecl;
-  external z3_dll name _PU + 'Z3_stats_get_key';
+  external z3_dll name  'Z3_stats_get_key';
 
 (**
        \brief Return \c true if the given statistical data is a unsigned integer.
@@ -6430,7 +6428,7 @@ function Z3_stats_get_key(c: Z3_context; s: Z3_stats; idx: Cardinal): Z3_string;
        def_API('Z3_stats_is_uint', BOOL, (_in(CONTEXT), _in(STATS), _in(UINT)))
  *)
 function Z3_stats_is_uint(c: Z3_context; s: Z3_stats; idx: Cardinal): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_stats_is_uint';
+  external z3_dll name  'Z3_stats_is_uint';
 
 (**
        \brief Return \c true if the given statistical data is a double.
@@ -6440,7 +6438,7 @@ function Z3_stats_is_uint(c: Z3_context; s: Z3_stats; idx: Cardinal): Boolean; c
        def_API('Z3_stats_is_double', BOOL, (_in(CONTEXT), _in(STATS), _in(UINT)))
  *)
 function Z3_stats_is_double(c: Z3_context; s: Z3_stats; idx: Cardinal): Boolean; cdecl;
-  external z3_dll name _PU + 'Z3_stats_is_double';
+  external z3_dll name  'Z3_stats_is_double';
 
 (**
        \brief Return the unsigned value of the given statistical data.
@@ -6450,7 +6448,7 @@ function Z3_stats_is_double(c: Z3_context; s: Z3_stats; idx: Cardinal): Boolean;
        def_API('Z3_stats_get_uint_value', UINT, (_in(CONTEXT), _in(STATS), _in(UINT)))
  *)
 function Z3_stats_get_uint_value(c: Z3_context; s: Z3_stats; idx: Cardinal): Cardinal; cdecl;
-  external z3_dll name _PU + 'Z3_stats_get_uint_value';
+  external z3_dll name  'Z3_stats_get_uint_value';
 
 (**
        \brief Return the double value of the given statistical data.
@@ -6460,7 +6458,7 @@ function Z3_stats_get_uint_value(c: Z3_context; s: Z3_stats; idx: Cardinal): Car
        def_API('Z3_stats_get_double_value', DOUBLE, (_in(CONTEXT), _in(STATS), _in(UINT)))
  *)
 function Z3_stats_get_double_value(c: Z3_context; s: Z3_stats; idx: Cardinal): Double; cdecl;
-  external z3_dll name _PU + 'Z3_stats_get_double_value';
+  external z3_dll name  'Z3_stats_get_double_value';
 
 (**
     \brief Return the estimated allocated memory in bytes.
@@ -6468,7 +6466,7 @@ function Z3_stats_get_double_value(c: Z3_context; s: Z3_stats; idx: Cardinal): D
     def_API('Z3_get_estimated_alloc_size', UINT64, ())
  *)
 function Z3_get_estimated_alloc_size(): UInt64; cdecl;
-  external z3_dll name _PU + 'Z3_get_estimated_alloc_size';
+  external z3_dll name  'Z3_get_estimated_alloc_size';
 
 implementation
 
