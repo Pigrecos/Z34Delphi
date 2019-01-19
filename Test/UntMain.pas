@@ -7,7 +7,26 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons,
   z3, Vcl.ComCtrls, Vcl.ExtCtrls;
 
-type
+
+const  MAX_RETRACTABLE_ASSERTIONS = 1024 ;
+
+(**
+   \brief Very simple logical context wrapper with support for retractable constraints.
+   A retractable constraint can be "removed" without using push/pop.
+*)
+  type
+   Z3_ext_context_struct = record
+      m_context : Z3_context;
+      m_solver  : Z3_solver;
+      // IMPORTANT: the fields m_answer_literals, m_retracted and m_num_answer_literals must be saved/restored
+      // if push/pop operations are performed on m_context.
+      m_answer_literals     : array[0..MAX_RETRACTABLE_ASSERTIONS-1] of Z3_ast;
+      m_retracted           : array[0..MAX_RETRACTABLE_ASSERTIONS-1] of Boolean; // true if the assertion was retracted.
+      m_num_answer_literals : Cardinal;
+  end;
+  Z3_ext_context = ^Z3_ext_context_struct;
+
+
   TMain = class(TForm)
     pnl1: TPanel;
     pnlBtn: TPanel;
@@ -33,10 +52,8 @@ type
     function  display_symbol(c: Z3_context; s: Z3_symbol): AnsiString;
     function  display_ast(c: Z3_context; v: Z3_ast): AnsiString;
     function  display_sort(c: Z3_context; ty: Z3_sort): AnsiString;
-    function display_function_interpretations(c: Z3_context;
-      m: Z3_model): AnsiString;
-    procedure assert_inj_axiom(ctx: Z3_context; s: Z3_solver; f: Z3_func_decl;
-      i: Cardinal);
+    function display_function_interpretations(c: Z3_context;  m: Z3_model): AnsiString;
+    procedure assert_inj_axiom(ctx: Z3_context; s: Z3_solver; f: Z3_func_decl;  i: Cardinal);
     procedure array_example1;
     procedure array_example2;
     procedure array_example3;
@@ -59,6 +76,14 @@ type
     procedure forest_example;
     procedure binary_tree_example;
     procedure unsat_core_and_proof_example;
+    function ext_check(ctx: Z3_ext_context): Z3_lbool;
+    procedure incremental_example1;
+    procedure reference_counter_example;
+    procedure smt2parser_example;
+    procedure substitute_example;
+    procedure substitute_vars_example;
+    procedure fpa_example;
+    procedure mk_model_example;
     { Private declarations }
   public
     { Public declarations }
@@ -68,7 +93,7 @@ var
   Main: TMain;
 
 implementation
-       uses z3_ast_containers;
+       uses z3_ast_containers,z3_fpa;
 
 {$R *.dfm}
 
@@ -2503,6 +2528,688 @@ begin
     Z3_del_context(ctx);
 end;
 
+(* -start- Z3_ext_context definition and implementation*************)
+
+(**
+   \brief Create a logical context wrapper with support for retractable constraints.
+ *)
+function mk_ext_context: Z3_ext_context ;
+var
+ ctx : Z3_ext_context;
+begin
+    ctx := AllocMem(SizeOf(Z3_ext_context_struct));
+    ctx^.m_context := mk_context();
+    ctx^.m_solver  := mk_solver(ctx.m_context);
+    ctx^.m_num_answer_literals := 0;
+
+    Result := ctx;
+end;
+
+(**
+   \brief Delete the given logical context wrapper.
+*)
+procedure del_ext_context(ctx: Z3_ext_context);
+begin
+     del_solver(ctx^.m_context, ctx^.m_solver);
+     Z3_del_context(ctx^.m_context);
+     FreeMem(ctx);
+end;
+
+(**
+   \brief Create a retractable constraint.
+
+   \return An id that can be used to retract/reassert the constraint.
+*)
+function assert_retractable_cnstr(ctx: Z3_ext_context; c:Z3_ast): Cardinal ;
+var
+  ty      : Z3_sort;
+  ans_lit : Z3_ast;
+  args    : array[0..1] of Z3_ast;
+begin
+    Result :=  MAX_RETRACTABLE_ASSERTIONS;
+
+    if (ctx.m_num_answer_literals = MAX_RETRACTABLE_ASSERTIONS) then
+        exitf('maximum number of retractable constraints was exceeded.');
+
+    ty      := Z3_mk_bool_sort(ctx.m_context);
+    ans_lit := Z3_mk_fresh_const(ctx.m_context, 'k', ty);
+    result  := ctx.m_num_answer_literals;
+    ctx^.m_answer_literals[result] := ans_lit;
+    ctx^.m_retracted[result]       := false;
+    Inc(ctx^.m_num_answer_literals);
+    // assert: c OR (not ans_lit)
+    args[0] := c;
+    args[1] := Z3_mk_not(ctx^.m_context, ans_lit);
+    Z3_solver_assert(ctx^.m_context, ctx^.m_solver, Z3_mk_or(ctx^.m_context, 2, @args[0]));
+
+end;
+
+(**
+   \brief Retract an constraint asserted using #assert_retractable_cnstr.
+*)
+procedure retract_cnstr(ctx: Z3_ext_context; id: Cardinal);
+begin
+    if (id >= ctx.m_num_answer_literals) then
+        exitf('invalid constraint id.');
+
+    ctx^.m_retracted[id] := true;
+end;
+
+(**
+   \brief Reassert a constraint retracted using #retract_cnstr.
+*)
+procedure reassert_cnstr(ctx: Z3_ext_context; id: Cardinal);
+begin
+    if (id >= ctx.m_num_answer_literals) then
+        exitf('invalid constraint id.');
+
+    ctx^.m_retracted[id] := false;
+end;
+
+(**
+   \brief Check whether the logical context wrapper with support for retractable assertions is feasible or not.
+*)
+function TMain.ext_check(ctx:Z3_ext_context): Z3_lbool;
+var
+  res             : Z3_lbool;
+  num_assumptions : Cardinal;
+  assumptions     : array[0..MAX_RETRACTABLE_ASSERTIONS-1] of Z3_ast;
+  core            : Z3_ast_vector ;
+  core_size, i    : Cardinal;
+  Ss              : AnsiString;
+begin
+    num_assumptions := 0;
+    Ss              := '';
+    for i := 0 to ctx.m_num_answer_literals- 1 do
+    begin
+        if (ctx.m_retracted[i] = false) then
+        begin
+            // Since the answer literal was not retracted, we added it as an assumption.
+            // Recall that we assert (C \/ (not ans_lit)). Therefore, adding ans_lit as an assumption has the effect of "asserting" C.
+            // If the constraint was "retracted" (ctx->m_retracted[i] == Z3_true), then we don't really need to add (not ans_lit) as an assumption.
+            assumptions[num_assumptions] := ctx.m_answer_literals[i];
+            Inc(num_assumptions);
+        end;
+    end;
+    res := Z3_solver_check_assumptions(ctx.m_context, ctx.m_solver, num_assumptions, @assumptions[0]);
+    if (res = Z3_L_FALSE) then
+    begin
+        // Display the UNSAT core
+        Ss :='unsat core: ';
+        core      := Z3_solver_get_unsat_core(ctx.m_context, ctx.m_solver);
+        core_size := Z3_ast_vector_size(ctx.m_context, core);
+        for i := 0 to  core_size - 1 do
+        begin
+            // In this example, we display the core based on the assertion ids.
+            var j : Cardinal;
+            for j := 0 to ctx.m_num_answer_literals - 1 do
+            begin
+ 	              if (Z3_ast_vector_get(ctx.m_context, core, i) = ctx.m_answer_literals[j]) then
+                begin
+                    Ss := Ss + (Format('%d ', [j]));
+                    break;
+                end;
+            end;
+            if (j = ctx.m_num_answer_literals) then
+                exitf('bug in Z3, the core contains something that is not an assumption.');
+
+        end;
+        reLog.Lines.Append(Ss);
+    end;
+    Result := res;
+end;
+(* -end- Z3_ext_context definition and implementation*************)
+
+(**
+   \brief Simple example using the functions: #mk_ext_context, #assert_retractable_cnstr, #retract_cnstr, #reassert_cnstr and #del_ext_context.
+*)
+procedure TMain.incremental_example1;
+var
+  x, y, z, two, one : Z3_ast;
+  c1, c2, c3, c4    : Cardinal ;
+  res               : Z3_lbool;
+begin
+    reLog.Lines.Append(sLineBreak+ 'incremental_example1');
+    LOG_MSG('incremental_example1');
+
+    var ext_ctx  : Z3_ext_context := mk_ext_context;
+    var ctx      : Z3_context     := ext_ctx.m_context;
+
+    x          := mk_int_var(ctx, 'x');
+    y          := mk_int_var(ctx, 'y');
+    z          := mk_int_var(ctx, 'z');
+    two        := mk_int(ctx, 2);
+    one        := mk_int(ctx, 1);
+
+    (* assert x < y *)
+    c1 := assert_retractable_cnstr(ext_ctx, Z3_mk_lt(ctx, x, y));
+    (* assert x = z *)
+    c2 := assert_retractable_cnstr(ext_ctx, Z3_mk_eq(ctx, x, z));
+    (* assert x > 2 *)
+    c3 := assert_retractable_cnstr(ext_ctx, Z3_mk_gt(ctx, x, two));
+    (* assert y < 1 *)
+    c4 := assert_retractable_cnstr(ext_ctx, Z3_mk_lt(ctx, y, one));
+
+    res := ext_check(ext_ctx);
+    if (res <> Z3_L_FALSE) then  exitf('bug in Z3');
+    reLog.Lines.Append('unsat');
+
+    retract_cnstr(ext_ctx, c4);
+    res := ext_check(ext_ctx);
+    if (res <> Z3_L_TRUE) then  exitf('bug in Z3');
+    reLog.Lines.Append('sat');
+
+    reassert_cnstr(ext_ctx, c4);
+    res := ext_check(ext_ctx);
+    if (res <> Z3_L_FALSE) then exitf('bug in Z3');
+    reLog.Lines.Append('unsat');
+
+    retract_cnstr(ext_ctx, c2);
+    res := ext_check(ext_ctx);
+    if (res <> Z3_L_FALSE) then exitf('bug in Z3');
+    reLog.Lines.Append('unsat');
+
+    retract_cnstr(ext_ctx, c3);
+    res := ext_check(ext_ctx);
+    if (res <> Z3_L_TRUE) then  exitf('bug in Z3');
+    reLog.Lines.Append('sat');
+
+    del_ext_context(ext_ctx);
+end;
+
+(**
+   \brief Simple example showing how to use reference counters in Z3
+   to manage memory efficiently.
+*)
+procedure TMain.reference_counter_example;
+var
+  cfg     : Z3_config;
+  ctx     : Z3_context;
+  s       : Z3_solver;
+  ty      : Z3_sort;
+  x, y,
+  x_xor_y : Z3_ast;
+  sx, sy  : Z3_symbol;
+begin
+    reLog.Lines.Append(sLineBreak+ 'reference_counter_example');
+    LOG_MSG('reference_counter_example');
+
+    cfg                := Z3_mk_config();
+    Z3_set_param_value(cfg, 'model', 'true');
+    // Create a Z3 context where the user is responsible for managing
+    // Z3_ast reference counters.
+    ctx                := Z3_mk_context_rc(cfg);
+    Z3_del_config(cfg);
+    s                  := mk_solver(ctx);
+    Z3_solver_inc_ref(ctx, s);
+
+    ty      := Z3_mk_bool_sort(ctx);
+    Z3_inc_ref(ctx, Z3_sort_to_ast(ctx, ty)); // Z3_sort_to_ast(ty) is just syntax sugar for ((Z3_ast) ty)
+    sx      := Z3_mk_string_symbol(ctx, 'x');
+    // Z3_symbol is not a Z3_ast. No reference counting is needed.
+    x       := Z3_mk_const(ctx, sx, ty);
+    Z3_inc_ref(ctx, x);
+    sy      := Z3_mk_string_symbol(ctx, 'y');
+    y       := Z3_mk_const(ctx, sy, ty);
+    Z3_inc_ref(ctx, y);
+    // ty is not needed anymore.
+    Z3_dec_ref(ctx, Z3_sort_to_ast(ctx, ty));
+    x_xor_y := Z3_mk_xor(ctx, x, y);
+    Z3_inc_ref(ctx, x_xor_y);
+    // x and y are not needed anymore.
+    Z3_dec_ref(ctx, x);
+    Z3_dec_ref(ctx, y);
+    Z3_solver_assert(ctx, s, x_xor_y);
+    // x_or_y is not needed anymore.
+    Z3_dec_ref(ctx, x_xor_y);
+
+    reLog.Lines.Append('model for: x xor y');
+    check(ctx, s, Z3_L_TRUE);
+
+    // Test push & pop
+    Z3_solver_push(ctx, s);
+    Z3_solver_pop(ctx, s, 1);
+    Z3_solver_dec_ref(ctx, s);
+
+    del_solver(ctx, s);
+    Z3_del_context(ctx);
+end;
+
+(**
+   \brief Demonstrates how to use SMT2 parser.
+*)
+procedure TMain.smt2parser_example;
+var
+  ctx : Z3_context;
+  fs  : Z3_ast_vector;
+Begin
+    reLog.Lines.Append(sLineBreak+ 'smt2parser_example');
+    LOG_MSG('smt2parser_example');
+
+    ctx := mk_context();
+    fs  := Z3_parse_smtlib2_string(ctx, '(declare-fun a () (_ BitVec 8)) (assert (bvuge a #x10)) (assert (bvule a #xf0))', 0, 0, 0, 0, 0, 0);
+    Z3_ast_vector_inc_ref(ctx, fs);
+    reLog.Lines.Append(Format('formulas: %s', [Z3_ast_vector_to_string(ctx, fs)]));
+    Z3_ast_vector_dec_ref(ctx, fs);
+
+    Z3_del_context(ctx);
+end;
+
+(**
+   \brief Demonstrates how to use the function \c Z3_substitute to replace subexpressions in a Z3 AST.
+*)
+procedure TMain.substitute_example;
+var
+  ctx   : Z3_context;
+  int_ty: Z3_sort;
+  a, b  : Z3_ast;
+  f     : Z3_func_decl;
+  g     : Z3_func_decl;
+  fab, ga, ffabga, r : Z3_ast;
+  f_domain : array of Z3_sort;
+  args     : array of Z3_ast;
+  from,&to : array of Z3_ast;
+begin
+    reLog.Lines.Append(sLineBreak+ 'substitute_example');
+    LOG_MSG('substitute_example');
+
+    ctx    := mk_context();
+    int_ty := Z3_mk_int_sort(ctx);
+    a      := mk_int_var(ctx,'a');
+    b      := mk_int_var(ctx,'b');
+    begin
+        f_domain := [ int_ty, int_ty ];
+        f        := Z3_mk_func_decl(ctx, Z3_mk_string_symbol(ctx, 'f'), 2, @f_domain[0], int_ty);
+    end;
+    g := Z3_mk_func_decl(ctx, Z3_mk_string_symbol(ctx, 'g'), 1, @int_ty, int_ty);
+    begin
+        args  := [ a, b ];
+        fab   := Z3_mk_app(ctx, f, 2, @args[0]);
+    end;
+    ga := Z3_mk_app(ctx, g, 1, @a);
+    begin
+        args   := [ fab, ga ];
+        ffabga := Z3_mk_app(ctx, f, 2, @args[0]);
+    end;
+    // Replace b -> 0, g(a) -> 1 in f(f(a, b), g(a))
+    begin
+        var zero : Z3_ast := Z3_mk_numeral(ctx, '0', int_ty);
+        var one  : Z3_ast := Z3_mk_numeral(ctx, '1', int_ty);
+        from     := [ b, ga ];
+        &to      := [ zero, one ];
+        r := Z3_substitute(ctx, ffabga, 2, @from[0], @&to[0]);
+    end;
+    // Display r
+    reLog.Lines.Append(Format('substitution result: %s', [Z3_ast_to_string(ctx, r)]));
+    Z3_del_context(ctx);
+end;
+
+(**
+   \brief Demonstrates how to use the function \c Z3_substitute_vars to replace (free) variables with expressions in a Z3 AST.
+*)
+procedure TMain.substitute_vars_example;
+var
+  ctx           : Z3_context;
+  int_ty        : Z3_sort;
+  x0, x1        : Z3_ast;
+  a, b, gb      : Z3_ast;
+  f             : Z3_func_decl;
+  g             : Z3_func_decl ;
+  f01, ff010, r : Z3_ast;
+
+  f_domain : array of Z3_sort;
+  args,&to : array of Z3_ast;
+begin
+    reLog.Lines.Append(sLineBreak+ 'substitute_vars_example');
+    LOG_MSG('substitute_vars_example');
+
+    ctx    := mk_context();
+    int_ty := Z3_mk_int_sort(ctx);
+    x0     := Z3_mk_bound(ctx, 0, int_ty);
+    x1     := Z3_mk_bound(ctx, 1, int_ty);
+    begin
+        f_domain := [ int_ty, int_ty ];
+        f        := Z3_mk_func_decl(ctx, Z3_mk_string_symbol(ctx, 'f'), 2, @f_domain[0], int_ty);
+    end;
+    g := Z3_mk_func_decl(ctx, Z3_mk_string_symbol(ctx, 'g'), 1, @int_ty, int_ty);
+    begin
+        args  := [ x0, x1 ];
+        f01   := Z3_mk_app(ctx, f, 2, @args[0]);
+    end;
+    begin
+        args  := [ f01, x0 ];
+        ff010 := Z3_mk_app(ctx, f, 2, @args[0]);
+    end;
+    a  := mk_int_var(ctx, 'a');
+    b  := mk_int_var(ctx, 'b');
+    gb := Z3_mk_app(ctx, g, 1, @b);
+    // Replace x0 -> a, x1 -> g(b) in f(f(x0,x1),x0)
+    begin
+        &to := [ a, gb ];
+        r   := Z3_substitute_vars(ctx, ff010, 2, @&to[0]);
+    end;
+    // Display r
+    reLog.Lines.Append(Format('substitution result: %s', [Z3_ast_to_string(ctx, r)]));
+    Z3_del_context(ctx);
+end;
+
+(**
+   \brief Demonstrates some basic features of the FloatingPoint theory.
+*)
+
+procedure TMain.fpa_example;
+var
+  cfg              : Z3_config;
+  ctx              : Z3_context;
+  s                : Z3_solver;
+  double_sort,
+  rm_sort          : Z3_sort;
+  s_rm, s_x,
+  s_y, s_x_plus_y  : Z3_symbol;
+  rm, x, y, n,
+  x_plus_y, c1, c2,
+  c3, c4, c5       : Z3_ast;
+	args, args2      : array[0..1] of Z3_ast ;
+  and_args, args3  : array[0..2] of Z3_ast;
+
+Begin
+    reLog.Lines.Append(sLineBreak+ 'FPA-example');
+    LOG_MSG('FPA-example');
+
+    cfg := Z3_mk_config();
+    ctx := Z3_mk_context(cfg);
+    s   := mk_solver(ctx);
+    Z3_del_config(cfg);
+
+    double_sort := Z3_mk_fpa_sort(ctx, 11, 53);
+    rm_sort     := Z3_mk_fpa_rounding_mode_sort(ctx);
+
+    // Show that there are x, y s.t. (x + y) = 42.0 (with rounding mode).
+    s_rm := Z3_mk_string_symbol(ctx, 'rm');
+    rm   := Z3_mk_const(ctx, s_rm, rm_sort);
+    s_x  := Z3_mk_string_symbol(ctx, 'x');
+    s_y  := Z3_mk_string_symbol(ctx, 'y');
+    x    := Z3_mk_const(ctx, s_x, double_sort);
+    y    := Z3_mk_const(ctx, s_y, double_sort);
+    n    := Z3_mk_fpa_numeral_double(ctx, 42.0, double_sort);
+
+    s_x_plus_y := Z3_mk_string_symbol(ctx, 'x_plus_y');
+    x_plus_y   := Z3_mk_const(ctx, s_x_plus_y, double_sort);
+    c1         := Z3_mk_eq(ctx, x_plus_y, Z3_mk_fpa_add(ctx, rm, x, y));
+
+    args[0] := c1;
+    args[1] := Z3_mk_eq(ctx, x_plus_y, n);
+    c2      := Z3_mk_and(ctx, 2, @args[0]);
+
+    args2[0] := c2;
+    args2[1] := Z3_mk_not(ctx, Z3_mk_eq(ctx, rm, Z3_mk_fpa_rtz(ctx)));
+    c3       := Z3_mk_and(ctx, 2, @args2[0]);
+
+    and_args[0] := Z3_mk_not(ctx, Z3_mk_fpa_is_zero(ctx, y));
+    and_args[1] := Z3_mk_not(ctx, Z3_mk_fpa_is_nan(ctx, y));
+    and_args[2] := Z3_mk_not(ctx, Z3_mk_fpa_is_infinite(ctx, y));
+    args3[0]    := c3;
+    args3[1]    := Z3_mk_and(ctx, 3, @and_args[0]);
+    c4          := Z3_mk_and(ctx, 2, @args3[0]);
+
+    reLog.Lines.Append(Format('c4: %s', [Z3_ast_to_string(ctx, c4)]));
+    Z3_solver_push(ctx, s);
+    Z3_solver_assert(ctx, s, c4);
+    check(ctx, s, Z3_L_TRUE);
+    Z3_solver_pop(ctx, s, 1);
+
+    // Show that the following are equal:
+    //   (fp #b0 #b10000000001 #xc000000000000)
+    //   ((_ to_fp 11 53) #x401c000000000000))
+    //   ((_ to_fp 11 53) RTZ 1.75 2)))
+    //   ((_ to_fp 11 53) RTZ 7.0)))
+
+    Z3_solver_push(ctx, s);
+    c1 := Z3_mk_fpa_fp(ctx,
+                       Z3_mk_numeral(ctx, '0', Z3_mk_bv_sort(ctx, 1)),
+                       Z3_mk_numeral(ctx, '1025', Z3_mk_bv_sort(ctx, 11)),
+                       Z3_mk_numeral(ctx, '3377699720527872', Z3_mk_bv_sort(ctx, 52)));
+    c2 := Z3_mk_fpa_to_fp_bv(ctx,
+                             Z3_mk_numeral(ctx, '4619567317775286272', Z3_mk_bv_sort(ctx, 64)),
+                             Z3_mk_fpa_sort(ctx, 11, 53));
+    c3 := Z3_mk_fpa_to_fp_int_real(ctx,
+                                   Z3_mk_fpa_rtz(ctx),
+                                   Z3_mk_numeral(ctx, '2', Z3_mk_int_sort(ctx)),     (* exponent *)
+                                   Z3_mk_numeral(ctx, '1.75', Z3_mk_real_sort(ctx)), (* significand *)
+                                   Z3_mk_fpa_sort(ctx, 11, 53));
+    c4 := Z3_mk_fpa_to_fp_real(ctx,
+                               Z3_mk_fpa_rtz(ctx),
+                               Z3_mk_numeral(ctx, '7.0', Z3_mk_real_sort(ctx)),
+                               Z3_mk_fpa_sort(ctx, 11, 53));
+    args3[0] := Z3_mk_eq(ctx, c1, c2);
+    args3[1] := Z3_mk_eq(ctx, c1, c3);
+    args3[2] := Z3_mk_eq(ctx, c1, c4);
+    c5       := Z3_mk_and(ctx, 3, @args3[0]);
+
+    reLog.Lines.Append(Format('c5: %s', [Z3_ast_to_string(ctx, c5)]));
+    Z3_solver_assert(ctx, s, c5);
+    check(ctx, s, Z3_L_TRUE);
+    Z3_solver_pop(ctx, s, 1);
+
+    del_solver(ctx, s);
+    Z3_del_context(ctx);
+end;
+
+(**
+   \brief Demonstrates some basic features of model construction
+*)
+
+procedure TMain.mk_model_example;
+var
+  ctx              : Z3_context;
+  m                : Z3_model;
+  intSort          : Z3_sort ;
+  aSymbol,
+  bSymbol,
+  cSymbol          : Z3_symbol;
+  aFuncDecl,
+  bFuncDecl,
+  cFuncDecl        : Z3_func_decl;
+  aApp, bApp,
+  cApp             : Z3_ast;
+  int2intArraySort : Z3_sort;
+  zeroNumeral,
+  oneNumeral,
+  twoNumeral,
+  threeNumeral,
+  fourNumeral     : Z3_ast;
+  addArgs,
+  arrayAddArgs    : array of Z3_ast;
+  arrayDomain     : array[0..0] of Z3_sort;
+  expectedInterpretations : array of Z3_func_decl;
+  cAsFuncDecl     : Z3_func_decl;
+  cAsFuncInterp   : Z3_func_interp;
+  zeroArgs        : Z3_ast_vector;
+  oneArgs         : Z3_ast_vector;
+  cFuncDeclAsArray: Z3_ast;
+  modelAsString   : Z3_string;
+begin
+    reLog.Lines.Append(sLineBreak+ 'mk_model_example');
+    LOG_MSG('mk_model_example');
+
+    ctx := mk_context();
+    // Construct empty model
+    m := Z3_mk_model(ctx);
+    Z3_model_inc_ref(ctx, m);
+
+    // Create constants "a" and "b"
+    intSort   := Z3_mk_int_sort(ctx);
+    aSymbol   := Z3_mk_string_symbol(ctx, 'a');
+    aFuncDecl := Z3_mk_func_decl(ctx, aSymbol,
+                                (*domain_size=*)0,
+                                (*domain=*)     nil,
+                                (*range=*)      intSort);
+    aApp := Z3_mk_app(ctx, aFuncDecl,
+                     (*num_args=*)0,
+                     (*args=*)nil);
+    bSymbol   := Z3_mk_string_symbol(ctx, 'b');
+    bFuncDecl := Z3_mk_func_decl(ctx, bSymbol,
+                                (*domain_size=*)0,
+                                (*domain=*)     nil,
+                                (*range=*)      intSort);
+    bApp := Z3_mk_app(ctx, bFuncDecl,
+                     (*num_args=*)0,
+                     (*args=*)    nil);
+
+    // Create array "c" that maps int to int.
+    cSymbol          := Z3_mk_string_symbol(ctx, 'c');
+    int2intArraySort := Z3_mk_array_sort(ctx,
+                                        (*domain=*)intSort,
+                                        (*range=*) intSort);
+    cFuncDecl := Z3_mk_func_decl(ctx, cSymbol,
+                                (*domain_size=*)0,
+                                (*domain=*)     nil,
+                                (*range=*)      int2intArraySort);
+    cApp := Z3_mk_app(ctx, cFuncDecl,
+                     (*num_args=*)0,
+                     (*args=*)    nil);
+
+    // Create numerals to be used in model
+    zeroNumeral := Z3_mk_int(ctx, 0, intSort);
+    oneNumeral  := Z3_mk_int(ctx, 1, intSort);
+    twoNumeral  := Z3_mk_int(ctx, 2, intSort);
+    threeNumeral:= Z3_mk_int(ctx, 3, intSort);
+    fourNumeral := Z3_mk_int(ctx, 4, intSort);
+
+    // Add assignments to model
+    // a == 1
+    Z3_add_const_interp(ctx, m, aFuncDecl, oneNumeral);
+    // b == 2
+    Z3_add_const_interp(ctx, m, bFuncDecl, twoNumeral);
+
+    // Create a fresh function that represents
+    // reading from array.
+    arrayDomain[0] := intSort;
+    cAsFuncDecl    := Z3_mk_fresh_func_decl(ctx,
+                                        (*prefix=*)     '',
+                                        (*domain_size*) 1,
+                                        (*domain=*)     @arrayDomain[0],
+                                        (*sort=*)       intSort);
+    // Create function interpretation with default
+    // value of "0".
+    cAsFuncInterp := Z3_add_func_interp(ctx, m, cAsFuncDecl,
+                                       (*default_value=*)zeroNumeral);
+    Z3_func_interp_inc_ref(ctx, cAsFuncInterp);
+    // Add [0] = 3
+    zeroArgs := Z3_mk_ast_vector(ctx);
+    Z3_ast_vector_inc_ref(ctx, zeroArgs);
+    Z3_ast_vector_push(ctx, zeroArgs, zeroNumeral);
+    Z3_func_interp_add_entry(ctx, cAsFuncInterp, zeroArgs, threeNumeral);
+    // Add [1] = 4
+    oneArgs := Z3_mk_ast_vector(ctx);
+    Z3_ast_vector_inc_ref(ctx, oneArgs);
+    Z3_ast_vector_push(ctx, oneArgs, oneNumeral);
+    Z3_func_interp_add_entry(ctx, cAsFuncInterp, oneArgs, fourNumeral);
+
+    // Now use the `(_ as_array)` to associate
+    // the `cAsFuncInterp` with the `cFuncDecl`
+    // in the model
+    cFuncDeclAsArray := Z3_mk_as_array(ctx, cAsFuncDecl);
+    Z3_add_const_interp(ctx, m, cFuncDecl, cFuncDeclAsArray);
+
+    // Print the model
+    modelAsString := Z3_model_to_string(ctx, m);
+    reLog.Lines.Append(Format('Model:'+ sLineBreak +'%s', [modelAsString]));
+
+    // Check the interpretations we expect to be present
+    // are.
+    begin
+        expectedInterpretations := [aFuncDecl, bFuncDecl, cFuncDecl];
+        var index : Integer;
+        for index := 0 to Length(expectedInterpretations) - 1 do
+        begin
+            var d  : Z3_func_decl := expectedInterpretations[index];
+            if (Z3_model_has_interp(ctx, m, d)) then
+            begin
+                reLog.Lines.Append(Format('Found interpretation for "%s"', [Z3_ast_to_string(ctx, Z3_func_decl_to_ast(ctx, d))]));
+            end else
+            begin
+                reLog.Lines.Append('Missing interpretation');
+                exit;
+            end;
+        end;
+    end;
+
+    begin
+        // Evaluate a + b under model
+        addArgs             := [aApp, bApp];
+        var aPlusB : Z3_ast := Z3_mk_add(ctx,
+                                  (*num_args=*)2,
+                                  (*args=*)    @addArgs[0]);
+        var aPlusBEval : Z3_ast := Nil;
+        var aPlusBEvalSuccess : Boolean := Z3_model_eval(ctx, m, aPlusB,
+                                         (*model_completion=*)false,
+                                                        @aPlusBEval);
+        if (aPlusBEvalSuccess <> true) then
+        begin
+            reLog.Lines.Append('Failed to evaluate model');
+            exit;
+        end;
+
+        begin
+            var aPlusBValue           : Integer := 0;
+            var getAPlusBValueSuccess : Boolean := Z3_get_numeral_int(ctx, aPlusBEval, @aPlusBValue);
+            if (getAPlusBValueSuccess <> true) then
+            begin
+                reLog.Lines.Append('Failed to get integer value for a+b');
+                exit;
+            end;
+            reLog.Lines.Append(Format('Evaluated a + b = %d', [aPlusBValue]));
+            if (aPlusBValue <> 3) then
+            begin
+                reLog.Lines.Append('a+b did not evaluate to expected value');
+                exit;
+            end;
+        end;
+    end;
+
+    begin
+        // Evaluate c[0] + c[1] + c[2] under model
+        var c0 : Z3_ast := Z3_mk_select(ctx, cApp, zeroNumeral);
+        var c1 : Z3_ast := Z3_mk_select(ctx, cApp, oneNumeral);
+        var c2 : Z3_ast := Z3_mk_select(ctx, cApp, twoNumeral);
+        arrayAddArgs    := [c0, c1, c2];
+        var arrayAdd : Z3_ast := Z3_mk_add(ctx,
+                                    (*num_args=*)3,
+                                    (*args=*)    @arrayAddArgs[0]);
+        var arrayAddEval : Z3_ast := nil;
+        var arrayAddEvalSuccess  : Boolean :=  Z3_model_eval(ctx, m, arrayAdd,
+                                               (*model_completion=*)false,
+                                                                    @arrayAddEval);
+        if (arrayAddEvalSuccess <> true) then
+        begin
+            reLog.Lines.Append('Failed to evaluate model');
+            exit;
+        end;
+        begin
+            var arrayAddValue : Integer := 0;
+            var getArrayAddValueSuccess : Boolean := Z3_get_numeral_int(ctx, arrayAddEval, @arrayAddValue);
+            if (getArrayAddValueSuccess <> true) then
+            begin
+                reLog.Lines.Append('Failed to get integer value for c[0] + c[1] + c[2]');
+                exit;
+            end;
+            reLog.Lines.Append(Format('Evaluated c[0] + c[1] + c[2] = %d', [arrayAddValue]));
+            if (arrayAddValue <> 7) then
+            begin
+                reLog.Lines.Append('c[0] + c[1] + c[2] did not evaluate to expected value');
+                exit;
+            end;
+        end;
+    end;
+
+    Z3_ast_vector_dec_ref(ctx, oneArgs);
+    Z3_ast_vector_dec_ref(ctx, zeroArgs);
+    Z3_func_interp_dec_ref(ctx, cAsFuncInterp);
+    Z3_model_dec_ref(ctx, m);
+    Z3_del_context(ctx);
+end;
+
 procedure TMain.StartMain;
 begin
     Z3_open_log('z3.log');
@@ -2538,13 +3245,13 @@ begin
     binary_tree_example();
     enum_example();
     unsat_core_and_proof_example();
-   { incremental_example1();
+    incremental_example1();
     reference_counter_example();
     smt2parser_example();
     substitute_example();
     substitute_vars_example();
     fpa_example();
-    mk_model_example();  }
+    mk_model_example();
 
     Z3_close_log;
 end;
