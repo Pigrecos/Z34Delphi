@@ -7,6 +7,6 @@
 
 
 # Note
-  Test (not yet completed) project compiled with Delphi 10.3(Rio)
+  Test project compiled with Delphi 10.3(Rio)
 
 
