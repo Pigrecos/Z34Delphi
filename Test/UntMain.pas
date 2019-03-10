@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons,
-  z3, Vcl.ComCtrls, Vcl.ExtCtrls;
+  z3, Vcl.ComCtrls, Vcl.ExtCtrls,
+  Z3.Context;
 
 
 const  MAX_RETRACTABLE_ASSERTIONS = 1024 ;
@@ -30,13 +31,18 @@ const  MAX_RETRACTABLE_ASSERTIONS = 1024 ;
   TMain = class(TForm)
     pnl1: TPanel;
     pnlBtn: TPanel;
-    btnStart: TBitBtn;
+    btnTestApi: TBitBtn;
     reLog: TRichEdit;
-    procedure btnStartClick(Sender: TObject);
+    btnTestX86: TBitBtn;
+    btnTestClass: TBitBtn;
+    edtBinFile: TEdit;
+    procedure btnTestApiClick(Sender: TObject);
     procedure reLogChange(Sender: TObject);
+    procedure btnTestClassClick(Sender: TObject);
+    procedure btnTestX86Click(Sender: TObject);
   private
     procedure prove(ctx: Z3_context; s: Z3_solver; f: Z3_ast; is_valid: Boolean);
-    procedure StartMain;
+    procedure TestApi;
     procedure simple_example;
     procedure demorgan;
     procedure find_model_example1;
@@ -84,6 +90,34 @@ const  MAX_RETRACTABLE_ASSERTIONS = 1024 ;
     procedure substitute_vars_example;
     procedure fpa_example;
     procedure mk_model_example;
+
+    procedure demorgan_;
+    procedure find_model_example1_;
+    procedure prove_example1_;
+    procedure prove_example2_;
+    procedure nonlinear_example1_;
+    procedure prove_(conjecture: TExpr);
+    procedure bitvector_example1_;
+    procedure bitvector_example2_;
+    procedure capi_example;
+    procedure eval_example1_;
+    procedure two_contexts_example1_;
+    procedure error_example_;
+    procedure numeral_example_;
+    procedure ite_example_;
+    procedure ite_example2_;
+    procedure quantifier_example;
+    procedure unsat_core_example1;
+    procedure unsat_core_example2;
+    procedure unsat_core_example3;
+    procedure TestClass;
+    procedure tactic_example1;
+    procedure tactic_example2;
+    procedure tactic_example3;
+    procedure tactic_example4;
+    procedure tactic_example5;
+    procedure tactic_example6;
+    procedure tactic_example7;
     { Private declarations }
   public
     { Public declarations }
@@ -93,7 +127,13 @@ var
   Main: TMain;
 
 implementation
-       uses z3_ast_containers,z3_fpa;
+       uses z3_ast_containers,z3_fpa,testAsmx86,
+       z3.Config,
+       z3.model,
+       z3.solver,
+       z3.tactic,
+       z3.func,
+       z3.def;
 
 {$R *.dfm}
 
@@ -1386,7 +1426,7 @@ begin
 
         (* context is satisfiable if n < 5 *)
         if    (n) < 5 then check2(ctx, s, Z3_L_TRUE )
-        else                 check2(ctx, s, Z3_L_FALSE );
+        else               check2(ctx, s, Z3_L_FALSE );
 
 	      del_solver(ctx, s);
         Z3_del_context(ctx);
@@ -2371,6 +2411,21 @@ begin
     Z3_del_context(ctx);
 end;
 
+procedure TMain.btnTestX86Click(Sender: TObject);
+begin
+    Z3_open_log('z3.log');
+    reLog.Clear;
+
+    (**test asm x86*)
+    if not FileExists('asmx86/test1.bin') then
+      ShowMessage('file inesistente')
+    else
+      relog.lines.AddStrings( Testx86(edtBinFile.Text));
+    (****)
+
+    Z3_close_log;
+end;
+
 (**
    \brief Create an enumeration data type.
 *)
@@ -3210,9 +3265,944 @@ begin
     Z3_del_context(ctx);
 end;
 
-procedure TMain.StartMain;
+(**
+   \brief Simple function that tries to prove the given conjecture using the following steps:
+   1- create a solver
+   2- assert the negation of the conjecture
+   3- checks if the result is unsat.
+*)
+procedure TMain.prove_(conjecture: TExpr);
 begin
-    Z3_open_log('z3.log');
+    var c : TContext := conjecture.ctx;
+
+    var s : TSolver := TSolver.Create(c);
+
+    s.add( OpNot(conjecture));
+
+    reLog.Lines.Append('conjecture:' +sLineBreak + conjecture.ToStr);
+    if (s.check = unsat) then
+    begin
+        reLog.Lines.Append('proved')
+    end else
+    begin
+        reLog.Lines.Append('failed to prove');
+        reLog.Lines.Append('counterexample:'+sLineBreak + s.get_model.ToStr);
+    end;
+end;
+(**********************************************************************)
+(*                      End Test Api                                  *)
+(**********************************************************************)
+
+
+(**********************************************************************)
+(*                      Start Test Class                              *)
+(**********************************************************************)
+
+procedure TMain.tactic_example7;
+(*
+  Tactics can be combined with solvers.
+  For example, we can apply a tactic to a goal, produced a set of subgoals,
+  then select one of the subgoals and solve it using a solver.
+  This example demonstrates how to do that, and
+  how to use model converters to convert a model for a subgoal into a model for the original goal.
+*)
+begin
+    reLog.Lines.Append(sLineBreak+ 'tactic example 7');
+    var c : TContext := TContext.Create;
+
+    var t: TTactic := TTactic.Create(c, 'simplify') ;
+        t := T_OpAnd(t, TTactic.Create(c, 'normalize-bounds') );
+        t := T_OpAnd(t, TTactic.Create(c, 'solve-eqs') );
+
+    var x  : TExpr := c.int_const('x');
+    var y  : TExpr := c.int_const('y');
+    var z  : TExpr := c.int_const('z');
+
+    var g : TGoal := TGoal.Create(c);
+    g.add(OpMajor(x,10));
+    g.add( OpEq(y,OpAdd(x,3)) );
+    g.add( OpMajor(z,y) );
+    var r : TApply_result := t.ToApplyRes(g);
+    // r contains only one subgoal
+    reLog.Lines.Append(r.ToStr);
+
+    var s: TSolver := TSolver.Create(c);
+    var i : Integer;
+    var subgoal : TGoal := r.Items[0];
+    for i := 0 to subgoal.size - 1 do
+        s.add( subgoal.Items[i] );
+
+    reLog.Lines.Append( check_resultToStr(s.check) );
+
+    var m : TModel := s.get_model;
+    reLog.Lines.Append('model for subgoal:' +sLineBreak + m.ToStr ) ;
+    reLog.Lines.Append('model for original goal:' +sLineBreak + subgoal.convert_model(m).ToStr )
+    
+end;
+
+procedure TMain.tactic_example6;
+(*
+In this example, we show how to implement a solver for integer arithmetic using SAT.
+The solver is complete only for problems where every variable has a lower and upper bound.
+*)
+begin
+    reLog.Lines.Append(sLineBreak+ 'tactic example 6');
+    var c : TContext := TContext.Create;
+    var p: TParams := TParams.Create(c);
+
+    p.&set('arith_lhs', true);
+    p.&set('som', true); // sum-of-monomials normal form
+
+    var t: TTactic := &with(TTactic.Create(c, 'simplify'), p) ;
+        t := T_OpAnd(t, TTactic.Create(c, 'normalize-bounds') );
+        t := T_OpAnd(t, TTactic.Create(c, 'lia2pb') );
+        t := T_OpAnd(t, TTactic.Create(c, 'pb2bv') );
+        t := T_OpAnd(t, TTactic.Create(c, 'bit-blast') );
+        t := T_OpAnd(t, TTactic.Create(c, 'sat') );
+
+    var s : TSolver  := t.mk_solver;
+
+    var x  : TExpr := c.int_const('x');
+    var y  : TExpr := c.int_const('y');
+    var z  : TExpr := c.int_const('z');
+
+    s.add( OpAnd(OpMajor(x,0), OpMinor(x,10)));
+    s.add( OpAnd(OpMajor(y,0), OpMinor(y,10)));
+    s.add( OpAnd(OpMajor(z,0), OpMinor(z,10)));
+
+    //s.add(3*y + 2*x == z)
+    s.add( OpEq(OpAdd(OpMul(3,y), OpMul(2,x)),z) );
+    reLog.Lines.Append( check_resultToStr(s.check));
+    reLog.Lines.Append( s.get_model.ToStr);
+
+    s.reset;
+    //s.add(3*y + 2*x == z);
+    s.add( OpEq(OpAdd(OpMul(3,y), OpMul(2,x)),z) );
+    reLog.Lines.Append( check_resultToStr(s.check));
+end;
+
+procedure TMain.tactic_example5;
+(*
+ The tactic smt wraps the main solver in Z3 as a tactic.
+*)
+begin
+    reLog.Lines.Append(sLineBreak+ 'tactic example 5');
+    var c : TContext := TContext.Create;
+    var x  : TExpr := c.int_const('x');
+    var y  : TExpr := c.int_const('y');
+
+    var s : TSolver := TTactic.Create(c, 'smt').mk_solver;
+    s.add(OpMajor(x, OpAdd(y,1)) );
+
+    reLog.Lines.Append(check_resultToStr(s.check));
+    reLog.Lines.Append(s.get_model.ToStr);
+
+end;
+
+procedure TMain.tactic_example4;
+(*
+  A tactic can be converted into a solver object using the method mk_solver().
+  If the tactic produces the empty goal, then the associated solver returns sat.
+  If the tactic produces a single goal containing False, then the solver returns unsat.
+  Otherwise, it returns unknown.
+
+  In this example, the tactic t implements a basic bit-vector solver using equation solving,
+  bit-blasting, and a propositional SAT solver.
+  We use the combinator `with` to configure our little solver.
+  We also include the tactic `aig` which tries to compress Boolean formulas using And-Inverted Graphs.
+*)
+begin
+    reLog.Lines.Append(sLineBreak+ 'tactic example 4');
+    var c : TContext := TContext.Create;
+
+    var p : TParams := TParams.Create(c);
+    p.&set('mul2concat', true);
+    var t : TTactic := &with( TTactic.Create(c, 'simplify'), p);
+        t := T_OpAnd( t, TTactic.Create(c, 'solve-eqs'));
+        t := T_OpAnd( t, TTactic.Create(c, 'bit-blast'));
+        t := T_OpAnd( t, TTactic.Create(c, 'aig'));
+        t := T_OpAnd( t, TTactic.Create(c, 'sat'));
+
+    var s : TSolver := t.mk_solver;
+
+    var x  : TExpr := c.bv_const('x',16);
+    var y  : TExpr := c.bv_const('y',16);
+
+    s.add( OpEq(OpAdd(OpMul(x,32),y),13));
+    // In C++, the operator < has higher precedence than &.
+    s.add( OpMinor(OpAndbv(x,y),10) );
+    s.add(OpMajor(y,-100));
+
+    reLog.Lines.Append(check_resultToStr(s.check));
+    var m : TModel := s.get_model;
+    reLog.Lines.Append(m.ToStr);
+    reLog.Lines.Append('x*32 + y = ' + (m.eval(OpAdd(OpMul(x,32),y)).ToStr )) ;
+    reLog.Lines.Append('x & y    = ' + (m.eval(OpAndbv(x,y)).ToStr));
+    
+end;
+
+procedure TMain.tactic_example3;
+begin
+    reLog.Lines.Append(sLineBreak+ 'tactic example 3');
+    var c : TContext := TContext.Create;
+
+    var x  : TExpr := c.real_const('x');
+    var y  : TExpr := c.real_const('y');
+    var z  : TExpr := c.real_const('z');
+
+    var g : TGoal := TGoal.Create(c);
+
+    g.add( OpOr( OpEq(x, 0), Opeq(x,1) ) );
+    g.add( OpOr( OpEq(y, 0), Opeq(y,1) ) );
+    g.add( OpOr( OpEq(z, 0), Opeq(z,1) ) );
+
+    g.add( OpMajor(OpAdd(OpAdd(x,y),z),2) );
+    // split all clauses
+
+    var t1        : TTactic := TTactic.Create(c,'split-clause');
+    var t2        : TTactic := TTactic.Create(c,'skip');
+    var split_all : TTactic := &repeat( T_OpOr(t1,t2) );
+    reLog.Lines.Append(split_all.ToApplyRes(g).ToStr );
+
+    t1 := TTactic.Create(c,'split-clause');
+    t2 := TTactic.Create(c,'skip');
+    var split_at_most_2 : TTactic := &repeat(T_OpOr(t1,t2), 1);
+    reLog.Lines.Append(split_at_most_2.ToApplyRes(g).ToStr);
+
+    // In the tactic split_solver, the tactic solve-eqs discharges all but one goal.
+    // Note that, this tactic generates one goal: the empty goal which is trivially satisfiable (i.e., feasible)
+    var split_solve : TTactic := T_OpAnd(split_all, TTactic.Create(c, 'solve-eqs'));
+    reLog.Lines.Append(split_solve.ToApplyRes(g).ToStr);
+
+end;
+
+procedure TMain.tactic_example2;
+(*
+  In Z3, we say a clause is any constraint of the form (f_1 || ... || f_n).
+  The tactic split-clause will select a clause in the input goal, and split it n subgoals.
+  One for each subformula f_i.
+*)
+begin
+    reLog.Lines.Append(sLineBreak+ 'tactic example 2');
+    var c : TContext := TContext.Create;
+
+    var x  : TExpr := c.real_const('x');
+    var y  : TExpr := c.real_const('y');
+
+    var g : TGoal := TGoal.Create(c);
+    g.add( OpOr( OpMinor(x, 0), OpMajor(x,0) ) );
+    g.add( OpEq(x,OpAdd(y, 1)) );
+    g.add( OpMinor(y, 0) );
+
+    var t : TTactic       := TTactic.Create(c, 'split-clause');
+    var r : TApply_result := t.ToApplyRes(g);
+    var i : Integer;
+    for i := 0 to r.size - 1 do
+      reLog.Lines.Append( 'subgoal '+ IntToStr(i) + sLineBreak + r.Items[i].ToStr );
+
+end;
+
+procedure TMain.tactic_example1;
+(*
+  Z3 implements a methodology for orchestrating reasoning engines where "big" symbolic
+  reasoning steps are represented as functions known as tactics, and tactics are composed
+  using combinators known as tacticals. Tactics process sets of formulas called Goals.
+
+  When a tactic is applied to some goal G, four different outcomes are possible. The tactic succeeds
+  in showing G to be satisfiable (i.e., feasible); succeeds in showing G to be unsatisfiable (i.e., infeasible);
+  produces a sequence of subgoals; or fails. When reducing a goal G to a sequence of subgoals G1, ..., Gn,
+  we face the problem of model conversion. A model converter construct a model for G using a model for some subgoal Gi.
+
+  In this example, we create a goal g consisting of three formulas, and a tactic t composed of two built-in tactics:
+  simplify and solve-eqs. The tactic simplify apply transformations equivalent to the ones found in the command simplify.
+  The tactic solver-eqs eliminate variables using Gaussian elimination. Actually, solve-eqs is not restricted
+  only to linear arithmetic. It can also eliminate arbitrary variables.
+  Then, sequential composition combinator & applies simplify to the input goal and solve-eqs to each subgoal produced by simplify.
+  In this example, only one subgoal is produced.
+*)
+begin
+    reLog.Lines.Append(sLineBreak+ 'tactic example 1');
+    var c : TContext := TContext.Create;
+
+    var x  : TExpr := c.real_const('x');
+    var y  : TExpr := c.real_const('y');
+
+    var g : TGoal := TGoal.Create(c);
+    g.add( OpMajor(x,0) );
+    g.add( OpMajor(y,0) );
+    g.add( OpEq(x, OpAdd(y,2)) );
+    reLog.Lines.Append(g.ToStr);
+
+    var t1 : TTactic := TTactic.Create(c, 'simplify');
+    var t2 : TTactic := TTactic.Create(c, 'solve-eqs');
+    var t  : TTactic := T_OpAnd(t1,t2);
+
+    var r : TApply_result := t.ToApplyRes(g);
+    reLog.Lines.Append(r.ToStr);
+
+end;
+
+(**
+   \brief Unsat core example 3
+*)
+procedure TMain.unsat_core_example3;
+begin
+    // Extract unsat core using tracked assertions
+    reLog.Lines.Append(sLineBreak+ 'unsat core example3');
+    var c : TContext := TContext.Create;
+
+    var x  : TExpr := c.int_const('x');
+    var y  : TExpr := c.int_const('y');
+
+    var s : TSolver := TSolver.Create(c);
+
+    // enabling unsat core tracking
+    var p : TParams := TParams.Create(c);
+    p.&set('unsat_core', true);
+    s.&set(p);
+
+    // The following assertion will not be tracked.
+    s.add(OpMajor(x,0));
+
+    // The following assertion will be tracked using Boolean variable p1.
+    // The C++ wrapper will automatically create the Boolean variable.
+    s.add(OpMajor(y,0), 'p1');
+
+    // Asserting other tracked assertions.
+    s.add( OpMinor(x,10), 'p2');
+    s.add( OpMinor(y,0),  'p3');
+
+    reLog.Lines.Append(  check_resultToStr(s.check) );
+    reLog.Lines.Append(  s.unsat_core.ToStr );
+
+end;
+
+(**
+   \brief Unsat core example 2
+*)
+procedure  TMain.unsat_core_example2;
+var
+  assumptions : TArray<TExpr>;
+  qs          : TArray<TExpr>; // auxiliary vector used to store new answer literals.
+  qi          : TExpr;
+  i           : Integer;
+  qname       : AnsiString;
+  p           : PAnsiChar;
+
+begin
+    reLog.Lines.Append(sLineBreak+ 'unsat core example2');
+    var c : TContext := TContext.Create;
+    // The answer literal mechanism, described in the previous example,
+    // tracks assertions. An assertion can be a complicated
+    // formula containing containing the conjunction of many subformulas.
+    var p1 : TExpr := c.bool_const('p1');
+    var x  : TExpr := c.int_const('x');
+    var y  : TExpr := c.int_const('y');
+
+    var s : TSolver := TSolver.Create(c);
+
+    var F : TExpr  := OpAnd(OpAnd(OpAnd(OpMajor(x,10),OpMajor(y,x)),OpMinor(y, 5)), OpMajor(y, 0));
+    s.add(implies(p1, F));
+
+    assumptions := [ p1 ];
+    reLog.Lines.Append(  check_resultToStr(s.check( 1, assumptions)) );
+
+    var core : Texpr_vector := s.unsat_core;
+    reLog.Lines.Append(core.ToStr);
+    reLog.Lines.Append('size: ' + IntToStr(core.size) );
+
+    for i := 0 to core.size - 1 do
+        reLog.Lines.Append(core.Items[i].ToStr);
+
+    // The core is not very informative, since p1 is tracking the formula F
+    // that is a conjunction of subformulas.
+    // Now, we use the following piece of code to break this conjunction
+    // into individual subformulas. First, we flat the conjunctions by
+    // using the method simplify.
+    assert(F.is_app ); // I'm assuming F is an application.
+    if (F.decl.decl_kind = Z3_OP_AND) then
+    begin
+        // F is a conjunction
+        reLog.Lines.Append('F num. args (before simplify): ' + IntToStr(F.num_args) );
+        F := F.simplify;
+        reLog.Lines.Append('F num. args (after simplify): ' + IntToStr(F.num_args) );
+        for i := 0 to F.num_args -1 do
+        begin
+            reLog.Lines.Append( format('Creating answer literal q%d for %s',[i,F.arg(i).toStr]));
+            //
+            qname := 'q'+ ansistring(UIntToStr(i));
+            GetMem(p,Length(qname));
+            CopyMemory(p,@qname[1],Length(qname));
+
+            qi := c.bool_const( p ); // create a new answer literal
+            s.add(implies(qi, F.arg(i)));
+            qs := qs + [qi] ;
+        end;
+    end;
+
+    // The solver s already contains p1 => F
+    // To disable F, we add (not p1) as an additional assumption
+    qs := qs + [ OpNot(p1) ];
+    reLog.Lines.Append(  check_resultToStr(s.check( Length(qs), qs)) );
+
+    var core2 : Texpr_vector := s.unsat_core;
+    reLog.Lines.Append(core2.ToStr);
+    reLog.Lines.Append('size: ' + IntToStr(core2.size) );
+
+    for i := 0 to core2.size - 1 do
+        reLog.Lines.Append(core2.Items[i].ToStr);
+
+end;
+
+(**
+   \brief Unsat core example
+*)
+procedure TMain.unsat_core_example1;
+var
+  i : Integer;
+begin
+    reLog.Lines.Append(sLineBreak+ 'unsat core example1');
+    var c : TContext := TContext.Create;
+    // We use answer literals to track assertions.
+    // An answer literal is essentially a fresh Boolean marker
+    // that is used to track an assertion.
+    // For example, if we want to track assertion F, we
+    // create a fresh Boolean variable p and assert (p => F)
+    // Then we provide p as an argument for the check method.
+    var p1 : TExpr := c.bool_const('p1');
+    var p2 : TExpr := c.bool_const('p2');
+    var p3 : TExpr := c.bool_const('p3');
+    var x  : TExpr := c.int_const('x');
+    var y  : TExpr := c.int_const('y');
+
+    var s : TSolver := TSolver.Create(c);
+
+    s.add(implies( p1,  OpMajor(x,10)) );
+    s.add(implies( p1,  OpMajor(y,x )) );
+    s.add(implies( p2,  OpMinor(y,5 )) ) ;
+    s.add(implies( p3,  OpMajor(y,0 )) );
+
+    var assumptions : TArray<TExpr> := [ p1, p2, p3 ];
+    reLog.Lines.Append( check_resultToStr(s.check(3, assumptions)));
+
+    var core : TExpr_vector := s.unsat_core;
+
+    reLog.Lines.Append( core.ToStr );
+    reLog.Lines.Append( 'size: ' + IntToStr(core.size));
+
+    for i := 0 to core.size - 1 do
+        reLog.Lines.Append( core.Items[i].ToStr);
+
+    // Trying again without p2
+    var assumptions2 : TArray<TExpr> := [ p1, p3 ];
+    reLog.Lines.Append( check_resultToStr(s.check(2, assumptions2)));
+
+end;
+
+(**
+   \brief Small example using quantifiers.
+*)
+procedure TMain.quantifier_example;
+begin
+    reLog.Lines.Append(sLineBreak+ 'quantifier example');
+    var c : TContext := TContext.Create;
+
+    var x : TExpr := c.int_const('x');
+    var y : TExpr := c.int_const('y');
+    var I : TSort := c.int_sort;
+    var f : TFunc_decl := &function('f', I, I, I);
+
+    var s : TSolver := TSolver.Create(c);
+
+    // making sure model based quantifier instantiation is enabled.
+    var p : TParams := TParams.Create(c);
+    p.&set('MBQI', true);
+    s.&set(p);
+
+    var rr : TExpr := OpMajOrEq(f.FunOf(x, y),0);
+    rr := forall(x, y, rr );
+    s.add( rr);
+    var a : TExpr := c.int_const('a');
+    s.add( OpMinor(f.FunOf(a, a), a) );
+    reLog.Lines.Append(s.ToStr);
+    reLog.Lines.Append(check_resultToStr(s.check));
+    reLog.Lines.Append( s.get_model.ToStr);
+
+    s.add( OpMinor(a, 0));
+    reLog.Lines.Append(check_resultToStr(s.check));
+end;
+
+procedure TMain.ite_example2_;
+begin
+    reLog.Lines.Append(sLineBreak+ 'if-then-else example2');
+    var c : TContext := TContext.Create;
+
+    var b : TExpr := c.bool_const('b');
+    var x : TExpr := c.int_const('x');
+    var y : TExpr := c.int_const('y');
+    var it: TExpr := OpMajor(ite(b,x,y),0) ;
+
+    reLog.Lines.Append(it.ToStr);
+end;
+
+(**
+   \brief Test ite-term (if-then-else terms).
+*)
+procedure TMain.ite_example_;
+begin
+    reLog.Lines.Append(sLineBreak+ 'if-then-else example');
+    var c : TContext := TContext.Create;
+
+    var f   : TExpr := c.bool_val(false);
+    var one : TExpr := c.int_val(1);
+    var zero: TExpr := c.int_val(0);
+    var ite : TExpr := to_expr(c, Z3_mk_ite(c.ToZ3_Context, f.ToZ3_ast, one.ToZ3_ast, zero.ToZ3_ast));
+
+    reLog.Lines.Append('term: '+ ite.ToStr);
+end;
+
+(**
+    \brief Demonstrate different ways of creating rational numbers: decimal and fractional representations.
+*)
+procedure TMain.numeral_example_;
+begin
+    reLog.Lines.Append(sLineBreak+ 'numeral example');
+    var c : TContext := TContext.Create;
+
+    var n1 : TExpr := c.real_val('1/2');
+    var n2 : TExpr := c.real_val('0.5');
+    var n3 : TExpr := c.real_val(1, 2);
+    reLog.Lines.Append(n1.ToStr + ''+ n2.ToStr + ''+ n3.ToStr);
+
+    prove_( OpAnd( OpEq(n1,n2), OpEq(n1,n3) ) );
+
+    n1 := c.real_val('-1/3');
+    n2 := c.real_val('-0.3333333333333333333333333333333333');
+    reLog.Lines.Append(n1.ToStr + ''+ n2.ToStr ) ;
+    prove_(OpNotEq(n1,n2));
+end;
+
+(**
+   \brief Demonstrates how to catch API usage errors.
+*)
+procedure TMain.error_example_;
+begin
+    reLog.Lines.Append(sLineBreak+ 'error example');
+
+    var c : TContext := TContext.Create;
+
+    var x : TExpr := c.bool_const('x');
+
+    // Error using the C API can be detected using Z3_get_error_code.
+    // The next call fails because x is a constant.
+    //Z3_ast arg = Z3_get_app_arg(c, x, 0);
+    if Z3_get_error_code(c.ToZ3_Context) <> Z3_OK then
+    begin
+       reLog.Lines.Append('last call failed.');
+    end ;
+
+    // The C++ layer converts API usage errors into exceptions.
+    try
+       // The next call fails because x is a Boolean.
+       var n : TExpr := OpAdd(x,1);
+    except
+       on Ex : TZ3Exception do
+       begin
+          reLog.Lines.Append('failed: ' + ex.message );
+       end;
+    end;
+
+    // The functions to_expr, to_sort and to_func_decl also convert C API errors into exceptions.
+    try
+       var arg : TExpr := to_expr(c, Z3_get_app_arg(c.ToZ3_Context, x.ToZ3_app, 0));
+    except
+       on Ex : TZ3Exception do
+       begin
+          reLog.Lines.Append('failed: ' + ex.message );
+       end;
+    end;
+end;
+
+(**
+   \brief Several contexts can be used simultaneously.
+*)
+procedure TMain.two_contexts_example1_;
+begin
+    reLog.Lines.Append(sLineBreak+ 'two contexts example 1');
+    LOG_MSG('two contexts example 1');
+
+    var c1 : TContext := TContext.Create;
+    var c2 : TContext := TContext.Create;
+
+    var x : TExpr := c1.int_const('x');
+    var n : TExpr := OpAdd(x, 1);
+    // We cannot mix expressions from different contexts, but we can copy
+    // an expression from one context to another.
+    // The following statement copies the expression n from c1 to c2.
+    var n1 : TExpr := to_expr(c2, Z3_translate(c1.ToZ3_Context, n.ToZ3_ast, c2.ToZ3_Context));
+    reLog.Lines.Append( n1.ToStr);
+end;
+
+(**
+   \brief Demonstrate how to evaluate expressions in a model.
+*)
+procedure TMain.eval_example1_;
+begin
+    reLog.Lines.Append(sLineBreak+ 'eval example 1');
+    LOG_MSG('eval example 1');
+
+    var c : TContext := TContext.Create;
+
+    var x : TExpr := c.int_const('x');
+    var y : TExpr := c.int_const('y');
+
+    var s : TSolver := TSolver.Create(c);
+
+    (* assert x < y *)
+    s.add( OpMinor(x, y));
+    (* assert x > 2 *)
+    s.add( OpMajor(x, 2));
+
+    reLog.Lines.Append( check_resultToStr(s.check));
+
+    var m : TModel := s.get_model;
+    reLog.Lines.Append('Model:'+sLineBreak + m.ToStr);
+    reLog.Lines.Append('x+y = ' + m.eval( OpAdd(x,y) ).ToStr);
+end;
+
+(**
+   \brief Mixing C and C++ APIs.
+*)
+procedure TMain.capi_example;
+begin
+    reLog.Lines.Append(sLineBreak+ 'capi example');
+    LOG_MSG('capi example');
+
+    var c : TContext := TContext.Create;
+
+    var x : TExpr := c.bv_const('x',32);
+    var y : TExpr := c.bv_const('y',32);
+    // Invoking a C API function, and wrapping the result using an expr object.
+    var  r : TExpr := to_expr(c, Z3_mk_bvsrem(c.ToZ3_Context, x.ToZ3_ast, y.ToZ3_ast));
+    reLog.Lines.Append('r: ' + r.ToStr);
+end;
+
+(**
+   \brief Find x and y such that: x ^ y - 103 == x * y
+*)
+procedure  TMain.bitvector_example2_;
+begin
+    reLog.Lines.Append(sLineBreak+ 'bitvector example 2');
+    LOG_MSG('bitvector example 2');
+
+    var c : TContext := TContext.Create;
+
+    var x : TExpr := c.bv_const('x',32);
+    var y : TExpr := c.bv_const('y',32);
+
+    var s : TSolver := TSolver.Create(c);
+
+    // In C++, the operator == has higher precedence than ^.
+    s.add(OpEq(OpMinus(OpXorbv(x, y),103), OpMul(x,y)) );
+    reLog.Lines.Append(s.ToStr);
+    reLog.Lines.Append(check_resultToStr(s.check));
+    reLog.Lines.Append( s.get_model.ToStr);
+end;
+
+(**
+   \brief Simple bit-vector example. This example disproves that x - 10 <= 0 IFF x <= 10 for (32-bit) machine integers
+*)
+procedure  TMain.bitvector_example1_;
+begin
+    reLog.Lines.Append(sLineBreak+ 'bitvector example 1');
+    LOG_MSG('bitvector example 1');
+
+    var c : TContext := TContext.Create;
+
+    var x : TExpr := c.bv_const('x',32);
+
+    // using signed <=
+    prove_(OpEq(OpMinOrEq(OpMinus(x, 10),0), OpMinOrEq(x,10)));
+
+    // using unsigned <=
+    prove_(OpEq( ule(OpAdd(x, 10), 0), ule(x, 10)));
+
+    var y : TExpr := c.bv_const('y',32);
+    prove_(implies(OpEq(concat(x, y),concat(y, x)), OpEq(x, y)));
+end;
+
+(**
+   \brief Nonlinear arithmetic example 1
+*)
+procedure  TMain.nonlinear_example1_;
+begin
+    reLog.Lines.Append(sLineBreak+ 'nonlinear example 1');
+    LOG_MSG('nonlinear example 1');
+
+    var cfg : TConfig := TConfig.Create;
+    cfg.&set('auto_config', true);
+
+    var c : TContext := TContext.Create(cfg);
+
+    var x : TExpr := c.real_const('x');
+    var y : TExpr := c.real_const('y');
+    var z : TExpr := c.real_const('z');
+
+    var s : TSolver := TSolver.Create(c);
+
+    s.add( OpEq(OpAdd(OpMul(x,x),OpMul(y,y) ),1 ));      // x^2 + y^2 == 1
+    s.add( OpMinor( OpAdd(OpMul(OpMul(x,x),x),OpMul(OpMul(z,z),z)), c.real_val('1/2')) );          // x^3 + z^3 < 1/2
+    s.add(OpNotEq(z, 0));
+    reLog.Lines.Append(check_resultToStr(s.check));
+
+    var m : TModel := s.get_model;
+    reLog.Lines.Append(m.ToStr);
+    set_param('pp.decimal', true); // set decimal notation
+    reLog.Lines.Append('model in decimal notation');
+    reLog.Lines.Append(m.ToStr);
+    set_param('pp.decimal-precision', 50); // increase number of decimal places to 50.
+    reLog.Lines.Append('model using 50 decimal places');
+    reLog.Lines.Append(m.ToStr);
+    set_param('pp.decimal', false); // disable decimal notation
+end;
+
+(**
+   \brief Prove <tt>not(g(g(x) - g(y)) = g(z)), x + z <= y <= x implies z < 0 </tt>.
+   Then, show that <tt>z < -1</tt> is not implied.
+
+   This example demonstrates how to combine uninterpreted functions and arithmetic.
+*)
+procedure TMain.prove_example2_ ;
+begin
+    reLog.Lines.Append(sLineBreak+ 'prove_example2');
+    LOG_MSG('prove_example2');
+
+    var c : TContext := TContext.Create;
+
+    var x : TExpr := c.int_const('x');
+    var y : TExpr := c.int_const('y');
+    var z : TExpr := c.int_const('z');
+
+    var I : TSort := c.int_sort;
+    var g : TFunc_decl := &function('g', I, I);
+
+    var e1 : TExpr := OpNotEq (g.FunOf( OpMinus(g.FunOf(x),g.FunOf(y))),g.FunOf(z));
+    var e2 : TExpr := OpAdd(x,z);
+        e2 := OpMinOrEq(e2,y);
+        e2 := OpAnd(e2,OpMinOrEq(y,x));
+        e1 := Opand(e1,e2);
+    // expr conjecture1 = implies(g(g(x) - g(y)) != g(z) && x + z <= y && y <= x, z < 0);
+    var conjecture1 : TExpr := implies ( e1, OpMinor(z,0) ) ;
+
+    var s : TSolver := TSolver.Create(c);
+    s.add( OpNot(conjecture1));
+
+    reLog.Lines.Append('conjecture 1' +sLineBreak + conjecture1.ToStr);
+
+    if (s.check = unsat) then  reLog.Lines.Append('proved')
+    else                       reLog.Lines.Append('failed to prove');
+
+    e1 := OpNotEq (g.FunOf( OpMinus(g.FunOf(x),g.FunOf(y))),g.FunOf(z));
+    e2 := OpAdd(x,z);
+    e2 := OpMinOrEq(e2,y);
+    e2 := OpAnd(e2,OpMinOrEq(y,x));
+    e1 := OpAnd(e1,e2);
+    //expr conjecture2 = implies(g(g(x) - g(y)) != g(z) && x + z <= y && y <= x, z < -1);
+    var conjecture2 : TExpr := implies ( e1, OpMinor(z,-1) ) ;
+
+    s.reset();
+    s.add(OpNot(conjecture2));
+    reLog.Lines.Append('conjecture 2' +sLineBreak + conjecture2.ToStr);
+
+    if (s.check = unsat) then  reLog.Lines.Append('proved')
+    else begin
+             reLog.Lines.Append('failed to prove');
+             reLog.Lines.Append('counterexample:'+sLineBreak + s.get_model.ToStr);
+    end;
+
+end;
+
+(**
+   \brief Prove <tt>x = y implies g(x) = g(y)</tt>, and
+   disprove <tt>x = y implies g(g(x)) = g(y)</tt>.
+
+   This function demonstrates how to create uninterpreted types and
+   functions.
+*)
+procedure TMain.prove_example1_;
+begin
+    reLog.Lines.Append(sLineBreak+ 'prove_example1');
+    LOG_MSG('prove_example1');
+
+    var c : TContext := TContext.Create;
+
+    var x : TExpr := c.int_const('x');
+    var y : TExpr := c.int_const('y');
+
+    var I : TSort := c.int_sort;
+    var g : TFunc_decl := &function('g', I, I);
+
+    var s : TSolver := TSolver.Create(c);
+
+    var conjecture1 : TExpr := implies ( OpEq(x,y) , OpEq( g.FunOf(x), g.FunOf(y) ) );
+    reLog.Lines.Append('conjecture 1' +sLineBreak + conjecture1.ToStr);
+    s.add( OpNot(conjecture1) );
+
+    if (s.check = unsat) then  reLog.Lines.Append('proved')
+    else                       reLog.Lines.Append('failed to prove');
+
+
+    s.reset; // remove all assertions from solver s
+
+    var conjecture2 : TExpr := implies ( OpEq(x,y) , OpEq( g.FunOf(g.FunOf(x)), g.FunOf(y) ) );
+    reLog.Lines.Append('conjecture 2' +sLineBreak + conjecture2.ToStr);
+    s.add( OpNot(conjecture2) );
+
+    if (s.check = unsat) then  reLog.Lines.Append('proved')
+    else begin
+        reLog.Lines.Append('failed to prove');
+        var m : TModel := s.get_model;
+        reLog.Lines.Append('counterexample:'+sLineBreak + m.ToStr);
+        reLog.Lines.Append('g(g(x)) = ' + m.eval(g.FunOf(g.FunOf(x))).ToStr );
+        reLog.Lines.Append('g(y)    = ' + m.eval(g.FunOf(y)).ToStr );
+    end;
+end;
+
+(**
+   \brief Find a model for <tt>x >= 1 and y < x + 3</tt>.
+*)
+procedure  TMain.find_model_example1_;
+var
+ i: Integer;
+begin
+    reLog.Lines.Append(sLineBreak+'find_model_example1');
+    LOG_MSG('find_model_example1');
+
+    var c : TContext := TContext.Create;
+
+    var x : TExpr := c.int_const('x');
+    var y : TExpr := c.int_const('y');
+
+    var s : TSolver := TSolver.Create(c);
+
+    s.add( OpMajOrEq(x,1) );
+    s.add( OpMinor(y, (OpAdd(x,3)) ) );
+
+    reLog.Lines.Append(check_resultToStr(s.check));
+
+    var m : TModel := s.get_model;
+    reLog.Lines.Append(string(m.ToStr));
+
+    // traversing the model
+    for i := 0 to m.size - 1 do
+    begin
+        var v : TFunc_decl := m.Item[i];
+        // this problem contains only constants
+        assert(v.arity = 0);
+        reLog.Lines.Append( v.name.ToStr+ ' = '+ (m.get_const_interp(v).ToStr ));
+
+    end;
+    // we can evaluate expressions in the model.
+    reLog.Lines.Append( 'x + y + 1 = ' +(m.eval( OpAdd( Opadd(x,y), 1))).ToStr );
+
+end;
+
+procedure TMain.demorgan_ ;
+var
+  str : AnsiString;
+begin
+    reLog.Lines.Append('de-Morgan example');
+    LOG_MSG('de-Morgan example');
+
+    var c : TContext := TContext.Create;
+
+    var x : TExpr := c.bool_const('x');
+    var y : TExpr := c.bool_const('y');
+
+    // (!(x && y) ) == ( !x || !y );
+    var conjecture : TExpr := OpEq((OpNot( OpAnd(x,y) )),  (OpOr( OpNot(x), OpNot(y) )) );
+
+
+    var s : TSolver := TSolver.Create(c);
+    // adding the negation of the conjecture as a constraint.
+    s.add(OpNot( conjecture) );
+    str := '';//s.to_smt2('unknown');
+
+    reLog.Lines.Append(s.ToStr);
+    reLog.Lines.Append(str);
+
+    case s.check of
+      unsat:   reLog.Lines.Append('de-Morgan is valid');
+      sat:     reLog.Lines.Append('de-Morgan is not valid');
+      unknown: reLog.Lines.Append('unknown');
+
+    end;
+end;
+
+procedure TMain.TestClass;
+begin
+   Z3_open_log('z3_Class.log');
+   reLog.Clear;
+
+   demorgan_ ;
+   find_model_example1_ ;
+   prove_example1_;
+   prove_example2_ ;
+   nonlinear_example1_ ;
+   bitvector_example1_ ;
+   bitvector_example2_ ;
+   capi_example;
+   eval_example1_;
+   two_contexts_example1_;
+   error_example_;
+   numeral_example_;
+   ite_example_;
+   ite_example2_;
+   quantifier_example;
+   unsat_core_example1;
+   unsat_core_example2;
+   unsat_core_example3;
+   tactic_example1;
+   tactic_example2;
+   tactic_example3;
+   tactic_example4;
+   tactic_example5;
+   tactic_example6;
+   tactic_example7;
+  {  tactic_example8;
+    tactic_example9;
+    tactic_qe;
+    tst_visit;
+    tst_numeral;
+    incremental_example1;
+    incremental_example2;
+    incremental_example3;
+    enum_sort_example;
+    tuple_example;
+    expr_vector_example;
+    exists_expr_vector_example;
+    substitute_example;
+    opt_example;
+    extract_example;
+    param_descrs_example;
+    sudoku_example;
+    consequence_example;
+    parse_example;
+    mk_model_example;
+    recfun_example;  }
+
+   reLog.Lines.Add('End Test z3_Class');
+   Z3_close_log;
+end;
+
+procedure TMain.btnTestClassClick(Sender: TObject);
+begin
+   TestClass
+end;
+
+procedure TMain.TestApi;
+begin
+    Z3_open_log('z3_Api.log');
     reLog.Clear;
 
     reLog.Lines.Append(display_version);
@@ -3253,12 +4243,13 @@ begin
     fpa_example();
     mk_model_example();
 
+    reLog.Lines.Add('End Test z3_Api');
     Z3_close_log;
 end;
 
-procedure TMain.btnStartClick(Sender: TObject);
+procedure TMain.btnTestApiClick(Sender: TObject);
 begin
-   StartMain
+   TestApi;
 end;
 
 end.
