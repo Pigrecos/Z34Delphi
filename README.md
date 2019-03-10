@@ -41,7 +41,7 @@
 ## examples
 * Test for Native Api
 * Test for Class wrapper
-* Test for opaque predicates in x86 code( original [code](www.zubcic.re)  by  zubcic.tomislav@gmail.com )
+* Test for opaque predicates in x86 code( original [code](http://zubcic.re/blog/experimenting-with-z3-proving-opaque-predicates)  by  zubcic.tomislav@gmail.com )
 
 
 ## Note
